@@ -1,0 +1,6 @@
+preflight
+=========
+
+.. currentmodule:: passengersim.callbacks.configured
+
+.. autofunction:: preflight

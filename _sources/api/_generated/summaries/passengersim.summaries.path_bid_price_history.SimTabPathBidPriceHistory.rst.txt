@@ -1,0 +1,55 @@
+SimTabPathBidPriceHistory
+=========================
+
+.. currentmodule:: passengersim.summaries.path_bid_price_history
+
+.. autoclass:: SimTabPathBidPriceHistory
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SimTabPathBidPriceHistory.__init__
+      ~SimTabPathBidPriceHistory.aggregate
+      ~SimTabPathBidPriceHistory.close
+      ~SimTabPathBidPriceHistory.extract
+      ~SimTabPathBidPriceHistory.fig_path_bid_prices
+      ~SimTabPathBidPriceHistory.fig_runtime_breakdown
+      ~SimTabPathBidPriceHistory.file_info
+      ~SimTabPathBidPriceHistory.from_file
+      ~SimTabPathBidPriceHistory.from_pickle
+      ~SimTabPathBidPriceHistory.metadata
+      ~SimTabPathBidPriceHistory.remove_data
+      ~SimTabPathBidPriceHistory.run_queries
+      ~SimTabPathBidPriceHistory.save
+      ~SimTabPathBidPriceHistory.subclasses
+      ~SimTabPathBidPriceHistory.to_file
+      ~SimTabPathBidPriceHistory.to_html
+      ~SimTabPathBidPriceHistory.to_pickle
+      ~SimTabPathBidPriceHistory.to_xlsx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SimTabPathBidPriceHistory.callback_data
+      ~SimTabPathBidPriceHistory.cnx
+      ~SimTabPathBidPriceHistory.config
+      ~SimTabPathBidPriceHistory.database_available
+      ~SimTabPathBidPriceHistory.database_path
+      ~SimTabPathBidPriceHistory.database_status
+      ~SimTabPathBidPriceHistory.db
+      ~SimTabPathBidPriceHistory.path_bid_price_history
+      ~SimTabPathBidPriceHistory.trial_databases
+      ~SimTabPathBidPriceHistory.sim
+      ~SimTabPathBidPriceHistory.n_total_samples
+      ~SimTabPathBidPriceHistory.meta_summaries
+   
+   

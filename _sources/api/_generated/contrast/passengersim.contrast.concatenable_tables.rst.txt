@@ -1,0 +1,6 @@
+concatenable\_tables
+====================
+
+.. currentmodule:: passengersim.contrast
+
+.. autofunction:: concatenable_tables

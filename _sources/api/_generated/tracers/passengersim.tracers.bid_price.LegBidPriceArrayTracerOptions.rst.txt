@@ -1,0 +1,55 @@
+LegBidPriceArrayTracerOptions
+=============================
+
+.. currentmodule:: passengersim.tracers.bid_price
+
+.. autoclass:: LegBidPriceArrayTracerOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegBidPriceArrayTracerOptions.__init__
+      ~LegBidPriceArrayTracerOptions.construct
+      ~LegBidPriceArrayTracerOptions.copy
+      ~LegBidPriceArrayTracerOptions.dict
+      ~LegBidPriceArrayTracerOptions.from_orm
+      ~LegBidPriceArrayTracerOptions.json
+      ~LegBidPriceArrayTracerOptions.model_construct
+      ~LegBidPriceArrayTracerOptions.model_copy
+      ~LegBidPriceArrayTracerOptions.model_dump
+      ~LegBidPriceArrayTracerOptions.model_dump_json
+      ~LegBidPriceArrayTracerOptions.model_json_schema
+      ~LegBidPriceArrayTracerOptions.model_parametrized_name
+      ~LegBidPriceArrayTracerOptions.model_post_init
+      ~LegBidPriceArrayTracerOptions.model_rebuild
+      ~LegBidPriceArrayTracerOptions.model_validate
+      ~LegBidPriceArrayTracerOptions.model_validate_json
+      ~LegBidPriceArrayTracerOptions.model_validate_strings
+      ~LegBidPriceArrayTracerOptions.parse_file
+      ~LegBidPriceArrayTracerOptions.parse_obj
+      ~LegBidPriceArrayTracerOptions.parse_raw
+      ~LegBidPriceArrayTracerOptions.schema
+      ~LegBidPriceArrayTracerOptions.schema_json
+      ~LegBidPriceArrayTracerOptions.update_forward_refs
+      ~LegBidPriceArrayTracerOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegBidPriceArrayTracerOptions.model_computed_fields
+      ~LegBidPriceArrayTracerOptions.model_config
+      ~LegBidPriceArrayTracerOptions.model_extra
+      ~LegBidPriceArrayTracerOptions.model_fields
+      ~LegBidPriceArrayTracerOptions.model_fields_set
+      ~LegBidPriceArrayTracerOptions.leg_ids
+   
+   

@@ -1,0 +1,24 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.callbacks.
+
+builtins
+========
+
+.. automodule:: passengersim.callbacks.builtins
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

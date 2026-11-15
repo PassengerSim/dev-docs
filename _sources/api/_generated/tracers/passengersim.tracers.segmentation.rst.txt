@@ -1,0 +1,42 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.tracers.
+
+segmentation
+============
+
+.. automodule:: passengersim.tracers.segmentation
+   :no-members:
+
+
+
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree: .
+   :template: autosummary/class.rst
+
+   SegmentationTracer
+   SegmentationTracerOptions
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   cumulative_to_timeframe
+   segment_metric_table
+   segmentation_detail_traced
+
+
+
+
+

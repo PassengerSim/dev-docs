@@ -1,0 +1,55 @@
+LegForecastTracerOptions
+========================
+
+.. currentmodule:: passengersim.tracers.forecasts
+
+.. autoclass:: LegForecastTracerOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegForecastTracerOptions.__init__
+      ~LegForecastTracerOptions.construct
+      ~LegForecastTracerOptions.copy
+      ~LegForecastTracerOptions.dict
+      ~LegForecastTracerOptions.from_orm
+      ~LegForecastTracerOptions.json
+      ~LegForecastTracerOptions.model_construct
+      ~LegForecastTracerOptions.model_copy
+      ~LegForecastTracerOptions.model_dump
+      ~LegForecastTracerOptions.model_dump_json
+      ~LegForecastTracerOptions.model_json_schema
+      ~LegForecastTracerOptions.model_parametrized_name
+      ~LegForecastTracerOptions.model_post_init
+      ~LegForecastTracerOptions.model_rebuild
+      ~LegForecastTracerOptions.model_validate
+      ~LegForecastTracerOptions.model_validate_json
+      ~LegForecastTracerOptions.model_validate_strings
+      ~LegForecastTracerOptions.parse_file
+      ~LegForecastTracerOptions.parse_obj
+      ~LegForecastTracerOptions.parse_raw
+      ~LegForecastTracerOptions.schema
+      ~LegForecastTracerOptions.schema_json
+      ~LegForecastTracerOptions.update_forward_refs
+      ~LegForecastTracerOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegForecastTracerOptions.model_computed_fields
+      ~LegForecastTracerOptions.model_config
+      ~LegForecastTracerOptions.model_extra
+      ~LegForecastTracerOptions.model_fields
+      ~LegForecastTracerOptions.model_fields_set
+      ~LegForecastTracerOptions.leg_ids
+   
+   

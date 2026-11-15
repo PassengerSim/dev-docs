@@ -1,0 +1,6 @@
+﻿register\_begin\_sample\_callback
+=================================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_begin_sample_callback

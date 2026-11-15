@@ -1,0 +1,62 @@
+SimTabLegs
+==========
+
+.. currentmodule:: passengersim.summaries.legs
+
+.. autoclass:: SimTabLegs
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SimTabLegs.__init__
+      ~SimTabLegs.aggregate
+      ~SimTabLegs.close
+      ~SimTabLegs.extract
+      ~SimTabLegs.fig_leg_load_factor_distribution
+      ~SimTabLegs.fig_leg_load_v_distance
+      ~SimTabLegs.fig_leg_load_v_local
+      ~SimTabLegs.fig_leg_local_share_distribution
+      ~SimTabLegs.fig_runtime_breakdown
+      ~SimTabLegs.file_info
+      ~SimTabLegs.from_file
+      ~SimTabLegs.from_pickle
+      ~SimTabLegs.metadata
+      ~SimTabLegs.remove_data
+      ~SimTabLegs.run_queries
+      ~SimTabLegs.save
+      ~SimTabLegs.subclasses
+      ~SimTabLegs.to_file
+      ~SimTabLegs.to_html
+      ~SimTabLegs.to_pickle
+      ~SimTabLegs.to_xlsx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SimTabLegs.callback_data
+      ~SimTabLegs.cnx
+      ~SimTabLegs.config
+      ~SimTabLegs.database_available
+      ~SimTabLegs.database_path
+      ~SimTabLegs.database_status
+      ~SimTabLegs.db
+      ~SimTabLegs.leg_defs
+      ~SimTabLegs.leg_detail
+      ~SimTabLegs.legs
+      ~SimTabLegs.legs_
+      ~SimTabLegs.local_fraction_by_place
+      ~SimTabLegs.trial_databases
+      ~SimTabLegs.sim
+      ~SimTabLegs.n_total_samples
+      ~SimTabLegs.meta_summaries
+   
+   

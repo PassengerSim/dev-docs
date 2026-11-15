@@ -1,0 +1,34 @@
+LegBidPriceArrayTracer
+======================
+
+.. currentmodule:: passengersim.tracers.bid_price
+
+.. autoclass:: LegBidPriceArrayTracer
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegBidPriceArrayTracer.__init__
+      ~LegBidPriceArrayTracer.attach
+      ~LegBidPriceArrayTracer.finalize
+      ~LegBidPriceArrayTracer.fresh
+      ~LegBidPriceArrayTracer.reset
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegBidPriceArrayTracer.hook
+      ~LegBidPriceArrayTracer.name
+      ~LegBidPriceArrayTracer.options_version
+      ~LegBidPriceArrayTracer.bid_price_arrays
+   
+   

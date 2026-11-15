@@ -1,0 +1,6 @@
+﻿register\_tracer\_factory
+=========================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_tracer_factory

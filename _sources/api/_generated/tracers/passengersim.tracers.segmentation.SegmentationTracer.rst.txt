@@ -1,0 +1,37 @@
+SegmentationTracer
+==================
+
+.. currentmodule:: passengersim.tracers.segmentation
+
+.. autoclass:: SegmentationTracer
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SegmentationTracer.__init__
+      ~SegmentationTracer.attach
+      ~SegmentationTracer.finalize
+      ~SegmentationTracer.fresh
+      ~SegmentationTracer.reset
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SegmentationTracer.hook
+      ~SegmentationTracer.name
+      ~SegmentationTracer.options_version
+      ~SegmentationTracer.markets
+      ~SegmentationTracer.carriers
+      ~SegmentationTracer.segments
+      ~SegmentationTracer.priority
+   
+   

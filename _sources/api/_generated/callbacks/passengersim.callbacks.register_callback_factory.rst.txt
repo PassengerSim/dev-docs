@@ -1,0 +1,6 @@
+﻿register\_callback\_factory
+===========================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_callback_factory

@@ -1,0 +1,58 @@
+SimTabLegCallbackDetail
+=======================
+
+.. currentmodule:: passengersim.summaries.leg_callback_detail
+
+.. autoclass:: SimTabLegCallbackDetail
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SimTabLegCallbackDetail.__init__
+      ~SimTabLegCallbackDetail.aggregate
+      ~SimTabLegCallbackDetail.close
+      ~SimTabLegCallbackDetail.extract
+      ~SimTabLegCallbackDetail.fig_leg_bid_price_detail_rake
+      ~SimTabLegCallbackDetail.fig_leg_bid_price_history
+      ~SimTabLegCallbackDetail.fig_leg_booking_detail_rake
+      ~SimTabLegCallbackDetail.fig_runtime_breakdown
+      ~SimTabLegCallbackDetail.file_info
+      ~SimTabLegCallbackDetail.from_file
+      ~SimTabLegCallbackDetail.from_pickle
+      ~SimTabLegCallbackDetail.metadata
+      ~SimTabLegCallbackDetail.remove_data
+      ~SimTabLegCallbackDetail.run_queries
+      ~SimTabLegCallbackDetail.save
+      ~SimTabLegCallbackDetail.subclasses
+      ~SimTabLegCallbackDetail.to_file
+      ~SimTabLegCallbackDetail.to_html
+      ~SimTabLegCallbackDetail.to_pickle
+      ~SimTabLegCallbackDetail.to_xlsx
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SimTabLegCallbackDetail.callback_data
+      ~SimTabLegCallbackDetail.cnx
+      ~SimTabLegCallbackDetail.config
+      ~SimTabLegCallbackDetail.database_available
+      ~SimTabLegCallbackDetail.database_path
+      ~SimTabLegCallbackDetail.database_status
+      ~SimTabLegCallbackDetail.db
+      ~SimTabLegCallbackDetail.leg_bid_price_detail
+      ~SimTabLegCallbackDetail.leg_booking_detail
+      ~SimTabLegCallbackDetail.trial_databases
+      ~SimTabLegCallbackDetail.sim
+      ~SimTabLegCallbackDetail.n_total_samples
+      ~SimTabLegCallbackDetail.meta_summaries
+   
+   

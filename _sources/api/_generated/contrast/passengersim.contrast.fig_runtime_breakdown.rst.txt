@@ -1,0 +1,6 @@
+fig\_runtime\_breakdown
+=======================
+
+.. currentmodule:: passengersim.contrast
+
+.. autofunction:: fig_runtime_breakdown

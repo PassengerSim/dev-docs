@@ -1,0 +1,66 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: pax (3.12.13)
+  language: python
+  name: python3
+---
+
+# Continuous Price Segmentation
+
+If your simulation uses continuous pricing, you may want to know how many sales actually used it.
+This chart puts those sales alongside total sales so you can see where continuous pricing matters
+most.
+
+You can read about the underlying data and how to collect it in
+[Continuous Price Segmentation](../summary-tables/cp-segmentation.md).
+
+The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
+you can run these examples without substituting your own data.
+
+## Set up the Europa examples
+
+We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
+run the demo; later calls reuse its cached result.
+
+```{code-cell} ipython3
+import altair as alt
+import passengersim as pax
+
+# Keep all observations available when a figure contains more than 5,000 rows.
+alt.data_transformers.disable_max_rows()
+summary = pax.demo_result("europa/upe")
+contrast = pax.demo_result({"europa": "europa", "europa/upe": "europa/upe"})
+baseline = contrast["europa"]
+alternative = contrast["europa/upe"]
+```
+
+## Sales using continuous pricing
+
+Neither of these Europa demos enables continuous pricing, so their continuous-priced sales are zero.
+You’ll see total sales in the charts below; a simulation with continuous pricing enabled would also
+show the continuous-priced portion.
+
+Here we can compare total sales with sales made using continuous pricing in each booking class. This
+helps you see which classes account for most of the continuous-price sales.
+
+Uses `cp_segmentation`. The comparison supports `title`, `height`, and `width`; the single-run
+figure uses its built-in layout.
+
+For one run, call
+[fig_cp_segmentation](passengersim.summaries.SimulationTables.fig_cp_segmentation):
+
+```{code-cell} ipython3
+summary.fig_cp_segmentation()
+```
+
+To compare runs, use [fig_cp_segmentation](passengersim.contrast.fig_cp_segmentation):
+
+```{code-cell} ipython3
+contrast.fig_cp_segmentation()
+```

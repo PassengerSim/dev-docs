@@ -1,0 +1,109 @@
+---
+title: Visualizations
+icon: material/chart-areaspline
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: pax (3.12.13)
+  language: python
+  name: python3
+---
+
+# Visualizations
+
+Built-in figures turn simulation outputs into charts. Most such methods use Altair for plotting
+charts, and have names that begin `fig_*`. Some figures are available using other libraries, such as
+Plotly (`plotly_*` method). The API documentation for each figure method describes its plotting
+library and signature. This guide groups figures by subject rather than rendering library. Subjects
+generally mirror those in [Summary Outputs](../basic-usage.md), and puts single-run and comparison
+examples together. Each group links to its source tables and collection settings.
+
+```{toctree}
+---
+maxdepth: 1
+---
+legs
+services
+carriers
+carrier-history
+cabins
+demands
+demand-to-come
+fare-class-mix
+cp-segmentation
+segmentation
+bid-prices
+forecasts
+pre-simulation
+```
+
+(viz-using-figures)=
+
+## Figures Demo Results
+
+We’ll use the Europa network throughout this guide.
+
+There are in general three categories of figures: single-run, comparison, and "duo".
+
+**Single-run** figures are generated from a single simulation result. They are generally available
+as methods on the `SimulationTables` object that holds a single result. In these docs, they are
+usually generated from the `summary` object, which is the result of a single simulation run of the
+`europa/upe` demo network. A sub-genre of single-run figures are configuration-only figures, which
+do not require complete simulation results. These figures are covered in
+[Configuration Visualizations](pre-simulation.md).
+
+**Comparison** figures are generated from two or more simulation results. They plot results
+side-by-side in a consolidated figure. They are generally available as methods on the `Contrast`
+object that holds multiple results, or called as result Python functions imported from
+`passengersim.contrast` and passed a mapping of results. If you have a `Contrast` object that
+includes more results than you want to compare in one figure, you can restrict the comparison to a
+subset of results using `contrast.subset(["baseline", "upe"])`, with whichever keys you want to
+include. In these docs, comparison figures are usually generated from the `contrast` object, which
+contains the baseline `europa` network and the `europa/upe` variant.
+
+**Duo** figures are generated from exactly two simulation results, and show the difference between
+them. They are generally available as Python functions in the `passengersim.contrast.duo` module,
+and passed two results explicitly.
+
+The following code will reproduce the `summary` and `contrast` objects used throughout this guide:
+
+```{code-cell} ipython3
+import altair as alt
+import passengersim as pax
+
+# Keep all observations available when a figure contains more than 5,000 rows.
+alt.data_transformers.disable_max_rows()
+summary = pax.demo_result("europa/upe")
+contrast = pax.demo_result({"europa": "europa", "europa/upe": "europa/upe"})
+baseline = contrast["europa"]
+alternative = contrast["europa/upe"]
+```
+
+## Data, presentation, and export
+
+Most figures accept `raw_df=True` to return their plotting data instead of a chart. Methods
+supporting `also_df=True` return `(chart, dataframe)`. These are common but not universal options:
+each figure's API link gives its actual signature, and the guide calls out exceptions such as
+revenue distributions and select-leg analysis.
+
+```{code-cell} ipython3
+data = summary.fig_carrier_revenues(raw_df=True)
+chart, data = summary.fig_carrier_revenues(also_df=True)
+chart
+```
+
+You can save the chart with `chart.save("carrier-revenues.html")`. HTML preserves hover tooltips.
+Most methods return Altair charts; some return layered, faceted, or concatenated charts, so layout
+customization depends on the returned type. Methods decorated for reporting additionally accept
+`report` to append the figure and `trace` to write plotting data to an Excel writer. These options
+are not available on every callback or specialized figure. See [the API](../../api/summaries.rst)
+for details.
+
+If a figure reports missing data, check the linked Summary Outputs activation section. Native
+counters, database-backed reports, and callback/tracer observations are different data sources.
+Saved summaries can only plot data stored in the archive or still available from their backing
+database.

@@ -1,0 +1,42 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.callbacks.
+
+configured
+==========
+
+.. automodule:: passengersim.callbacks.configured
+   :no-members:
+
+
+
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree: .
+   :template: autosummary/class.rst
+
+   CallbackDefinition
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   preflight
+   prepare
+   register_callback_factory
+   register_tracer_factory
+
+
+
+
+

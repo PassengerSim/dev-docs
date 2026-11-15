@@ -1,0 +1,242 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: pax (3.12.13)
+  language: python
+  name: python3
+mystnb:
+  execution_timeout: 1800
+---
+
+# Legs
+
+A carrier-wide average can hide a lot of variation between flights. Here we can look at individual
+legs—a single flight from one airport to another—and see which ones are full, which carry connecting
+passengers, and how their results change between runs.
+
+You can read about the underlying data and how to collect it in [Legs](../summary-tables/legs.md).
+
+```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
+import altair as alt
+import passengersim as pax
+
+# Keep all observations available when a figure contains more than 5,000 rows.
+alt.data_transformers.disable_max_rows()
+summary = pax.demo_result("europa/upe")
+contrast = pax.demo_result({"europa": "europa", "europa/upe": "europa/upe"})
+baseline = contrast["europa"]
+alternative = contrast["europa/upe"]
+```
+
+## Load Factor Distribution
+
+This histogram groups legs by load factor—the percentage of seats sold. It helps you see whether
+most legs have similar loads or whether the network has a mixture of full and lightly loaded
+flights.
+
+For one run, call
+[fig_leg_load_factor_distribution](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution):
+
+```{code-cell} ipython3
+summary.fig_leg_load_factor_distribution()
+```
+
+Pass a carrier name to focus on just that carrier, as below.
+
+```{code-cell} ipython3
+summary.fig_leg_load_factor_distribution(by_carrier="Tapas")
+```
+
+`normalize=True` shows the fraction of legs in each range instead of their count, which helps when
+carriers have different numbers of flights.
+
+```{code-cell} ipython3
+summary.fig_leg_load_factor_distribution(normalize=True)
+```
+
+You can choose your own range boundaries with `breakpoints`.
+
+```{code-cell} ipython3
+summary.fig_leg_load_factor_distribution(breakpoints=[70,80,90])
+```
+
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
+
+## Local Share Distribution
+
+This histogram groups legs by their share of local passengers. Legs with a low local share mainly
+carry connecting traffic; those with a high local share mainly serve passengers traveling directly
+between their endpoints.
+
+Use `by_carrier`, `breakpoints`, and `normalize` as in the load-factor distribution.
+
+For one run, call
+[fig_leg_local_share_distribution](passengersim.summaries.SimulationTables.fig_leg_local_share_distribution):
+
+```{code-cell} ipython3
+summary.fig_leg_local_share_distribution(normalize=True)
+```
+
+```{code-cell} ipython3
+summary.fig_leg_local_share_distribution(by_carrier="Tapas", normalize=True)
+```
+
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
+
+## Load Factor v Local Flow
+
+This scatter plot shows the relationship between load factor and local share across legs. Each point
+represents a leg. By plotting load factor against the share of local passengers, we can look for
+patterns—for example, whether legs carrying more connecting passengers also tend to be fuller.
+
+For one run, call
+[fig_leg_load_v_local](passengersim.summaries.SimulationTables.fig_leg_load_v_local):
+
+```{code-cell} ipython3
+summary.fig_leg_load_v_local()
+```
+
+Filter with `orig`, `dest`, `place` (either endpoint), or `carrier`.
+
+```{code-cell} ipython3
+summary.fig_leg_load_v_local(carrier="Tapas")
+```
+
+Calling this function with `select_leg=True` returns an interactive notebook widget for select-leg
+analysis, rather than an ordinary standalone chart. For any leg you click on in the scatterplot, the
+widget shows the origins, destinations, and booking classes of passengers using that leg.
+
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
+
+## Load Factor v Distance
+
+Are longer flights fuller than shorter ones? This scatter plot puts each leg’s load factor alongside
+its distance so you can explore that question. For one run, call
+[fig_leg_load_v_distance](passengersim.summaries.SimulationTables.fig_leg_load_v_distance):
+
+```{code-cell} ipython3
+summary.fig_leg_load_v_distance()
+```
+
+Filter with `orig`, `dest`, `place`, or `carrier`, the same as for `fig_leg_load_v_local`.
+
+```{code-cell} ipython3
+summary.fig_leg_load_v_distance(place="MAD")
+```
+
+This figure is particularly prone to having many overlapping points. The `beeswarm` argument can
+separate points that overlap, by moving points slightly so they don't overlap as much.
+
+```{code-cell} ipython3
+summary.fig_leg_load_v_distance(beeswarm=1000)
+```
+
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
+
+## Select Leg Analysis
+
+A passenger on a leg may have started somewhere else or may be connecting onward. These panels show
+the origins, destinations, and booking classes of passengers using the leg or legs you select.
+
+Generating this figure requires that both `path_legs` and `pathclasses` tables are available for the
+select-leg analysis.
+
+For one run, call
+[fig_select_leg_analysis](passengersim.summaries.SimulationTables.fig_select_leg_analysis):
+
+```{code-cell} ipython3
+summary.fig_select_leg_analysis(leg_id=111)
+```
+
+The breakdown of leg customers can be one of two metrics: either `bookings` (the default) or
+`revenue`.
+
+```{code-cell} ipython3
+summary.fig_select_leg_analysis(leg_id=111, metric="revenue")
+```
+
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
+
+(viz-leg-shifts)=
+
+## Duo Comparison: Leg Shifts
+
+This figure will compare load factor and local share for the same legs in two runs. Lines connect
+baseline to treatment and points mark treatment outcomes, with marker size representing leg
+capacity. Use this tool for matched networks (i.e. before and after treatments).
+
+```{code-cell} ipython3
+from passengersim.contrast.duo import fig_leg_shifts
+
+fig_leg_shifts(baseline, alternative, coloring="change_revenue_pct")
+```
+
+This is a paired-run function, not a `Contrast` method or a single-run method. See the API
+documentation on [`fig_leg_shifts`](passengersim.contrast.duo.fig_leg_shifts) for additional
+details.
+
+## Callback Analysis: Leg Booking Detail
+
+If you want to see how bookings grow over the booking horizon, and how that growth varies from
+sample to sample, this chart is useful. It shows the median and selected percentiles for one leg.
+For example, the 10th and 90th percentiles help you see the range containing most observations.
+You’ll need to to set up a callback to collect daily booking detail on the legs of interest before
+running the simulation, as the average totals alone don’t contain that information.
+
+The standard demo archive has no daily booking callbacks. This code replays `europa/upe` with the
+same simulation settings and an extra collector for Tapas flight 111 (KEF–MAD). It caches the
+recorded result separately so you only need to collect it once.
+
+```{code-cell} ipython3
+from pathlib import Path
+import tempfile
+from passengersim.contrast import Contrast
+from passengersim.callbacks.booking_detail import collect_leg_booking_detail
+
+
+def collect_demo(name: str) -> pax.SimulationTables:
+    """Replay a demo with the recording needed by this page."""
+    cfg = pax.Config.from_yaml(pax.demo_network(name))
+    cfg.outputs._write_no_files()
+    cfg.outputs.reports = set()
+    cfg.simulation_controls.show_progress_bar = False
+    cfg.db = None
+    cache_dir = Path(tempfile.gettempdir()) / "passengersim-viz-guide" / "booking-detail" / name
+    simulation_class = pax.MultiSimulation if cfg.simulation_controls.num_trials > 1 else pax.Simulation
+    with simulation_class(cfg) as sim:
+        sim.daily_callback(collect_leg_booking_detail({111, 201}))
+        return sim.run(cache_dir=cache_dir)
+
+
+recorded_summary = collect_demo("europa/upe")
+```
+
+```{code-cell} ipython3
+recorded_summary.fig_leg_booking_detail_rake(leg_id=111)
+```
+
+```{code-cell} ipython3
+recorded_summary.fig_leg_booking_detail_rake(leg_id=201)
+```
+
+The collector can also be enabled in a configuration instead of attached in Python, using
+`callbacks: {leg_booking_detail: {parameters: {leg_ids: [111, 201]}}}`; the summary methods are the
+same either way.
+
+There is no dedicated comparison method; collect and plot the same leg in each run separately. See
+the API documentation on
+[`fig_leg_booking_detail_rake`](passengersim.callbacks.booking_detail.fig_leg_booking_detail_rake)
+for additional details.

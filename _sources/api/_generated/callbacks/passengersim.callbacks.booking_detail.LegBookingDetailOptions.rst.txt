@@ -1,0 +1,55 @@
+LegBookingDetailOptions
+=======================
+
+.. currentmodule:: passengersim.callbacks.booking_detail
+
+.. autoclass:: LegBookingDetailOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegBookingDetailOptions.__init__
+      ~LegBookingDetailOptions.construct
+      ~LegBookingDetailOptions.copy
+      ~LegBookingDetailOptions.dict
+      ~LegBookingDetailOptions.from_orm
+      ~LegBookingDetailOptions.json
+      ~LegBookingDetailOptions.model_construct
+      ~LegBookingDetailOptions.model_copy
+      ~LegBookingDetailOptions.model_dump
+      ~LegBookingDetailOptions.model_dump_json
+      ~LegBookingDetailOptions.model_json_schema
+      ~LegBookingDetailOptions.model_parametrized_name
+      ~LegBookingDetailOptions.model_post_init
+      ~LegBookingDetailOptions.model_rebuild
+      ~LegBookingDetailOptions.model_validate
+      ~LegBookingDetailOptions.model_validate_json
+      ~LegBookingDetailOptions.model_validate_strings
+      ~LegBookingDetailOptions.parse_file
+      ~LegBookingDetailOptions.parse_obj
+      ~LegBookingDetailOptions.parse_raw
+      ~LegBookingDetailOptions.schema
+      ~LegBookingDetailOptions.schema_json
+      ~LegBookingDetailOptions.update_forward_refs
+      ~LegBookingDetailOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegBookingDetailOptions.model_computed_fields
+      ~LegBookingDetailOptions.model_config
+      ~LegBookingDetailOptions.model_extra
+      ~LegBookingDetailOptions.model_fields
+      ~LegBookingDetailOptions.model_fields_set
+      ~LegBookingDetailOptions.leg_ids
+   
+   

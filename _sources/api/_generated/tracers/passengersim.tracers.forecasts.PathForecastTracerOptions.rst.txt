@@ -1,0 +1,55 @@
+PathForecastTracerOptions
+=========================
+
+.. currentmodule:: passengersim.tracers.forecasts
+
+.. autoclass:: PathForecastTracerOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PathForecastTracerOptions.__init__
+      ~PathForecastTracerOptions.construct
+      ~PathForecastTracerOptions.copy
+      ~PathForecastTracerOptions.dict
+      ~PathForecastTracerOptions.from_orm
+      ~PathForecastTracerOptions.json
+      ~PathForecastTracerOptions.model_construct
+      ~PathForecastTracerOptions.model_copy
+      ~PathForecastTracerOptions.model_dump
+      ~PathForecastTracerOptions.model_dump_json
+      ~PathForecastTracerOptions.model_json_schema
+      ~PathForecastTracerOptions.model_parametrized_name
+      ~PathForecastTracerOptions.model_post_init
+      ~PathForecastTracerOptions.model_rebuild
+      ~PathForecastTracerOptions.model_validate
+      ~PathForecastTracerOptions.model_validate_json
+      ~PathForecastTracerOptions.model_validate_strings
+      ~PathForecastTracerOptions.parse_file
+      ~PathForecastTracerOptions.parse_obj
+      ~PathForecastTracerOptions.parse_raw
+      ~PathForecastTracerOptions.schema
+      ~PathForecastTracerOptions.schema_json
+      ~PathForecastTracerOptions.update_forward_refs
+      ~PathForecastTracerOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PathForecastTracerOptions.model_computed_fields
+      ~PathForecastTracerOptions.model_config
+      ~PathForecastTracerOptions.model_extra
+      ~PathForecastTracerOptions.model_fields
+      ~PathForecastTracerOptions.model_fields_set
+      ~PathForecastTracerOptions.path_ids
+   
+   

@@ -1,0 +1,56 @@
+LegBidPriceDetailOptions
+========================
+
+.. currentmodule:: passengersim.callbacks.bid_price_detail
+
+.. autoclass:: LegBidPriceDetailOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegBidPriceDetailOptions.__init__
+      ~LegBidPriceDetailOptions.construct
+      ~LegBidPriceDetailOptions.copy
+      ~LegBidPriceDetailOptions.dict
+      ~LegBidPriceDetailOptions.from_orm
+      ~LegBidPriceDetailOptions.json
+      ~LegBidPriceDetailOptions.model_construct
+      ~LegBidPriceDetailOptions.model_copy
+      ~LegBidPriceDetailOptions.model_dump
+      ~LegBidPriceDetailOptions.model_dump_json
+      ~LegBidPriceDetailOptions.model_json_schema
+      ~LegBidPriceDetailOptions.model_parametrized_name
+      ~LegBidPriceDetailOptions.model_post_init
+      ~LegBidPriceDetailOptions.model_rebuild
+      ~LegBidPriceDetailOptions.model_validate
+      ~LegBidPriceDetailOptions.model_validate_json
+      ~LegBidPriceDetailOptions.model_validate_strings
+      ~LegBidPriceDetailOptions.parse_file
+      ~LegBidPriceDetailOptions.parse_obj
+      ~LegBidPriceDetailOptions.parse_raw
+      ~LegBidPriceDetailOptions.schema
+      ~LegBidPriceDetailOptions.schema_json
+      ~LegBidPriceDetailOptions.update_forward_refs
+      ~LegBidPriceDetailOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegBidPriceDetailOptions.model_computed_fields
+      ~LegBidPriceDetailOptions.model_config
+      ~LegBidPriceDetailOptions.model_extra
+      ~LegBidPriceDetailOptions.model_fields
+      ~LegBidPriceDetailOptions.model_fields_set
+      ~LegBidPriceDetailOptions.leg_ids
+      ~LegBidPriceDetailOptions.include_sold_out
+   
+   

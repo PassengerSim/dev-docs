@@ -1,0 +1,3759 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="services.html">
+      
+      
+        <link rel="next" href="carrier-history.html">
+      
+      
+      <link rel="icon" href="../../_static/favicon.png">
+    
+    
+      
+        <title>Carriers - PassengerSim</title>
+      
+    
+    
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+        <link rel="stylesheet" type="text/css" href="../../_static/sphinx_immaterial_theme.50640b526df5ff663.min.css?v=cff97996" />
+        <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+        <link rel="stylesheet" type="text/css" href="../../_static/css/extra.css?v=1e028aa6" />
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+
+<style>
+  /* Keep the Networks landing page in the top tabs, but omit its sidebar row. */
+  .md-sidebar--primary .md-nav__item:has(> a[href="../../networks/index.html"]) {
+    display: none;
+  }
+  
+</style>
+
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#set-up-the-europa-examples" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../index.html" title="PassengerSim" class="md-header__button md-logo" aria-label="PassengerSim" data-md-component="logo">
+      <img src="../../_static/logo.svg" alt="logo">
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PassengerSim
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Carriers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/passengersim/passengersim" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PassengerSim/passengersim
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="../welcome.html" class="md-tabs__link">
+        
+  
+    
+  
+  <span>User Guide</span>
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../mechanics/counting-sims.html" class="md-tabs__link">
+        
+  
+    
+  
+  <span>Mechanics</span>
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../examples/intro-3mkt.html" class="md-tabs__link">
+        
+  
+    
+  
+  <span>Examples</span>
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../networks/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  <span>Networks</span>
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../api/_index.html" class="md-tabs__link">
+        
+  
+    
+  
+  <span>API</span>
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../index.html" title="PassengerSim" class="md-nav__button md-logo" aria-label="PassengerSim" data-md-component="logo">
+      <img src="../../_static/logo.svg" alt="logo">
+    </a>
+    PassengerSim
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/passengersim/passengersim" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PassengerSim/passengersim
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>User Guide</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            <span>User Guide</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../welcome.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 10H5L3 8l2-2h6V3l1-1 1 1v1h6l2 2-2 2h-6v2h6l2 2-2 2h-6v6a2 2 0 0 1 2 2H9a2 2 0 0 1 2-2z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Wayfinding</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m13.13 22.19-1.63-3.83c1.57-.58 3.04-1.36 4.4-2.27zM5.64 12.5l-3.83-1.63 6.1-2.77C7 9.46 6.22 10.93 5.64 12.5M21.61 2.39S16.66.269 11 5.93c-2.19 2.19-3.5 4.6-4.35 6.71-.28.75-.09 1.57.46 2.13l2.13 2.12c.55.56 1.37.74 2.12.46A19.1 19.1 0 0 0 18.07 13c5.66-5.66 3.54-10.61 3.54-10.61m-7.07 7.07c-.78-.78-.78-2.05 0-2.83s2.05-.78 2.83 0c.77.78.78 2.05 0 2.83s-2.05.78-2.83 0m-5.66 7.07-1.41-1.41zM6.24 22l3.64-3.64c-.34-.09-.67-.24-.97-.45L4.83 22zM2 22h1.41l4.77-4.76-1.42-1.41L2 20.59zm0-2.83 4.09-4.08c-.21-.3-.36-.62-.45-.97L2 17.76z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Installation</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../terminology.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5m-1-14c-1.36-.6-3.16-1-4.5-1-1.2 0-2.4.15-3.5.5v11.5c1.1-.35 2.3-.5 3.5-.5 1.34 0 3.14.4 4.5 1zM13 19c1.36-.6 3.16-1 4.5-1 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.34 0-3.14.4-4.5 1zm1-2.65c.96-.35 2.12-.52 3.5-.52 1.04 0 1.88.08 2.5.24v-1.5a13.9 13.9 0 0 0-6 .19zm0-2.66c.96-.35 2.12-.53 3.5-.53 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23-1.28 0-2.45.15-3.5.45zM14 11c.96-.33 2.12-.5 3.5-.5.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23-1.32 0-2.5.15-3.5.46z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Terminology</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../static-config.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19.5 3.5 18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2zM19 19H5V5h14zM6 15h12v2H6m0-6h12v2H6m0-6h12v2H6z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Raw Configuration</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dynamic-config.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m18 2 1.5 1.5L21 2v7.13l-2 2V4.91H5v14.18h5.5v1.41L9 22l-1.5-1.5L6 22l-1.5-1.5L3 22V2l1.5 1.5L6 2l1.5 1.5L9 2l1.5 1.5L12 2l1.5 1.5L15 2l1.5 1.5zm-5 17.96 6.13-6.13 2.04 2.04L15.04 22H13zm6.83-6.83.98-.98.02-.02c.05-.04.11-.08.17-.1a.5.5 0 0 1 .53.12l1.32 1.32c.2.2.2.53 0 .72l-.98.98zm-1.83-1-.87.87H6v-2h12zM15.13 15l-2 2H6v-2zM18 9V7H6v2z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Dynamic Configuration</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../network-editors.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11.55 11.63 7.66 15.5 8 18l-1.05 1.06-1.77-3.19L2 14.11l1.06-1.06 2.48.35 3.89-3.9L2 5.62l1.41-1.41 9.2 2.12 3.89-3.89a1.49 1.49 0 0 1 2.12 0c.58.59.58 1.56 0 2.12l-3.89 3.89 1.3 5.65-2.09 2.09zM13 19.96V22h2.04l6.13-6.12-2.04-2.05zm9.85-6.49-1.32-1.32c-.2-.2-.53-.2-.72 0l-.98.98 2.04 2.04.98-.98c.2-.19.2-.52 0-.72"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Network Editors</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../basic-usage.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 4 2.5 5.5L17 12l-5.5 2.5L9 20l-2.5-5.5L1 12l5.5-2.5zm0 4.83L8 11l-2.17 1L8 13l1 2.17L10 13l2.17-1L10 11zM19 9l-1.26-2.74L15 5l2.74-1.25L19 1l1.25 2.75L23 5l-2.75 1.26zm0 14-1.26-2.74L15 19l2.74-1.25L19 15l1.25 2.75L23 19l-2.75 1.26z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Summary Outputs</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rm-systems.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 6h18v12H5zm9 3a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3M9 8a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2v-4a2 2 0 0 1-2-2zm-8 2h2v10h16v2H1z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>RM Systems</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rm-actions.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v12H3zm9 3a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3M7 8a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2v-4a2 2 0 0 1-2-2z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>RM Actions</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Database</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../experiments.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1c0-.21-.07-.41-.18-.57L13 8.35V4h-2v4.35L5.18 18.43c-.11.16-.18.36-.18.57m1 3a3 3 0 0 1-3-3c0-.6.18-1.16.5-1.63L9 7.81V6a1 1 0 0 1-1-1V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1v1.81l5.5 9.56c.32.47.5 1.03.5 1.63a3 3 0 0 1-3 3zm7-6 1.34-1.34L16.27 18H7.73l2.66-4.61zm-.5-4a.5.5 0 0 1 .5.5.5.5 0 0 1-.5.5.5.5 0 0 1-.5-.5.5.5 0 0 1 .5-.5"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Experiments</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../callbacks.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.6 5.29c-1.1-.1-2.07.71-2.17 1.82L13.18 10H16v2h-3l-.44 5.07a3.986 3.986 0 0 1-4.33 3.63 4 4 0 0 1-3.06-1.87l1.5-1.5c.24.74.9 1.31 1.73 1.38 1.1.1 2.07-.71 2.17-1.82L11 12H8v-2h3.17l.27-3.07c.19-2.2 2.13-3.83 4.33-3.63 1.31.11 2.41.84 3.06 1.87l-1.5 1.5c-.24-.74-.9-1.31-1.73-1.38"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Callbacks</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tracers.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.84 2.73c-.39 0-.77.15-1.07.44l-2.12 2.12 5.3 5.31 2.12-2.1c.6-.61.6-1.56 0-2.14L17.9 3.17c-.3-.29-.68-.44-1.06-.44M12.94 6l-8.1 8.11 2.56.28.18 2.29 2.28.17.29 2.56 8.1-8.11m-14 3.74L2.5 21.73l6.7-1.79-.24-2.16-2.31-.17-.18-2.32"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Tracing</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_14" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="index.html" class="md-nav__link ">
+              
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.45 15.18 22 7.31V21H2V3h2v12.54L9.5 6 16 9.78l4.24-7.33 1.73 1-5.23 9.05-6.51-3.75L4.31 19h2.26l4.39-7.56z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Visualizations</span>
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1_14" id="__nav_1_14_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_1_14">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Visualizations</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="legs.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Legs</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="services.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Services</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    <span>Carriers</span>
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="#" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Carriers</span>
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-the-europa-examples" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Set up the Europa examples</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-by-carrier" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue by carrier</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-per-passenger-mile" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue per passenger mile</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-per-available-seat-mile" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue per available seat mile</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passenger-bookings" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Passenger bookings</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-full-are-the-flights" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>How full are the flights?</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-and-connecting-passengers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Local and connecting passengers</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capacity-offered-and-traffic-carried" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Capacity offered and traffic carried</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="carrier-history.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Carrier Histories</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cabins.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Cabins</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="demands.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Demands</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="demand-to-come.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Demand to Come</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="fare-class-mix.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Fare Class Mix</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cp-segmentation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Continuous Price Segmentation</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="segmentation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Segmentation and Booking Timeframes</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="bid-prices.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Bid Prices and Displacement</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="forecasts.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Forecasts</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="pre-simulation.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Configuration Visualizations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../diagnostics.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2m0 2a8 8 0 0 1 8 8c0 2.4-1 4.5-2.7 6-1.4-1.3-3.3-2-5.3-2s-3.8.7-5.3 2C5 16.5 4 14.4 4 12a8 8 0 0 1 8-8m2 1.89c-.38.01-.74.26-.9.65l-1.29 3.23-.1.23c-.71.13-1.3.6-1.57 1.26-.41 1.03.09 2.19 1.12 2.6s2.19-.09 2.6-1.12c.26-.66.14-1.42-.29-1.98l.1-.26 1.29-3.21.01-.03c.2-.51-.05-1.09-.56-1.3-.13-.05-.26-.07-.41-.07M10 6a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1M7 9a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1m10 0a1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1 1 1 0 0 0-1-1"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Live Diagnostics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../firehose.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 15v-1H4v-2h1v-1h2v4zm14-3v-1h-2v4h2v-1h1v-2zm-1-6h-2.14C15.5 4.6 14.4 3.5 13 3.14V2h-2v1.14C9.6 3.5 8.5 4.6 8.14 6H6v2h12zm0 16H6c0-1.1.9-2 2-2V9h8v11a2 2 0 0 1 2 2m-8-9a2 2 0 1 0 4 0c0-1.11-.89-2-2-2s-2 .9-2 2"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Firehose</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>Mechanics</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Mechanics</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/counting-sims.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 10.73V19h-2v-7.64L15 12v7h-2v-6.38l-2 .64V19H9v-5.11l-2 .61V19H5v-3.85l-2.43.77L2 14l3-.95V5h2v7.42l2-.63V5h2v6.16l2-.63V5h2v4.9l2-.64V5h2v3.63L21 8l.57 1.92z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Counting Simulations</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/demand-generation.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.35 5.64c-.9-.64-1.12-1.88-.49-2.79.64-.9 1.88-1.12 2.79-.49.9.64 1.12 1.88.49 2.79-.64.9-1.88 1.12-2.79.49M16 19H8.93c-1.48 0-2.74-1.08-2.96-2.54L4 7H2l2 9.76A4.99 4.99 0 0 0 8.94 21H16m.23-6h-4.88l-1.03-4.1c1.58.89 3.28 1.54 5.15 1.22V10c-1.63.3-3.44-.28-4.69-1.26L9.14 7.47c-.23-.18-.49-.3-.76-.38a2.2 2.2 0 0 0-.99-.06h-.02a2.27 2.27 0 0 0-1.84 2.61l1.35 5.92A2.99 2.99 0 0 0 9.83 18h6.85l3.82 3 1.5-1.5"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Demand Generation</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/forecasting.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9.38 8.38 2.12.96 2.12-.96-.96 2.12.96 2.12-2.12-.96-2.12.96.96-2.12zM16.5 2.5l1.09 2.91L20.5 6.5l-2.91 1.09-1.09 2.91-1.09-2.91L12.5 6.5l2.91-1.09zM6 19h1v-1a1 1 0 0 1 1-1h.26a7.47 7.47 0 0 1-3.76-6.5A7.5 7.5 0 0 1 12 3c1.05 0 2.05.22 2.96.61l-.37.98-1.42.53Q12.6 5 12 5a5.5 5.5 0 0 0-5.5 5.5A5.5 5.5 0 0 0 12 16c2.91 0 5.3-2.27 5.5-5.13l.91-2.46.71-.27c.25.74.38 1.54.38 2.36 0 2.78-1.5 5.2-3.76 6.5H16a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v1H4v-1a2 2 0 0 1 2-2"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Forecasting</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/todd.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 9c-.91 0-1.77.18-2.57.5l-.7-3.05 3.89-3.89c.58-.56.58-1.53 0-2.12s-1.54-.586-2.12 0l-3.89 3.89-9.2-2.12L0 3.62 7.43 7.5l-3.89 3.9-2.48-.35L0 12.11l3.18 1.76 1.77 3.19L6 16l-.34-2.5 3.89-3.87 1.02 1.96A6.995 6.995 0 0 0 16 23c3.87 0 7-3.13 7-7s-3.13-7-7-7m0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5m.5-4.75V12H15v5l3.61 2.16.75-1.22z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Time of Day Preferences</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/database-storage.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Database connections and consolidation</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mechanics/pxsim-storage.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 3h18v4H3zm1 5h16v13H4zm5.5 3a.5.5 0 0 0-.5.5V13h6v-1.5a.5.5 0 0 0-.5-.5z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>PXSIM storage format</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>Examples</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Examples</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/intro-3mkt.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>The 3MKT Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/diagnostic-logging.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Logging simulation diagnostics</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/EE.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Basic Simulation</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/PE.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Pro<wbr>BP Optimization</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/LL.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Unrestricted Networks</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/QC.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Q vs Conditional Forecasting</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/olympic-fcst.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Custom Forecaster</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/blf-curves.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Heuristic Intervention</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/continuous-price.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Continuous Pricing</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../labs/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Labs</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>Networks</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            <span>Networks</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Networks</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/3mkt/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 7h2v5H8zM4.22 2h15.56C21 2 22 3 22 4.22v15.56A2.22 2.22 0 0 1 19.78 22H4.22C3 22 2 21 2 19.78V4.22A2.22 2.22 0 0 1 4.22 2M12 4a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m2 3.5h2v4h-2zm-3.5 8.75a1.5 1.5 0 0 1 1.5-1.5 1.5 1.5 0 0 1 1.5 1.5V17h-3z"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>3MKT Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/europa/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4.22 2A2.22 2.22 0 0 0 2 4.22v15.56C2 21 3 22 4.22 22h15.56A2.22 2.22 0 0 0 22 19.78V4.22C22 3 21 2 19.78 2zM11 4.07V6h2V4.07A8 8 0 0 1 20 12a8 8 0 0 1-7 7.93V18h-2v1.93A8 8 0 0 1 4 12a8 8 0 0 1 7-7.93M7.5 10.5A1.5 1.5 0 0 0 6 12c0 .83.66 1.5 1.5 1.5A1.5 1.5 0 0 0 9 12a1.5 1.5 0 0 0-1.5-1.5m9 0A1.5 1.5 0 0 0 15 12a1.5 1.5 0 0 0 1.5 1.5A1.5 1.5 0 0 0 18 12a1.5 1.5 0 0 0-1.5-1.5"/></svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Europa Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/u25/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+  <!-- Original network icon with a transparent hub opening. -->
+  <path d="M164 280H48M220 202 168 80M331 228 464 136M335 332 464 416" fill="none" stroke="currentColor" stroke-width="48" stroke-linecap="round"/>
+  <path fill-rule="evenodd" d="M368 280a112 112 0 1 1-224 0 112 112 0 1 1 224 0Zm-72 0a40 40 0 1 0-80 0 40 40 0 1 0 80 0Z"/>
+  <circle cx="48" cy="280" r="48"/>
+  <circle cx="168" cy="80" r="48"/>
+  <circle cx="464" cy="136" r="48"/>
+  <circle cx="464" cy="416" r="48"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>U25 Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/na26/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+  <!-- Original artwork: simplified continents cut out of a solid globe. -->
+  <path fill-rule="evenodd" d="M 256,0 C 114.61501,0 1.1113408e-4,114.61511 1.1113408e-4,256 1.1113408e-4,397.38489 114.61501,512 256,512 397.38499,512 511.99989,397.38489 511.99989,256 511.99989,114.61511 397.38499,0 256,0 Z M 124.24456,102.49276 C 147.12323,75.17321 203.37541,37.044495 289,51 c 11,15 10,29 -3,43 l -13,14 c -11,12 -9,29 4,39 13,10 30,6 37,-8 l 8,-16 c 5,-9 16,-9 23,-1 l 25,31 c 12,15 9,35 -5,47 l -31,26 c -9,8 -14,18 -16,30 l -4,26 c -1,10 -13,13 -18,4 l -9,-16 c -5,-10 -15,-14 -25,-10 l -16,7 c -12,5 -16,18 -10,29 l 4.08488,17.43276 c 17.91512,20.52361 34.59945,-20.33452 38.86249,-2.2352 l 6.43944,27.33954 c 2.20913,9.37918 59.41074,25.6605 71.11143,42.32761 -9.73785,10.39924 -7.79254,9.63885 -15.47599,19.67132 -8.46486,-21.23535 -19.49171,-19.66394 -31.60239,-25.89185 -12.64285,-6.50158 -27.47664,-7.31512 -41.17705,-11.1113 -17.81509,-4.9363 -37.72392,-5.28191 -53.34426,-15.16875 -14.76006,-9.34233 -23.53648,-25.84514 -34.52536,-39.42391 -10.8187,-13.36848 -22.2055,-26.48277 -30.87243,-41.33689 -10.11264,-17.33189 -19.01913,-35.72371 -24.26461,-55.09237 -5.43225,-20.05829 -10.46195,-47.17548 -7.09703,-61.93733 6.0465,-26.52588 14.57382,-30.64632 6.10544,-48.08087 z M 374,85 c 18.79736,12.877097 35.35119,28.75526 49,47 l -12,32 c -3,9 -7,16 -11,20 -5,6 -12,2 -13,-6 l -4,-25 c -1,-8 -5,-14 -10,-20 -10,-12 -8,-33 1,-48 z m -17.08608,296.00119 c 11,-10 16.91154,-13.56604 29.91154,-4.56604 l 31.17573,22.30424 c -12.15311,13.04357 -24.88908,31.77601 -74.39628,51.74177 l -7.04244,-18.08726 c -11,-12 9.35145,-39.39271 20.35145,-51.39271 z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>NA26 Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/me26/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+  <!-- Original artwork: simplified land cut out of a solid globe, centered on the Middle East. -->
+  <path fill-rule="evenodd" d="M256 0a256 256 0 1 0 0 512A256 256 0 0 0 256 0Z
+    M120 99A208 208 0 0 1 458 205
+    L426 221C415 226 410 236 406 247
+    C402 258 392 261 383 255
+    L374 250L368 302C367 314 362 326 354 328
+    C346 330 341 320 337 309
+    L322 273C319 266 313 261 306 258
+    L288 248C280 244 277 234 270 231
+    C263 228 259 234 263 241
+    L286 267C294 277 291 290 280 297
+    L251 314C240 320 231 316 226 306
+    L201 256C196 246 194 234 185 234
+    C179 234 180 244 185 254
+    L211 307C217 319 227 324 239 322
+    L257 318C267 316 272 326 265 334
+    L238 365C231 373 225 387 221 400
+    L212 428C207 443 194 448 183 438
+    L159 414C148 403 143 388 143 373
+    L143 338C143 326 135 318 123 318
+    L89 318C72 318 60 307 56 291
+    A208 208 0 0 1 56 199
+    L132 199C148 199 162 207 178 207
+    L195 207C204 207 212 200 212 191
+    C212 182 205 177 196 177
+    L179 177C171 177 166 173 161 167
+    L151 154C146 147 138 146 132 151
+    C125 157 116 154 114 146
+    C110 132 117 113 120 99Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>ME26 Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    <span>API</span>
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            <span>API</span>
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Passenger<wbr>Sim</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>callbacks</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.config.CallbackConfig.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Callback<wbr>Config</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback_<wbr>factory</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.register_tracer_factory.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer_<wbr>factory</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.register_begin_sample_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>begin_<wbr>sample_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.register_daily_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>daily_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.register_end_sample_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>end_<wbr>sample_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/callbacks/passengersim.callbacks.CallbackMixin.use_registered_callbacks.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Callback<wbr>Mixin.<wbr>use_<wbr>registered_<wbr>callbacks</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/config.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>config</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/connection_builder/passengersim.connection_builder.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>connection_<wbr>builder</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/contrast/passengersim.contrast.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>contrast</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/core/passengersim.core.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>core</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/database.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>Database</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/driver/passengersim.driver.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>driver</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/experiments/passengersim.experiments.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>experiments</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/rm.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>rm</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/summaries/passengersim.summaries.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>summaries</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/tracers/passengersim.tracers.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>tracers</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../api/_generated/transforms/passengersim.transforms.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>transforms</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#set-up-the-europa-examples" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Set up the Europa examples</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-by-carrier" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue by carrier</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-per-passenger-mile" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue per passenger mile</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#revenue-per-available-seat-mile" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Revenue per available seat mile</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#passenger-bookings" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Passenger bookings</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-full-are-the-flights" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>How full are the flights?</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-and-connecting-passengers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Local and connecting passengers</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capacity-offered-and-traffic-carried" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Capacity offered and traffic carried</span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset" role="main">
+                
+                
+                  
+
+
+<h1 id="carriers">Carriers<a class="headerlink" href="#carriers" title="Link to this heading">¶</a></h1>
+<p>Start here when you want to see how each carrier is doing overall. These charts help you look at
+revenue, passenger bookings, and how much of the available capacity is being used.</p>
+<p>You can read about the underlying data and how to collect it in
+<a class="reference internal" href="../summary-tables/carriers.html"><span class="std std-doc">Carriers</span></a>.</p>
+<p>The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
+you can run these examples without substituting your own data.</p>
+<h2 id="set-up-the-europa-examples">Set up the Europa examples<a class="headerlink" href="#set-up-the-europa-examples" title="Link to this heading">¶</a></h2>
+<p>We’ll use <code class="docutils literal notranslate"><span class="pre">europa/upe</span></code> for the single-run charts and compare it with <code class="docutils literal notranslate"><span class="pre">europa</span></code>. The first load may
+run the demo; later calls reuse its cached result.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
+
+<span class="c1"># Keep all observations available when a figure contains more than 5,000 rows.</span>
+<span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">(</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">)</span>
+<span class="n">contrast</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">({</span><span class="s2">&quot;europa&quot;</span><span class="p">:</span> <span class="s2">&quot;europa&quot;</span><span class="p">,</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">:</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">})</span>
+<span class="n">baseline</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa&quot;</span><span class="p">]</span>
+<span class="n">alternative</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">]</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<h2 id="revenue-by-carrier">Revenue by carrier<a class="headerlink" href="#revenue-by-carrier" title="Link to this heading">¶</a></h2>
+<p>Let’s start with average revenue for each carrier. This is a useful first check when you want to
+know whether a change to the simulation helped or hurt revenue.</p>
+<p>Contrast bars support <code class="docutils literal notranslate"><span class="pre">orient=&quot;h&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;v&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code>, and <code class="docutils literal notranslate"><span class="pre">ratio</span></code> for reference comparisons.</p>
+<p>For one run, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_revenues" title="passengersim.summaries.SimulationTables.fig_carrier_revenues (Python method)"><span class="xref myst py py-meth">fig_carrier_revenues</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_revenues</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-a8b33fb65d744649b57afb819cd0fa30.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-a8b33fb65d744649b57afb819cd0fa30.vega-embed details,
+  #altair-viz-a8b33fb65d744649b57afb819cd0fa30.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-a8b33fb65d744649b57afb819cd0fa30"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-a8b33fb65d744649b57afb819cd0fa30") {
+      outputDiv = document.getElementById("altair-viz-a8b33fb65d744649b57afb819cd0fa30");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_rev", "format": "$.4s", "title": "Average Revenue", "type": "quantitative"}], "x": {"axis": {"format": "$.4s"}, "field": "avg_rev", "stack": "zero", "title": "Average Revenue", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_rev", "format": "$.4s", "type": "quantitative"}, "x": {"axis": {"format": "$.4s"}, "field": "avg_rev", "stack": "zero", "title": "Average Revenue", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-927cb09d146bfe578244edf8a6d79b07"}, "height": 70, "title": "Carrier Revenues", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-927cb09d146bfe578244edf8a6d79b07": [{"carrier": "Tapas", "avg_rev": 291741.38333333336, "rm_system": "E"}, {"carrier": "Stroop", "avg_rev": 935476.8416666667, "rm_system": "P"}, {"carrier": "Brat", "avg_rev": 968552.7208333332, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_revenues.html#passengersim.contrast.fig_carrier_revenues" title="passengersim.contrast.fig_carrier_revenues (Python function) — Generate a figure contrasting carrier revenues for one or more runs."><span class="xref myst py py-func">fig_carrier_revenues</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_revenues</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88.vega-embed details,
+  #altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88") {
+      outputDiv = document.getElementById("altair-viz-c4179b6e399e4f5bb3c08f86a9dd6c88");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-9a9884220ab019ea401ca63cbdc35d00"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_rev", "format": "$.4s", "title": "Revenue ($)", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": "$.4s"}, "field": "avg_rev", "stack": "zero", "title": "Revenue ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_rev", "format": "$.4s", "type": "quantitative"}, "x": {"axis": {"format": "$.4s"}, "field": "avg_rev", "stack": "zero", "title": "Revenue ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "avg_rev", "scale": {"domain": [0, 1036351.4112916666]}, "stack": "zero", "title": "Revenue ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Revenues", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-9a9884220ab019ea401ca63cbdc35d00": [{"source": "europa", "carrier": "Tapas", "avg_rev": 292491.43888888886, "rm_system": "E", "ratio_0": null, "ratio_1": 0.0025709604410097953, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+0.3%"}, {"source": "europa", "carrier": "Stroop", "avg_rev": 920608.3388888888, "rm_system": "E", "ratio_0": null, "ratio_1": -0.015894036191518968, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-1.6%"}, {"source": "europa", "carrier": "Brat", "avg_rev": 943208.8944444446, "rm_system": "E", "ratio_0": null, "ratio_1": -0.02616669784075676, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-2.6%"}, {"source": "europa/upe", "carrier": "Tapas", "avg_rev": 291741.38333333336, "rm_system": "E", "ratio_0": -0.0025643675534736676, "ratio_1": null, "ratio_label": "-0.3%", "ratio_label_0": "-0.3%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "avg_rev": 935476.8416666667, "rm_system": "P", "ratio_0": 0.01615073658329358, "ratio_1": null, "ratio_label": "+1.6%", "ratio_label_0": "+1.6%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "avg_rev": 968552.7208333332, "rm_system": "U", "ratio_0": 0.02686979155748559, "ratio_1": null, "ratio_label": "+2.7%", "ratio_label_0": "+2.7%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="revenue-per-passenger-mile">Revenue per passenger mile<a class="headerlink" href="#revenue-per-passenger-mile" title="Link to this heading">¶</a></h2>
+<p>Yield tells us how much revenue a carrier earns for each passenger mile. Looking at it alongside
+total revenue can help you understand whether a revenue change comes from pricing or from carrying
+more traffic. The values use your simulation’s currency per mile.</p>
+<p>The comparison supports the same orientation, width, and ratio options as carrier revenues.</p>
+<p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_yields" title="passengersim.summaries.SimulationTables.fig_carrier_yields (Python method) — Generate a figure showing carrier yields."><span class="xref myst py py-meth">fig_carrier_yields</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_yields</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-c9540c8da14049aba37e5c8d57828ab1.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-c9540c8da14049aba37e5c8d57828ab1.vega-embed details,
+  #altair-viz-c9540c8da14049aba37e5c8d57828ab1.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-c9540c8da14049aba37e5c8d57828ab1"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-c9540c8da14049aba37e5c8d57828ab1") {
+      outputDiv = document.getElementById("altair-viz-c9540c8da14049aba37e5c8d57828ab1");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "yield", "format": "$.4f", "title": "Average Yield", "type": "quantitative"}], "x": {"axis": {"format": "$.4f"}, "field": "yield", "stack": "zero", "title": "Average Yield", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "yield", "format": "$.4f", "type": "quantitative"}, "x": {"axis": {"format": "$.4f"}, "field": "yield", "stack": "zero", "title": "Average Yield", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-ffa0336af886ecfd8c9cef3f8f2c1acb"}, "height": 70, "title": "Carrier Yields", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-ffa0336af886ecfd8c9cef3f8f2c1acb": [{"carrier": "Tapas", "yield": 0.15015162170688595, "rm_system": "E"}, {"carrier": "Stroop", "yield": 0.24440803237307293, "rm_system": "P"}, {"carrier": "Brat", "yield": 0.2513960130293894, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_yields.html#passengersim.contrast.fig_carrier_yields" title="passengersim.contrast.fig_carrier_yields (Python function) — Generate a figure contrasting carrier yields for one or more runs."><span class="xref myst py py-func">fig_carrier_yields</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_yields</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-f2e1ac75c324456aac70ec34cebd62e7.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-f2e1ac75c324456aac70ec34cebd62e7.vega-embed details,
+  #altair-viz-f2e1ac75c324456aac70ec34cebd62e7.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-f2e1ac75c324456aac70ec34cebd62e7"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-f2e1ac75c324456aac70ec34cebd62e7") {
+      outputDiv = document.getElementById("altair-viz-f2e1ac75c324456aac70ec34cebd62e7");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-beb2e899a3b37791988bf92fb93ee42e"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "yield", "format": "$.4f", "title": "Yield ($)", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": "$.4f"}, "field": "yield", "stack": "zero", "title": "Yield ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "yield", "format": "$.4f", "type": "quantitative"}, "x": {"axis": {"format": "$.4f"}, "field": "yield", "stack": "zero", "title": "Yield ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "yield", "scale": {"domain": [0, 0.2689937339414467]}, "stack": "zero", "title": "Yield ($)", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Yields", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-beb2e899a3b37791988bf92fb93ee42e": [{"source": "europa", "carrier": "Tapas", "yield": 0.15258455835911142, "rm_system": "E", "ratio_0": null, "ratio_1": 0.01620319930326719, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+1.6%"}, {"source": "europa", "carrier": "Stroop", "yield": 0.23982882078222836, "rm_system": "E", "ratio_0": null, "ratio_1": -0.018735929201601276, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-1.9%"}, {"source": "europa", "carrier": "Brat", "yield": 0.24540342355759032, "rm_system": "E", "ratio_0": null, "ratio_1": -0.02383724944396204, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-2.4%"}, {"source": "europa/upe", "carrier": "Tapas", "yield": 0.15015162170688595, "rm_system": "E", "ratio_0": -0.015944841852866154, "ratio_1": null, "ratio_label": "-1.6%", "ratio_label_0": "-1.6%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "yield": 0.24440803237307293, "rm_system": "P", "ratio_0": 0.019093666790792607, "ratio_1": null, "ratio_label": "+1.9%", "ratio_label_0": "+1.9%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "yield": 0.2513960130293894, "rm_system": "U", "ratio_0": 0.024419339326750666, "ratio_1": null, "ratio_label": "+2.4%", "ratio_label_0": "+2.4%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="revenue-per-available-seat-mile">Revenue per available seat mile<a class="headerlink" href="#revenue-per-available-seat-mile" title="Link to this heading">¶</a></h2>
+<p>RASM stands for revenue per available seat mile. It relates revenue to the capacity offered, so both
+ticket prices and the number of occupied seats affect the result.</p>
+<p>Contrast supports <code class="docutils literal notranslate"><span class="pre">orient</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code>, and <code class="docutils literal notranslate"><span class="pre">ratio</span></code>.</p>
+<p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_rasm" title="passengersim.summaries.SimulationTables.fig_carrier_rasm (Python method)"><span class="xref myst py py-meth">fig_carrier_rasm</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_rasm</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-38253a5808cc48c5b75596fc398d9e3d.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-38253a5808cc48c5b75596fc398d9e3d.vega-embed details,
+  #altair-viz-38253a5808cc48c5b75596fc398d9e3d.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-38253a5808cc48c5b75596fc398d9e3d"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-38253a5808cc48c5b75596fc398d9e3d") {
+      outputDiv = document.getElementById("altair-viz-38253a5808cc48c5b75596fc398d9e3d");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "rasm", "format": "$.4f", "title": "Revenue per Available Seat Mile", "type": "quantitative"}], "x": {"axis": {"format": "$.4f"}, "field": "rasm", "stack": "zero", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "rasm", "format": "$.4f", "type": "quantitative"}, "x": {"axis": {"format": "$.4f"}, "field": "rasm", "stack": "zero", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-4ce790d985c3e3cee46a08a25d2828ef"}, "height": 70, "title": "Carrier Revenue per Available Seat Mile (RASM)", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-4ce790d985c3e3cee46a08a25d2828ef": [{"carrier": "Tapas", "rasm": 0.1289958904446437, "rm_system": "E"}, {"carrier": "Stroop", "rasm": 0.20618731310611654, "rm_system": "P"}, {"carrier": "Brat", "rasm": 0.21585714632535707, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_rasm.html#passengersim.contrast.fig_carrier_rasm" title="passengersim.contrast.fig_carrier_rasm (Python function) — Generate a figure contrasting carrier RASM for one or more runs."><span class="xref myst py py-func">fig_carrier_rasm</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_rasm</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-f7816735a7b344168e8c9b75a916ff94.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-f7816735a7b344168e8c9b75a916ff94.vega-embed details,
+  #altair-viz-f7816735a7b344168e8c9b75a916ff94.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-f7816735a7b344168e8c9b75a916ff94"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-f7816735a7b344168e8c9b75a916ff94") {
+      outputDiv = document.getElementById("altair-viz-f7816735a7b344168e8c9b75a916ff94");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-b163724dac6d465307996c804db322cd"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "rasm", "format": "$.4f", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": "$.4f"}, "field": "rasm", "stack": "zero", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "rasm", "format": "$.4f", "type": "quantitative"}, "x": {"axis": {"format": "$.4f"}, "field": "rasm", "stack": "zero", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "rasm", "scale": {"domain": [0, 0.23096714656813208]}, "stack": "zero", "title": "Revenue per Available Seat Mile", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Revenue per Available Seat Mile (RASM)", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-b163724dac6d465307996c804db322cd": [{"source": "europa", "carrier": "Tapas", "rasm": 0.12932753377602973, "rm_system": "E", "ratio_0": null, "ratio_1": 0.0025709604410097953, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+0.3%"}, {"source": "europa", "carrier": "Stroop", "rasm": 0.20291016448937588, "rm_system": "E", "ratio_0": null, "ratio_1": -0.015894036191518968, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-1.6%"}, {"source": "europa", "carrier": "Brat", "rasm": 0.21020887760069343, "rm_system": "E", "ratio_0": null, "ratio_1": -0.02616669784075676, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-2.6%"}, {"source": "europa/upe", "carrier": "Tapas", "rasm": 0.1289958904446437, "rm_system": "E", "ratio_0": -0.0025643675534736676, "ratio_1": null, "ratio_label": "-0.3%", "ratio_label_0": "-0.3%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "rasm": 0.20618731310611654, "rm_system": "P", "ratio_0": 0.01615073658329358, "ratio_1": null, "ratio_label": "+1.6%", "ratio_label_0": "+1.6%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "rasm": 0.21585714632535707, "rm_system": "U", "ratio_0": 0.02686979155748559, "ratio_1": null, "ratio_label": "+2.7%", "ratio_label_0": "+2.7%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="passenger-bookings">Passenger bookings<a class="headerlink" href="#passenger-bookings" title="Link to this heading">¶</a></h2>
+<p>This chart shows average bookings for each carrier. A passenger on a connecting itinerary counts
+once here, even though that passenger occupies seats on more than one leg.</p>
+<p>Contrast supports <code class="docutils literal notranslate"><span class="pre">orient</span></code>, <code class="docutils literal notranslate"><span class="pre">width</span></code>, and <code class="docutils literal notranslate"><span class="pre">ratio</span></code>.</p>
+<p>For one run, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_total_bookings" title="passengersim.summaries.SimulationTables.fig_carrier_total_bookings (Python method)"><span class="xref myst py py-meth">fig_carrier_total_bookings</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_total_bookings</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-3f79e40cb52740b9a956d89ecafa5264.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-3f79e40cb52740b9a956d89ecafa5264.vega-embed details,
+  #altair-viz-3f79e40cb52740b9a956d89ecafa5264.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-3f79e40cb52740b9a956d89ecafa5264"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-3f79e40cb52740b9a956d89ecafa5264") {
+      outputDiv = document.getElementById("altair-viz-3f79e40cb52740b9a956d89ecafa5264");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_sold", "format": ".4s", "title": "Total Bookings", "type": "quantitative"}], "x": {"axis": {"format": ".4s"}, "field": "avg_sold", "stack": "zero", "title": "Total Bookings", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_sold", "format": ".4s", "type": "quantitative"}, "x": {"axis": {"format": ".4s"}, "field": "avg_sold", "stack": "zero", "title": "Total Bookings", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-0288c0d7b151abd12ee6f5dd20f26e12"}, "height": 70, "title": "Carrier Total Bookings", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-0288c0d7b151abd12ee6f5dd20f26e12": [{"carrier": "Tapas", "avg_sold": 1228.493333333333, "rm_system": "E"}, {"carrier": "Stroop", "avg_sold": 1343.6755555555555, "rm_system": "P"}, {"carrier": "Brat", "avg_sold": 1575.6533333333334, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_total_bookings.html#passengersim.contrast.fig_carrier_total_bookings" title="passengersim.contrast.fig_carrier_total_bookings (Python function) — Generate a figure contrasting carrier total bookings for one or more runs."><span class="xref myst py py-func">fig_carrier_total_bookings</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_total_bookings</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-5ad880137fe84dd0ba075db435bec750.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-5ad880137fe84dd0ba075db435bec750.vega-embed details,
+  #altair-viz-5ad880137fe84dd0ba075db435bec750.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-5ad880137fe84dd0ba075db435bec750"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-5ad880137fe84dd0ba075db435bec750") {
+      outputDiv = document.getElementById("altair-viz-5ad880137fe84dd0ba075db435bec750");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-3ec4e8a6d96a3d59a2aba70331c3e8cb"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_sold", "format": ".4s", "title": "Bookings", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": ".4s"}, "field": "avg_sold", "stack": "zero", "title": "Bookings", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_sold", "format": ".4s", "type": "quantitative"}, "x": {"axis": {"format": ".4s"}, "field": "avg_sold", "stack": "zero", "title": "Bookings", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "avg_sold", "scale": {"domain": [0, 1700.5462444444445]}, "stack": "zero", "title": "Bookings", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Total Bookings", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-3ec4e8a6d96a3d59a2aba70331c3e8cb": [{"source": "europa", "carrier": "Tapas", "avg_sold": 1206.8, "rm_system": "E", "ratio_0": null, "ratio_1": -0.017658486818541763, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-1.8%"}, {"source": "europa", "carrier": "Stroop", "avg_sold": 1369.5633333333335, "rm_system": "E", "ratio_0": null, "ratio_1": 0.019266390365399122, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+1.9%"}, {"source": "europa", "carrier": "Brat", "avg_sold": 1589.2955555555554, "rm_system": "E", "ratio_0": null, "ratio_1": 0.008658136871618538, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+0.9%"}, {"source": "europa/upe", "carrier": "Tapas", "avg_sold": 1228.493333333333, "rm_system": "E", "ratio_0": 0.01797591426361711, "ratio_1": null, "ratio_label": "+1.8%", "ratio_label_0": "+1.8%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "avg_sold": 1343.6755555555555, "rm_system": "P", "ratio_0": -0.01890221295189798, "ratio_1": null, "ratio_label": "-1.9%", "ratio_label_0": "-1.9%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "avg_sold": 1575.6533333333334, "rm_system": "U", "ratio_0": -0.00858381700907307, "ratio_1": null, "ratio_label": "-0.9%", "ratio_label_0": "-0.9%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="how-full-are-the-flights">How full are the flights?<a class="headerlink" href="#how-full-are-the-flights" title="Link to this heading">¶</a></h2>
+<p>Load factor describes how much of the available capacity is used. The default system measure,
+<code class="docutils literal notranslate"><span class="pre">sys_lf</span></code>, divides passenger miles by available seat miles, so longer flights contribute more to the
+result.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">load_measure=&quot;avg_leg_lf&quot;</span></code> for average leg load factor instead. Both measures are available for
+comparisons.</p>
+<p>For one run, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_load_factors" title="passengersim.summaries.SimulationTables.fig_carrier_load_factors (Python method)"><span class="xref myst py py-meth">fig_carrier_load_factors</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_load_factors</span><span class="p">(</span><span class="n">load_measure</span><span class="o">=</span><span class="s2">&quot;avg_leg_lf&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-3361259ea9a643f3a2723586ca3bb7c5.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-3361259ea9a643f3a2723586ca3bb7c5.vega-embed details,
+  #altair-viz-3361259ea9a643f3a2723586ca3bb7c5.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-3361259ea9a643f3a2723586ca3bb7c5"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-3361259ea9a643f3a2723586ca3bb7c5") {
+      outputDiv = document.getElementById("altair-viz-3361259ea9a643f3a2723586ca3bb7c5");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_leg_lf", "format": ".2f", "title": "Leg Load Factor", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "avg_leg_lf", "stack": "zero", "title": "Leg Load Factor", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_leg_lf", "format": ".2f", "type": "quantitative"}, "x": {"axis": {"format": ".2f"}, "field": "avg_leg_lf", "stack": "zero", "title": "Leg Load Factor", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-29b90c542a67070e5ee6448b0d262006"}, "height": 70, "title": "Carrier Leg Load Factors", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-29b90c542a67070e5ee6448b0d262006": [{"carrier": "Tapas", "avg_leg_lf": 84.9265873015873, "rm_system": "E"}, {"carrier": "Stroop", "avg_leg_lf": 84.02820662768032, "rm_system": "P"}, {"carrier": "Brat", "avg_leg_lf": 85.45164351851854, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_load_factors.html#passengersim.contrast.fig_carrier_load_factors" title="passengersim.contrast.fig_carrier_load_factors (Python function) — Generate a figure contrasting carrier load factors for one or more runs."><span class="xref myst py py-func">fig_carrier_load_factors</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_load_factors</span><span class="p">(</span><span class="n">load_measure</span><span class="o">=</span><span class="s2">&quot;avg_leg_lf&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-cc321fc6d91d4a3aafbbcad98e46016c.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-cc321fc6d91d4a3aafbbcad98e46016c.vega-embed details,
+  #altair-viz-cc321fc6d91d4a3aafbbcad98e46016c.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-cc321fc6d91d4a3aafbbcad98e46016c"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-cc321fc6d91d4a3aafbbcad98e46016c") {
+      outputDiv = document.getElementById("altair-viz-cc321fc6d91d4a3aafbbcad98e46016c");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-d56eca9294008d9ecd673f5b73514b84"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "avg_leg_lf", "format": ".2f", "title": "Leg Load factor", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "avg_leg_lf", "stack": "zero", "title": "Leg Load factor", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "avg_leg_lf", "format": ".2f", "type": "quantitative"}, "x": {"axis": {"format": ".2f"}, "field": "avg_leg_lf", "stack": "zero", "title": "Leg Load factor", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "avg_leg_lf", "scale": {"domain": [0, 92.70614681147315]}, "stack": "zero", "title": "Leg Load factor", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Leg Load factors", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-d56eca9294008d9ecd673f5b73514b84": [{"source": "europa", "carrier": "Tapas", "avg_leg_lf": 83.49543650793652, "rm_system": "E", "ratio_0": null, "ratio_1": -0.0168516225498212, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-1.7%"}, {"source": "europa", "carrier": "Stroop", "avg_leg_lf": 86.64125870231135, "rm_system": "E", "ratio_0": null, "ratio_1": 0.031097320524870575, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+3.1%"}, {"source": "europa", "carrier": "Brat", "avg_leg_lf": 85.5705787037037, "rm_system": "E", "ratio_0": null, "ratio_1": 0.001391841985571629, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+0.1%"}, {"source": "europa/upe", "carrier": "Tapas", "avg_leg_lf": 84.9265873015873, "rm_system": "E", "ratio_0": 0.017140467233975665, "ratio_1": null, "ratio_label": "+1.7%", "ratio_label_0": "+1.7%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "avg_leg_lf": 84.02820662768032, "rm_system": "P", "ratio_0": -0.030159442669330905, "ratio_1": null, "ratio_label": "-3.0%", "ratio_label_0": "-3.0%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "avg_leg_lf": 85.45164351851854, "rm_system": "U", "ratio_0": -0.001389907454021011, "ratio_1": null, "ratio_label": "-0.1%", "ratio_label_0": "-0.1%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="local-and-connecting-passengers">Local and connecting passengers<a class="headerlink" href="#local-and-connecting-passengers" title="Link to this heading">¶</a></h2>
+<p>Here we can see the share of passengers traveling locally, on a single leg, rather than making a
+connection. This can help explain why similar numbers of bookings produce different amounts of
+traffic on the legs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">load_measure=&quot;bookings&quot;</span></code> uses itinerary bookings; <code class="docutils literal notranslate"><span class="pre">&quot;leg_pax&quot;</span></code> uses leg passengers, counting
+connecting passengers on each leg. The same switch is supported in comparisons.</p>
+<p>For one run, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_local_share" title="passengersim.summaries.SimulationTables.fig_carrier_local_share (Python method)"><span class="xref myst py py-meth">fig_carrier_local_share</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_local_share</span><span class="p">(</span><span class="n">load_measure</span><span class="o">=</span><span class="s2">&quot;leg_pax&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-e92f318bc27446799a15bf7e53483013.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-e92f318bc27446799a15bf7e53483013.vega-embed details,
+  #altair-viz-e92f318bc27446799a15bf7e53483013.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-e92f318bc27446799a15bf7e53483013"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-e92f318bc27446799a15bf7e53483013") {
+      outputDiv = document.getElementById("altair-viz-e92f318bc27446799a15bf7e53483013");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "local_pct_leg_pax", "format": ".2f", "title": "Local Percent of Leg Passengers", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "local_pct_leg_pax", "stack": "zero", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "local_pct_leg_pax", "format": ".2f", "type": "quantitative"}, "x": {"axis": {"format": ".2f"}, "field": "local_pct_leg_pax", "stack": "zero", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, "y": {"field": "carrier", "title": "Carrier", "type": "nominal"}}}], "data": {"name": "data-861e651876786c62ef6a97969de27eaf"}, "height": 70, "title": "Carrier Local Percent of Leg Passengers", "width": 500, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-861e651876786c62ef6a97969de27eaf": [{"carrier": "Tapas", "local_pct_leg_pax": 72.20662103123612, "rm_system": "E"}, {"carrier": "Stroop", "local_pct_leg_pax": 37.312683767904154, "rm_system": "P"}, {"carrier": "Brat", "local_pct_leg_pax": 36.45059000633619, "rm_system": "U"}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_carrier_local_share.html#passengersim.contrast.fig_carrier_local_share" title="passengersim.contrast.fig_carrier_local_share (Python function) — Generate a figure contrasting carrier local shares for one or more runs."><span class="xref myst py py-func">fig_carrier_local_share</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_carrier_local_share</span><span class="p">(</span><span class="n">load_measure</span><span class="o">=</span><span class="s2">&quot;leg_pax&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-0334f997a1c74d72878e945429bc9bde.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-0334f997a1c74d72878e945429bc9bde.vega-embed details,
+  #altair-viz-0334f997a1c74d72878e945429bc9bde.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-0334f997a1c74d72878e945429bc9bde"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-0334f997a1c74d72878e945429bc9bde") {
+      outputDiv = document.getElementById("altair-viz-0334f997a1c74d72878e945429bc9bde");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-d00a7f6f181dd1bc114e235704842da0"}, "facet": {"row": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "rm_system", "title": "RM System", "type": "nominal"}, "tooltip": [{"field": "source", "title": null, "type": "nominal"}, {"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "rm_system", "title": "RM System", "type": "nominal"}, {"field": "local_pct_leg_pax", "format": ".2f", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, {"field": "ratio_0", "format": ".3%", "title": "vs europa", "type": "quantitative"}, {"field": "ratio_1", "format": ".3%", "title": "vs europa/upe", "type": "quantitative"}], "x": {"axis": {"format": ".2f"}, "field": "local_pct_leg_pax", "stack": "zero", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "right", "baseline": "middle", "color": "white", "dx": -5, "dy": 0}, "encoding": {"text": {"field": "local_pct_leg_pax", "format": ".2f", "type": "quantitative"}, "x": {"axis": {"format": ".2f"}, "field": "local_pct_leg_pax", "stack": "zero", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}}, {"mark": {"type": "text", "align": "left", "baseline": "middle", "dx": 5, "dy": 0}, "encoding": {"text": {"field": "reference_source", "type": "nominal"}, "x": {"field": "local_pct_leg_pax", "scale": {"domain": [0, 77.26108450342265]}, "stack": "zero", "title": "Local Percent of Leg Passengers", "type": "quantitative"}, "y": {"field": "source", "sort": ["europa", "europa/upe"], "title": null, "type": "nominal"}}, "transform": [{"calculate": "datum[\"ratio_label_\" + ref_source]", "as": "reference_source"}]}], "height": 50, "width": 500}, "params": [{"name": "ref_source", "bind": {"input": "radio", "options": ["0", "1"], "labels": ["europa", "europa/upe"], "name": "Reference Source: "}, "value": "0"}], "title": "Carrier Local Percent of Leg Passengers", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-d00a7f6f181dd1bc114e235704842da0": [{"source": "europa", "carrier": "Tapas", "local_pct_leg_pax": 72.06529203905735, "rm_system": "E", "ratio_0": null, "ratio_1": -0.0019572857746332772, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-0.2%"}, {"source": "europa", "carrier": "Stroop", "local_pct_leg_pax": 37.086413107548715, "rm_system": "E", "ratio_0": null, "ratio_1": -0.006064175435969932, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "-0.6%"}, {"source": "europa", "carrier": "Brat", "local_pct_leg_pax": 37.51231766254267, "rm_system": "E", "ratio_0": null, "ratio_1": 0.029127859275307255, "ratio_label": " ", "ratio_label_0": " ", "ratio_label_1": "+2.9%"}, {"source": "europa/upe", "carrier": "Tapas", "local_pct_leg_pax": 72.20662103123612, "rm_system": "E", "ratio_0": 0.0019611242552401986, "ratio_1": null, "ratio_label": "+0.2%", "ratio_label_0": "+0.2%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Stroop", "local_pct_leg_pax": 37.312683767904154, "rm_system": "P", "ratio_0": 0.00610117402562671, "ratio_1": null, "ratio_label": "+0.6%", "ratio_label_0": "+0.6%", "ratio_label_1": " "}, {"source": "europa/upe", "carrier": "Brat", "local_pct_leg_pax": 36.45059000633619, "rm_system": "U", "ratio_0": -0.02830344063935697, "ratio_1": null, "ratio_label": "-2.8%", "ratio_label_0": "-2.8%", "ratio_label_1": " "}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<h2 id="capacity-offered-and-traffic-carried">Capacity offered and traffic carried<a class="headerlink" href="#capacity-offered-and-traffic-carried" title="Link to this heading">¶</a></h2>
+<p>Available seat miles (ASM) describe the capacity offered: seats multiplied by distance. Revenue
+passenger miles (RPM) describe the traffic carried: passengers multiplied by distance. This chart
+shows both for each carrier, averaged over the samples kept after burn-in.</p>
+<p>Use this to distinguish capacity supplied from traffic carried. There is no dedicated contrast
+function; generate one chart per run.</p>
+<p>For one run, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_carrier_mileage" title="passengersim.summaries.SimulationTables.fig_carrier_mileage (Python method) — Figure showing mileage by carrier."><span class="xref myst py py-meth">fig_carrier_mileage</span></a>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_carrier_mileage</span><span class="p">()</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-c55330b5eba74115a119cef17c743ce5.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-c55330b5eba74115a119cef17c743ce5.vega-embed details,
+  #altair-viz-c55330b5eba74115a119cef17c743ce5.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-c55330b5eba74115a119cef17c743ce5"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-c55330b5eba74115a119cef17c743ce5") {
+      outputDiv = document.getElementById("altair-viz-c55330b5eba74115a119cef17c743ce5");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "measure", "type": "nominal"}, "tooltip": [{"field": "carrier", "type": "nominal"}, {"field": "measure", "type": "nominal"}, {"field": "value", "format": ".4s", "type": "quantitative"}], "x": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "y": {"field": "value", "stack": null, "title": "miles", "type": "quantitative"}}, "title": "Carrier Loads"}, {"mark": {"type": "text", "baseline": "top", "color": "white", "dx": 0, "dy": 5}, "encoding": {"text": {"field": "value", "format": ".4s", "type": "quantitative"}, "x": {"field": "carrier", "type": "nominal"}, "y": {"field": "value", "stack": null, "type": "quantitative"}}, "title": "Carrier Loads"}], "data": {"name": "data-f47dd1cc1f69363039ef7786f0b99a20"}, "height": 300, "width": 400, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-f47dd1cc1f69363039ef7786f0b99a20": [{"measure": "asm", "carrier": "Tapas", "value": 2261633.16}, {"measure": "asm", "carrier": "Stroop", "value": 4537024.26}, {"measure": "asm", "carrier": "Brat", "value": 4487007.9}, {"measure": "rpm", "carrier": "Tapas", "value": 1942978.5707066664}, {"measure": "rpm", "carrier": "Stroop", "value": 3827520.8575744443}, {"measure": "rpm", "carrier": "Brat", "value": 3852697.221256666}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  
+  
+  <div class="md-footer-meta md-typeset">
+    
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-footer-copyright__highlight">
+        &#169; Copyright 2026, PassengerSim LLC.
+        
+    </div>
+  
+    Created using
+    <a href="https://www.sphinx-doc.org/" target="_blank" rel="noopener">Sphinx</a>
+    8.2.3.
+     and
+    <a href="https://github.com/jbms/sphinx-immaterial/" target="_blank" rel="noopener">Sphinx-Immaterial</a>
+  
+</div>
+      
+    </div>
+    
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.action.view", "content.code.copy", "content.code.annotate", "navigation.tabs", "navigation.top", "navigation.tracking", "announce.dismiss"], "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+      
+        <script src="../../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
+    
+  </body>
+</html>

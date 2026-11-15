@@ -1,0 +1,147 @@
+---
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: pax (3.12.13)
+  language: python
+  name: python3
+mystnb:
+  execution_timeout: 1800
+---
+
+# Segmentation and Booking Timeframes
+
+When do different kinds of passengers book, and how much revenue do they bring in? These charts let
+you follow bookings through the time leading up to departure and focus on a carrier, booking class,
+or market.
+
+You can read about the underlying data and how to collect it in
+[Segmentation and Booking Timeframes](../summary-tables/segmentation.md).
+
+The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
+you can run these examples without substituting your own data.
+
+## Set up the Europa examples
+
+We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
+run the demo; later calls reuse its cached result.
+
+```{code-cell} ipython3
+import altair as alt
+import passengersim as pax
+
+# Keep all observations available when a figure contains more than 5,000 rows.
+alt.data_transformers.disable_max_rows()
+summary = pax.demo_result("europa/upe")
+contrast = pax.demo_result({"europa": "europa", "europa/upe": "europa/upe"})
+baseline = contrast["europa"]
+alternative = contrast["europa/upe"]
+```
+
+## When do passengers book?
+
+This chart shows bookings or revenue within each booking timeframe, separated by passenger segment.
+It is useful for seeing whether different groups book early or wait until close to departure.
+
+The required `metric` is `"bookings"` or `"revenue"`. `by_carrier` and `by_class` accept booleans or
+a specific name. Single-run `exclude_nogo=True` excludes the no-go carrier. Comparisons instead
+offer `source_labels` and `ratio`.
+
+For one run, call
+[fig_segmentation_by_timeframe](passengersim.summaries.SimulationTables.fig_segmentation_by_timeframe):
+
+```{code-cell} ipython3
+summary.fig_segmentation_by_timeframe(metric="revenue", by_carrier="Tapas")
+```
+
+To compare runs, use
+[fig_segmentation_by_timeframe](passengersim.contrast.fig_segmentation_by_timeframe):
+
+```{code-cell} ipython3
+contrast.fig_segmentation_by_timeframe(metric="revenue", by_carrier="Tapas")
+```
+
+## A shortcut for plotting bookings
+
+If you are interested in bookings rather than revenue, you can use this shortcut. For a single run,
+it gives the same result as `fig_segmentation_by_timeframe("bookings", ...)`.
+
+Choose `by_carrier` and `by_class`. Comparisons additionally support `by_segment`,
+`source_labels=True` for static images, and `ratio` for reference values in tooltips.
+
+For one run, call
+[fig_bookings_by_timeframe](passengersim.summaries.SimulationTables.fig_bookings_by_timeframe):
+
+```{code-cell} ipython3
+summary.fig_bookings_by_timeframe(by_carrier="Tapas", by_class=True)
+```
+
+To compare runs, use [fig_bookings_by_timeframe](passengersim.contrast.fig_bookings_by_timeframe):
+
+```{code-cell} ipython3
+contrast.fig_bookings_by_timeframe(by_carrier="Tapas", by_class=True)
+```
+
+## Taking a closer look at a market
+
+This view adds market detail to the passenger-segment breakdown. Unlike the timeframe charts above,
+its booking counts are cumulative: a point includes bookings made up to that day.
+
+Uses `segmentation_detail`, backed by recorded booking detail. Choose `by_carrier`, `by_class`,
+`orig`, and `dest`. Follow the linked table’s activation instructions before running. There is no
+`Contrast` method of this name.
+
+The default demo archive has no fare-detail records. To show this chart, we replay the same demo
+configurations with fare recording enabled and prepare `segmentation_detail` before discarding the
+temporary databases. The sample counts, seed, and RM settings stay the same. This first collection
+can take a little longer; later calls use its separate cache.
+
+```{code-cell} ipython3
+from pathlib import Path
+import tempfile
+from passengersim.contrast import Contrast
+
+
+def collect_demo(name: str) -> pax.SimulationTables:
+    """Replay a demo with the recording needed by this page."""
+    cfg = pax.Config.from_yaml(pax.demo_network(name))
+    cfg.outputs._write_no_files()
+    cfg.outputs.reports = {"segmentation_detail"}
+    cfg.simulation_controls.show_progress_bar = False
+    cfg.db.write_items = {"fare"}
+    cfg.db.filename = None
+    cfg.db.result_directory = None
+    cfg.db.result_storage = "summary_only"
+    cache_dir = Path(tempfile.gettempdir()) / "passengersim-viz-guide" / "segmentation-detail-v1" / name
+    simulation_class = pax.MultiSimulation if cfg.simulation_controls.num_trials > 1 else pax.Simulation
+    with simulation_class(cfg) as sim:
+        return sim.run(cache_dir=cache_dir)
+
+
+recorded = Contrast({name: collect_demo(name) for name in ("europa", "europa/upe")})
+recorded_summary = recorded["europa/upe"]
+```
+
+For one run, call
+[fig_segmentation_detail](passengersim.summaries.SimulationTables.fig_segmentation_detail):
+
+```{code-cell} ipython3
+recorded_summary.fig_segmentation_detail(by_carrier="Tapas", orig="KEF", dest="MAD")
+```
+
+**Contrasting runs:** use the standalone comparison helper below. It is not exposed as a `Contrast`
+method. It accepts the same carrier, class, and market filters, plus `width` and `height` for the
+layout.
+
+```{code-cell} ipython3
+from passengersim.summaries.segmentation_detail import fig_segmentation_detail
+
+fig_segmentation_detail(recorded, by_carrier="Tapas", orig="KEF", dest="MAD")
+```
+
+API:
+[`fig_segmentation_detail`](passengersim.summaries.segmentation_detail.fig_segmentation_detail).

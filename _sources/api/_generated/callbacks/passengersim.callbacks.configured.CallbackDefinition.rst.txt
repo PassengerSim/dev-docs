@@ -1,0 +1,31 @@
+CallbackDefinition
+==================
+
+.. currentmodule:: passengersim.callbacks.configured
+
+.. autoclass:: CallbackDefinition
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CallbackDefinition.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CallbackDefinition.output_name
+      ~CallbackDefinition.factory
+      ~CallbackDefinition.when
+      ~CallbackDefinition.parameters_model
+      ~CallbackDefinition.version
+   
+   

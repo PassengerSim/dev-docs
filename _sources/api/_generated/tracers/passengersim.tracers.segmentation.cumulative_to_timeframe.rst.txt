@@ -1,0 +1,6 @@
+cumulative\_to\_timeframe
+=========================
+
+.. currentmodule:: passengersim.tracers.segmentation
+
+.. autofunction:: cumulative_to_timeframe

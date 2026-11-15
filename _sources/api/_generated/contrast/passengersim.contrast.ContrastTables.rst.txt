@@ -1,0 +1,21 @@
+ContrastTables
+==============
+
+.. currentmodule:: passengersim.contrast
+
+.. autoclass:: ContrastTables
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ContrastTables.__init__
+   
+   
+
+   
+   
+   

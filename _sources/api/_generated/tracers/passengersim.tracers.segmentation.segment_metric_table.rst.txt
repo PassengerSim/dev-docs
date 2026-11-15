@@ -1,0 +1,6 @@
+segment\_metric\_table
+======================
+
+.. currentmodule:: passengersim.tracers.segmentation
+
+.. autofunction:: segment_metric_table

@@ -1,0 +1,537 @@
+---
+title: Callbacks
+icon: material/function
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
+
+# Callbacks
+
+PassengerSim includes a variety of optimized data collection processes that run automatically during
+a simulation, but these pre-selected data may not be sufficient for every analysis. To supplement
+this, users can choose to additionally collect any other data while running a simulation. This is
+done by writing a "callback" function. Such a function is invoked regularly while the simulation is
+running, and can inspect and store almost anything from the Simulation object.
+
+```{code-cell} ipython3
+import pandas as pd
+
+import passengersim as pax
+
+pax.versions()
+```
+
+Here, we'll run a quick demo using the "3MKT" example model. We'll give AL1 the 'P' RM system to
+make it interesting.
+
+```{code-cell} ipython3
+cfg = pax.Config.from_yaml(pax.demo_network("3MKT"))
+
+cfg.simulation_controls.num_samples = 100
+cfg.simulation_controls.burn_samples = 50
+cfg.simulation_controls.num_trials = 1
+cfg.db = None
+cfg.outputs.reports.clear()
+
+cfg.carriers.AL1.rm_system = "P"
+
+sim = pax.Simulation(cfg)
+```
+
+## Types of Callback Functions
+
+To collect data, we can write a function that will interrogate the simulation and grab whatever info
+we are looking for. There are five lifecycle hooks:
+
+| Hook                | Execution   | Timing                                                                                                      |
+| ------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| `initialize_sample` | Synchronous | After the sample number, random seed, and counters are initialized, before demand generation                |
+| `begin_sample`      | Event queue | One second after the first DCP, after its RM processing                                                     |
+| `daily`             | Event queue | Each day, at the existing callback priority offset from the overnight trigger                               |
+| `end_sample`        | Event queue | One second after the final DCP                                                                              |
+| `finalize_sample`   | Synchronous | After all queued events, before sample diagnostics, departure statistics, history rollover, and bookkeeping |
+
+Use `initialize_sample` to modify demand inputs such as `base_demand` for the current sample. RM
+steps have not yet run for that sample; use `begin_sample` to inspect its initial forecasts and bid
+prices instead. With `simulation_controls.skip_demand_generation=True`, an initializer must set
+`scenario_demand` and add booking events (for example, with `sim.eng.add_booking_event`). RM and
+queued callback events are still generated normally.
+
+`finalize_sample` sees the completed sample before history rollover. Its execution is included in
+sample timing, and changes it makes are visible to subsequent bookkeeping. It cannot change output
+already recorded during event processing. In `run_single_sample()`, it runs on normal context exit
+after the caller's context body and before bookkeeping.
+
+Both synchronous hooks run in registration order, with configured callbacks before manual callbacks.
+Event `priority` does not apply to them. They run during burn-in too, and callback exceptions
+propagate. Finalization is a successful-completion hook, not exception cleanup; it does not run if
+sample processing or the single-sample context body raises an exception. Finalizers should not
+enqueue events: sample event processing has already finished.
+
+All hooks except `daily` accept one argument (the `Simulation` object), and either return nothing
+(to ignore that invocation) or return a dictionary of values to store, where the keys are all
+strings naming what's being stored and the values can be whatever is of interest. This can be a
+simple numeric value (i.e., a scalar), or a tuple, an array, a nested dictionary, or any other
+[pickle-able](https://docs.python.org/3/library/pickle.html#what-can-be-pickled-and-unpickled)
+Python object.
+
+We can attach each callback to the Simulation by using a Python decorator.
+
+## Example Callback Functions
+
+For example, here we create a callback to collect carrier revenue at the end of every sample. Note
+that we skip the burn period by returning nothing for those samples; this is not required by the
+callback algorithm but is good practice for analysis.
+
+```{code-cell} ipython3
+@sim.end_sample_callback
+def collect_carrier_revenue(sim: pax.Simulation) -> dict | None:
+    if sim.eng.sample < sim.eng.burn_samples:
+        return
+    return {c.name: c.revenue for c in sim.eng.carriers}
+```
+
+The daily callback operates similarly, except it accepts a second argument that gives the number of
+days prior to departure for this day. You don't need to *use* the second argument in the callback
+function, but you need to including in the function signature (and you can use it if desired, e.g.
+to collect data only at DCPs instead of every day). In the example here, we collect daily carrier
+revenue, but only every 7th sample, which is a good way to reduce the overhead from collecting
+detailed data.
+
+```{code-cell} ipython3
+@sim.daily_callback
+def collect_carrier_revenue_detail(
+    sim: pax.Simulation, days_prior: int
+) -> dict | None:
+    if sim.eng.sample < sim.eng.burn_samples:
+        return
+    if sim.eng.sample % 7 == 0:
+        return {c.name: c.revenue for c in sim.eng.carriers}
+```
+
+Use the queued `begin_sample` hook to inspect RM state once per sample, after the first DCP:
+
+```python
+@sim.begin_sample_callback
+def grab_initial_forecasts(sim: pax.Simulation) -> dict:
+    return {"path-1": sim.eng.paths.select(path_id=1).get_forecast_data()}
+```
+
+The synchronous hooks use the same decorator interface:
+
+```python
+@sim.initialize_sample_callback
+def initialize_inputs(sim: pax.Simulation) -> dict:
+    return {"base_demand": sum(d.base_demand for d in sim.eng.demands)}
+
+
+@sim.finalize_sample_callback
+def collect_completed_sample(sim: pax.Simulation) -> dict:
+    return {"sold": sum(leg.sold for leg in sim.eng.legs)}
+```
+
+Returned data is available under `callback_data.initialize_sample` and
+`callback_data.finalize_sample`, tagged with the current trial and sample. The corresponding global
+decorators are `register_initialize_sample_callback` and `register_finalize_sample_callback`.
+Configured callback factories can select either hook with `when="initialize_sample"` or
+`when="finalize_sample"`, including in multiprocessing runs.
+
+Multiple callbacks of the same kind can be attached (i.e. there can be two end_sample callbacks).
+The only limitation is that the named values in the return values of each callback function must be
+unique, or else they will overwrite one another.
+
+For example, suppose we also want to count for each carrier the number of passengers departing each
+airport on each sample day. The previous end sample callback stored revenue values in a dictionary
+keyed by carrier name, so if we don't want to overwrite that, we need to use a different key. One
+way to avoid that is to just nest the output of the callback function in another dictionary with a
+unique top level key.
+
+```{code-cell} ipython3
+from collections import defaultdict
+
+
+@sim.end_sample_callback
+def collect_passenger_counts(sim: pax.Simulation) -> dict | None:
+    if sim.eng.sample < sim.eng.burn_samples:
+        return
+    paxcount = defaultdict(lambda: defaultdict(int))
+    for leg in sim.eng.legs:
+        paxcount[leg.carrier.name][leg.orig] += leg.sold
+    # convert defaultdict to a regular dict, not necessary but pickles smaller
+    paxcount = {
+        carrier: dict(airports) for carrier, airports in paxcount.items()
+    }
+    return {"psgr_by_airport": paxcount}
+```
+
+One of the nifty features of callbacks is that they can access anything available in the simulation,
+not just sales and revenue data from carriers. For example, we can inspect demand objects directly,
+and see how many potential passengers were simulated so far, and how many didn't make a booking on
+any airlines (i.e. the "no-go" customers).
+
+```{code-cell} ipython3
+@sim.daily_callback
+def count_nogo(sim: pax.Simulation, days_prior: int) -> dict | None:
+    if sim.eng.sample < sim.eng.burn_samples:
+        return
+    if sim.eng.sample % 7 == 0:
+        return
+    if days_prior > 0 and days_prior not in sim.config.dcps:
+        # Only count "nogo" (unsold) demand at DCPs, and at departure (days_prior == 0)
+        return
+    nogo_count = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+    for dmd in sim.eng.demands:
+        nogo_count[dmd.orig][dmd.dest][dmd.segment] += dmd.unsold
+    # convert defaultdict to a regular dict, not necessary but pickles smaller
+    nogo_count = {
+        orig: {dest: dict(seg) for dest, seg in dests.items()}
+        for orig, dests in nogo_count.items()
+    }
+    return {"nogo": nogo_count}
+```
+
+### Re-using Callback Functions
+
+Attaching via the decorators is a convenient way to add callbacks to a single simulation. The
+decorators connect the callback function to the simulation, but do not otherwise modify the function
+itself. It is easy to define callback functions in a seperate module or to re-use callback functions
+for multiple simulations, by using the decorator as a regular function. For example, we can create a
+second simulation object, and attach the same callback functions like this:
+
+```{code-cell} ipython3
+duplicate_sim = pax.Simulation(cfg)
+duplicate_sim.end_sample_callback(collect_carrier_revenue)
+duplicate_sim.daily_callback(collect_carrier_revenue_detail)
+```
+
+In this example, the duplicate_sim is running the same config as the original, but this would work
+with a modified config or even a completely different network.
+
+Once we have attached all desired callbacks to the simulation we want to run, we can run it as
+normal.
+
+```{code-cell} ipython3
+summary = sim.run()
+```
+
+All the usual summary data remains available for review and analysis.
+
+```{code-cell} ipython3
+summary.fig_carrier_revenues()
+```
+
+## Callback Data
+
+In addition to the usual suspects, the summary object includes the collected callback data from our
+callback functions.
+
+```{code-cell} ipython3
+summary.callback_data
+```
+
+Because we connected a "daily" callback, the data we collected is available under the
+`callback_data.daily` accessor.
+
+```{code-cell} ipython3
+summary.callback_data.daily[:5]
+```
+
+As you might expect, the "begin_sample" or "end_sample" callbacks are available under
+`callback_data.begin_sample` or `callback_data.end_sample`, respectively.
+
+```{code-cell} ipython3
+summary.callback_data.end_sample[:3]
+```
+
+The callback data can include pretty much anything, so it is stored in a very flexible (but
+inefficient) format: a list of dict's. If the content of the dicts is fairly simple (numbers,
+tuples, lists, or nested dictionaries thereof), it can be converted into a pandas DataFrame using
+the `to_dataframe` method on the `callback_data` attribute. This may make subsequent analysis
+easier.
+
+```{code-cell} ipython3
+summary.callback_data.to_dataframe("daily")
+```
+
+```{code-cell} ipython3
+summary.callback_data.to_dataframe("end_sample")
+```
+
+Users are free to process this callback data now however they like, with typical Python tools:
+analyze, visualize, interpret, etc.
+
+```{code-cell} ipython3
+# Visualize revenue difference between carriers across booking curve
+
+import altair as alt
+
+alt.Chart(
+    summary.callback_data.to_dataframe("daily").eval("DIFF = AL1 - AL2")
+).mark_line().encode(
+    x=alt.X("days_prior", scale=alt.Scale(reverse=True)),
+    y="DIFF",
+    color="sample:N",
+)
+```
+
+```{code-cell} ipython3
+# Visualize "nogo" passengers over time, by market and segment
+
+nogo = (
+    summary.callback_data.to_dataframe("daily")
+    .set_index(["days_prior", "sample"])
+    .drop(columns=["trial", "AL1", "AL2"])
+)
+nogo.columns = pd.MultiIndex.from_tuples(nogo.columns.str.split(".").to_list())
+nogo.columns.names = ["nogo", "orig", "dest", "segment"]
+nogo = nogo.stack([1, 2, 3], future_stack=True).dropna().reset_index()
+
+mean_nogo = (
+    nogo.groupby(["days_prior", "orig", "dest", "segment"])
+    .nogo.mean()
+    .reset_index()
+)
+mean_nogo["market"] = mean_nogo.orig + "-" + mean_nogo.dest
+
+alt.Chart(mean_nogo).mark_line().encode(
+    x=alt.X("days_prior", scale=alt.Scale(reverse=True)),
+    y="nogo",
+    color="segment:N",
+    strokeWidth="market:N",
+    strokeDash="market:N",
+)
+```
+
+## Configured Callbacks
+
+Use the top-level `callbacks` mapping to select predefined callbacks in configurations, either in
+the YAML or Python format. Each mapping key identifies a declaration of a callback that will be
+triggered during simulation. Its registry name defaults to that key; use `name` when the declaration
+ID differs from the registered implementation.
+
+```yaml
+callbacks:
+  segmentation_detail:
+    parameters:
+      carriers: [AL1]
+      segments: [business, leisure]
+  selected_prices:
+    name: leg_bid_prices
+    parameters:
+      leg_ids: [101, 111]
+      priority: 1
+```
+
+You can load this configuration with `Config.from_yaml`, or modify an existing `Config` object in
+Python to add callbacks. This config can then be passed to `Simulation`, `MultiSimulation`, or
+`Experiments`. No Python attachment call is necessary. Callbacks are constructed during run
+preparation, with fresh state for each simulation and each multi-sim trial worker. A single
+`Simulation` running several trials retains a tracer's existing accumulation across those trials.
+
+| Option       | Meaning                                                                           |
+| ------------ | --------------------------------------------------------------------------------- |
+| `name`       | Registered implementation; defaults to the declaration ID                         |
+| `parameters` | Explicit JSON-compatible constructor/factory options; defaults to `{}`            |
+| `enabled`    | Whether to attach this callback; defaults to `true`                               |
+| `version`    | Optional required implementation version; mismatch is a run-time validation error |
+
+You can edit `sim.config.callbacks` before calling `run()`, including nested parameters. Changed
+declarations are revalidated before execution; unchanged ones can reuse validation. Callback strings
+pass through verbatim, without the format-tag expansion applied elsewhere in the config. This allows
+braces in regular expressions and label templates.
+
+Declarations merge by key when loading YAML overlays. For example, this overlay disables
+segmentation and changes the selected leg IDs without restating the other declarations:
+
+```yaml
+callbacks:
+  segmentation_detail:
+    enabled: false
+  selected_prices:
+    parameters:
+      leg_ids: [101]
+```
+
+Existing keys retain their positions; new keys append in overlay order. Saving and reloading a
+config preserves declaration order. At the same event time, configured callbacks execute in
+declaration order. Daily `priority` remains an offset in seconds relative to the overnight event, so
+different priorities can change execution order. Ordering relative to manual or RM events at exactly
+the same timestamp retains the existing scheduler behavior; use the established priority options
+when timing relative to RM updates matters.
+
+### Built-in Catalog
+
+Built-ins callbacks and tracers (those that are part of the PassengerSim library) are per-registered
+for use, and do not require the user to register them:
+
+| Registry name             | Hook         | Parameters                                                         | Result key                |
+| ------------------------- | ------------ | ------------------------------------------------------------------ | ------------------------- |
+| `segmentation_detail`     | daily        | Optional `markets`, `carriers`, `segments`, `priority` (default 1) | `segmentation_detail`     |
+| `leg_bid_prices`          | daily        | Required `leg_ids`; optional `priority` (default 1)                | `leg_bid_prices`          |
+| `path_bid_prices`         | daily        | Required `path_ids`; optional `priority` (default 1)               | `path_bid_prices`         |
+| `leg_bid_price_arrays`    | begin sample | Required `leg_ids`                                                 | `leg_bid_price_arrays`    |
+| `leg_bid_price_vectors`   | daily        | Required `leg_ids`; optional `priority` (default 2)                | `leg_bid_price_vectors`   |
+| `selected_leg_forecasts`  | begin sample | Required `leg_ids`                                                 | `selected_leg_forecasts`  |
+| `selected_path_forecasts` | begin sample | Required `path_ids`                                                | `selected_path_forecasts` |
+| `leg_booking_detail`      | daily        | Required `leg_ids`                                                 | `daily` callback data     |
+| `leg_bid_price_detail`    | daily        | Required `leg_ids`; optional `include_sold_out` (default true)     | `daily` callback data     |
+
+The last two are plain daily callbacks rather than tracers. They add `leg-<id>-sold` and
+`leg-<id>-bidprice` entries to the shared `daily` callback data, which summaries expose as
+`leg_booking_detail` and `leg_bid_price_detail`, with the figures `fig_leg_booking_detail_rake`,
+`fig_leg_bid_price_detail_rake`, and `fig_leg_bid_price_history`. These summary members are always
+available; no extra import is needed.
+
+These adapters retain the tracers' existing burn-period filtering, aggregation, and prerequisites.
+Begin-sample adapters do not expose `priority`, which has no effect for that hook. Two configured
+tracers cannot write the same result key, even under different declaration IDs or registry aliases.
+A configured tracer also cannot share an output name with a manually or globally attached tracer.
+Output renaming is not supported. The names `initialize_sample`, `begin_sample`, `daily`,
+`end_sample`, and `finalize_sample` are reserved for ordinary callback data.
+
+### Custom Callback Factories
+
+Use `register_callback_factory` or `register_tracer_factory` to register a custom callback or tracer
+implementation. Registration makes it available by name in the configurations; it does not attach it
+to simulations unless called for. Every name is unique, and repeated registration raises an error,
+even for the same implementation. There is no replacement operation.
+
+Factories receive one validated Pydantic model and return a fresh callable. Use `extra="forbid"` on
+the parameter model to catch misspelled options. For example:
+
+```python
+from collections.abc import Callable
+from functools import partial
+
+from pydantic import BaseModel
+
+from passengersim import Simulation
+from passengersim.callbacks import register_callback_factory
+
+
+class RevenueOptions(BaseModel, extra="forbid"):
+    skip_burn: bool = True
+
+
+def collect_revenue(sim: Simulation, *, skip_burn: bool) -> dict | None:
+    if skip_burn and sim.eng.sample < sim.eng.burn_samples:
+        return None
+    return {"carrier_revenue": {c.name: c.revenue for c in sim.eng.carriers}}
+
+
+def make_revenue_callback(options: RevenueOptions) -> Callable:
+    return partial(collect_revenue, skip_burn=options.skip_burn)
+
+
+register_callback_factory(
+    "my_carrier_revenue",
+    factory=make_revenue_callback,
+    when="end_sample",
+    parameters_model=RevenueOptions,
+    version="1",
+)
+```
+
+Then select it in YAML:
+
+```yaml
+callbacks:
+  my_carrier_revenue:
+    parameters:
+      skip_burn: true
+```
+
+Daily callbacks accept `(sim, days_prior)`; begin/end-sample callbacks accept `(sim)`. Return a
+dictionary to collect ordinary callback data, or `None`. Stateful factories must construct
+independent instances. Custom definitions are transported to multi-sim workers with the existing
+dill-based mechanism; they must be serializable, and their dependencies must be available to
+workers. YAML contains only names and options, not Python code or arbitrary import expressions.
+
+For a `GenericTracer` subclass, declare its configuration on the class, beside the constructor it
+describes, and register the class with the helper:
+
+```python
+from typing import ClassVar, Literal
+
+from pydantic import BaseModel
+
+from passengersim.callbacks import register_tracer_factory
+from passengersim.tracers.generic import GenericTracer
+
+
+class MyTracerOptions(BaseModel, extra="forbid"):
+    leg_ids: list[int]
+    priority: int = 1  # Same default as the constructor.
+
+
+class MyTracer(GenericTracer):
+    name = "my_tracer"  # Canonical result key in callback_data.
+    hook: ClassVar[Literal["begin_sample", "daily", "end_sample"]] = "daily"
+    options_model: ClassVar[type[BaseModel]] = MyTracerOptions
+    options_version: ClassVar[str] = "1"
+
+    def __init__(self, leg_ids: list[int], *, priority: int = 1) -> None: ...
+
+    # reset(), fresh(), attach(), __call__(), and finalize() as for any tracer.
+
+
+register_tracer_factory(MyTracer)
+```
+
+The helper calls `MyTracer(**validated_options)` and uses the declared hook, result name, options
+model, and version. Keep the options model's fields and defaults identical to the constructor's, and
+bump `options_version` when the tracer's results change meaning. `parameters_model=` and `version=`
+arguments override the class attributes, and `name=` registers an alias without renaming the output.
+The tracer's `fresh()` must preserve its output name and parameters, and its manual `attach()`
+should use the same hook.
+
+For a general factory returning a tracer, supply `output_name` equal to the tracer's canonical name;
+this allows collision checks before workers start.
+
+The built-in catalog follows the same pattern: each tracer declares its options on its class, and
+`passengersim.callbacks.builtins` only lists what is registered and under which names.
+
+### Caching and Saved Configurations
+
+Configured callbacks participate in cache identity and experiment reuse through **explicit
+configuration only**, including declaration order and disabled entries. Omitted options remain
+omitted in saved configs. Explicit `enabled: true` and a `name` equal to the declaration ID are
+retained when saving, because overlays may need them to override an inherited value. After overlays
+are merged, these defaults are normalized only for cache identity and experiment reuse. Ordinary
+`find_differences()` reports explicit differences; its `normalize_callbacks=True` option applies the
+same reuse normalization without changing either config. Missing callback configs match other
+missing configs, and an empty mapping is omitted to preserve existing cache hashes for configs
+without callbacks.
+
+Registered implementation versions and parameter defaults are not compared. Changing callback code,
+a registered version, or a default alone therefore does not invalidate a cache. Change an explicit
+config value or bypass reuse when those changes should take effect. An explicitly supplied YAML
+`version` is compared like any other config value and checked against the registry when a new run is
+prepared. Existing explicit cache-key and experiment reuse overrides still apply.
+
+Callback declarations and collected data survive saved-result round trips. Older PassengerSim
+versions can read configs without callback declarations, but cannot load configs containing the new
+`callbacks` field.
+
+## Choosing an Approach
+
+|                            | Manual attachment              | Configured callbacks              |
+| -------------------------- | ------------------------------ | --------------------------------- |
+| Definition                 | Callable or tracer in Python   | Named factory and parameter model |
+| Activation                 | Attach to an individual object | Enable via configuration          |
+| Parameters                 | Python code                    | Per-config options                |
+| Experiments and overlays   | Python attachment              | Adjust declarations by key        |
+| Included in cache identity | No                             | Yes (explicit config only)        |
+
+Use configured callbacks for collection reused across runs, experiments, or caches. Manual
+attachment is convenient for one-off notebook work. You can also mix these approaches.
+Configured/manual tracer output collisions raise an error before execution, so you'll be warned
+promptly if you've made a mistake.

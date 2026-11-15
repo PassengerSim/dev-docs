@@ -1,0 +1,6 @@
+prepare
+=======
+
+.. currentmodule:: passengersim.callbacks.configured
+
+.. autofunction:: prepare

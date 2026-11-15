@@ -1,0 +1,6 @@
+﻿CallbackMixin.use\_registered\_callbacks
+========================================
+
+.. currentmodule:: passengersim.callbacks
+
+.. automethod:: CallbackMixin.use_registered_callbacks

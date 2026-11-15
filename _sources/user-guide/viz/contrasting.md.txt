@@ -1,0 +1,33 @@
+---
+orphan: true
+jupytext:
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.19.2
+kernelspec:
+  display_name: pax (3.12.13)
+  language: python
+  name: python3
+---
+
+# Contrasting Runs
+
+The visualization guide is now organized by subject. Each group documents single-run figures and
+their available comparison counterparts together.
+
+Start with [Visualizations](index.md) for setup, data extraction, and export guidance.
+
+- [Legs](legs.md)
+- [Services](services.md)
+- [Carriers](carriers.md)
+- [Carrier Histories](carrier-history.md)
+- [Cabins](cabins.md)
+- [Demands](demands.md)
+- [Demand to Come](demand-to-come.md)
+- [Fare Class Mix](fare-class-mix.md)
+- [Continuous Price Segmentation](cp-segmentation.md)
+- [Segmentation and Booking Timeframes](segmentation.md)
+- [Bid Prices and Displacement](bid-prices.md)
+- [Forecasts](forecasts.md)

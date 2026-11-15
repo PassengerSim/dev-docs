@@ -1,0 +1,132 @@
+---
+title: Terminology
+icon: material/book-open-variant-outline
+---
+
+# Terminology
+
+While PassengerSim is designed to be flexible and support a variety of modeling approaches, it is
+helpful to have a common set of terms to describe the key concepts. The following definitions are
+used throughout the documentation and code. They may not align exactly with the definitions used in
+other modeling platforms or for particular airlines or supporting companies, but they are intended
+to provide a consistent framework for understanding the PassengerSim model and its outputs.
+
+## Service and Network Structure
+
+The following terminology is used in PassengerSim when describing the air travel services that are
+supplied by carriers to customers, and the structure of the airline network:
+
+- **carrier** represents a common carrier that operates vehicles and sells seats to customers. In
+  most applications, a carrier is an airline and the vehicles are airplanes, but it could also be a
+  bus or train operator, or a combination/hybrid. We often will adopt the language of airlines and
+  flights, but the concepts are intended to be more general.
+
+- **place** represents a location where passengers can board or deplane an aircraft (or other
+  vehicle). A place may be an airport, a rail station, or some other similar type location. In
+  PassengerSim, we generally assume that each place is a distinct origin or destination for
+  customers, and that customers don't consider multiple places as the same origin or destination.
+  For example, if both MDW and ORD are included in the model, we assume that customers consider each
+  airport as a distinct origin or destination, and that they don't consider "Chicago" as a whole as
+  their origin or destination.
+
+- **leg** represents a single scheduled flight operated by a carrier, with a specific origin,
+  destination, departure time, and arrival time. We generally assume that a leg is operated by a
+  single aircraft in a single flight operation, although the key feature is that the beginning and
+  end of a leg are defined by the place and time that passengers can board and deplane the aircraft,
+  rather than by the physical aircraft operation. For example, a "leg" might include a refueling
+  stop, but this is not modeled explicitly in PassengerSim.
+
+- **service** represents the set of legs that are operated by a carrier between two specific places.
+  A service may include one or more legs, but these are legs servicing the same places, not
+  connecting. A service is defined by the carrier, the origin and destination places. For example, a
+  carrier's service from ORD to LAX may include three different flight legs (at different times of
+  day).
+
+- **path** represents a sequence of one or more legs that a customer can take to travel from an
+  origin to a destination. A path is defined by the sequence of legs, the departure time of the
+  first leg, and the arrival time of the last leg. A path may include connections, or it could be a
+  single leg without connections. Currently, PassengerSim does not support modeling code-shares, so
+  all paths are assumed to be comprised of legs operated by a single carrier.
+
+- **market** represents a pair of origin and destination places that are connected by one or more
+  paths. A market is defined by the origin and destination places, and all paths that connect those
+  two places are considered to be in the same market. Markets are directional, so the market from
+  place A to place B is different from the market from place B to place A.
+
+- **cabin** represents the cabin types on aircraft. Cabins are strictly ordered, so it is possible
+  to decide if one cabin is better or worse than another. This ordering is also universal; we assume
+  that every customer would order the cabins in the same way, and that every customer would always
+  prefer a better cabin to a worse cabin, all else equal.
+
+## Fares and Pricing
+
+PassengerSim offers two paradigms for modeling fares: linear pricing and matrix pricing. In linear
+pricing, there is a single one-dimensional ladder of fares for any given market, and the RM system
+can open or close each fare on the ladder. In matrix pricing, there is a two-dimensional matrix of
+fares. Each cell in this two dimensional matrix may be populated with a fare or not. The RM system
+can open or close each *row* in the matrix, but cannot independently open or close each *cell*.
+Within this framework, linear pricing can be thought of as a special case of matrix pricing, where
+there is only one column in the matrix.
+
+The following terminology is used in PassengerSim code when referring to various aspects of fares
+and pricing:
+
+- **booking_class** represents a "row" of the matrix under matrix pricing. A booking class may have
+  advance purchase or other restrictions tied to it at the configuration level, but this is for the
+  convenience of the user; when we convert from configuration to simulation all advance purchase or
+  other restrictions are pushed into the `Fare` objects. Booking classes may also have a minimum
+  cabin type attached.
+
+- **brand** represents a "column" of the matrix under matrix pricing. A brand may have restrictions
+  tied to it, or ancillaries bundled with it. A brand may have a minimum or maximum booking class
+  (e.g. "basic economy" is never offered above booking class "Y2", or "gold elite" is never offered
+  below booking class "Y5")
+
+- **fare** is a "cell" in the matrix under matrix pricing. It is the combination of a booking_class
+  and a brand. It may also have uniquely defined attributes from a configuration. If a user wants to
+  define restrictions that are not homogenous by booking_class or brand, they can do so by
+  configuring restrictions at the fare level.
+
+- **fare_class** is a combination of a booking class and a brand. It is used to label the specific
+  fare that is being offered to a customer. It is a generalization of the fare: while the `fare` is
+  specific to a market and also has other attributes like prices and restrictions, the `fare_class`
+  is just a label.
+
+### Prices
+
+In contrast to a "fare", which refers to a combination of price and restrictions, when we are
+referring to "price" we are referring to a pure currency amount, without any restrictions attached.
+There are various types of "price" values that are relevant to different parts of the code, and it
+is important to be precise about which one we are referring to in different contexts.
+
+- **customer_price** is an attribute of an `Offer`. It is the amount of money that a customer pays
+  to book that offer, exclusive of any ancillaries that are not bundled into the offer. This is also
+  the carrier revenue actually realized if a customer books an offer. This value is specific to each
+  offer, and due to continuous pricing effects may not be exactly the same as the `fare_price`. In
+  the absence of continuous pricing this value should be the same as the `fare_price`.
+
+- **fare_price** is an attribute of a `Fare`. It is roughly equivalent to a "published" fare for a
+  particular combination of booking class and brand, for a given market. This is the starting point
+  for continuous pricing adjustments when generating offers.
+
+- **reference_price** is an attribute of a `Demand`. It is the pricing anchor point for customer
+  choice processes among customers in that segment for the given market. The `reference_price` is
+  typically the lowest `fare_price` for any fare on any carrier serving that market, regardless of
+  whether that fare is actually offered to the customer or not. However, this is configurable, and
+  in some cases the `reference_price` may be some other value, or some multiple of the lowest
+  `fare_price`.
+
+- **decision_price** This is an "average" price attached to a `PathClass` (paths by booking class)
+  or `Bucket` (legs by booking class). This is the default value that is fed as the input into all
+  RM steps that need to know the price of various booking classes that may be opened or closed. The
+  algorithm which determines how this average is calculated and how often it is updated is
+  configurable.
+
+- **marginal_rev** This is the expected positive marginal revenue to the carrier from keeping a
+  booking class open on a path or leg. For cases where expected marginal revenue is negative, this
+  value is zero, as we assume that the booking class will definitely be closed. These values are the
+  result of "fare adjustment" algorithms (e.g. "MR" or "KI") when used with variations of
+  forecasting that account for the probability of sell up (e.g. Q or conditional). This is a vector
+  of values by timeframe, as the probability of sell up is not constant over time. If using
+  "standard" forecasting that has independent demands, the marginal_rev can still be expressed as a
+  vector but all the values in the vector are equal.

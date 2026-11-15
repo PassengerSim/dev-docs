@@ -1,0 +1,58 @@
+SegmentationTracerOptions
+=========================
+
+.. currentmodule:: passengersim.tracers.segmentation
+
+.. autoclass:: SegmentationTracerOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SegmentationTracerOptions.__init__
+      ~SegmentationTracerOptions.construct
+      ~SegmentationTracerOptions.copy
+      ~SegmentationTracerOptions.dict
+      ~SegmentationTracerOptions.from_orm
+      ~SegmentationTracerOptions.json
+      ~SegmentationTracerOptions.model_construct
+      ~SegmentationTracerOptions.model_copy
+      ~SegmentationTracerOptions.model_dump
+      ~SegmentationTracerOptions.model_dump_json
+      ~SegmentationTracerOptions.model_json_schema
+      ~SegmentationTracerOptions.model_parametrized_name
+      ~SegmentationTracerOptions.model_post_init
+      ~SegmentationTracerOptions.model_rebuild
+      ~SegmentationTracerOptions.model_validate
+      ~SegmentationTracerOptions.model_validate_json
+      ~SegmentationTracerOptions.model_validate_strings
+      ~SegmentationTracerOptions.parse_file
+      ~SegmentationTracerOptions.parse_obj
+      ~SegmentationTracerOptions.parse_raw
+      ~SegmentationTracerOptions.schema
+      ~SegmentationTracerOptions.schema_json
+      ~SegmentationTracerOptions.update_forward_refs
+      ~SegmentationTracerOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SegmentationTracerOptions.model_computed_fields
+      ~SegmentationTracerOptions.model_config
+      ~SegmentationTracerOptions.model_extra
+      ~SegmentationTracerOptions.model_fields
+      ~SegmentationTracerOptions.model_fields_set
+      ~SegmentationTracerOptions.markets
+      ~SegmentationTracerOptions.carriers
+      ~SegmentationTracerOptions.segments
+      ~SegmentationTracerOptions.priority
+   
+   

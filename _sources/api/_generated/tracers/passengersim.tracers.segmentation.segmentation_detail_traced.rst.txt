@@ -1,0 +1,6 @@
+segmentation\_detail\_traced
+============================
+
+.. currentmodule:: passengersim.tracers.segmentation
+
+.. autofunction:: segmentation_detail_traced

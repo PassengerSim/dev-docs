@@ -1,0 +1,56 @@
+PathBidPriceTracerOptions
+=========================
+
+.. currentmodule:: passengersim.tracers.bid_price
+
+.. autoclass:: PathBidPriceTracerOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PathBidPriceTracerOptions.__init__
+      ~PathBidPriceTracerOptions.construct
+      ~PathBidPriceTracerOptions.copy
+      ~PathBidPriceTracerOptions.dict
+      ~PathBidPriceTracerOptions.from_orm
+      ~PathBidPriceTracerOptions.json
+      ~PathBidPriceTracerOptions.model_construct
+      ~PathBidPriceTracerOptions.model_copy
+      ~PathBidPriceTracerOptions.model_dump
+      ~PathBidPriceTracerOptions.model_dump_json
+      ~PathBidPriceTracerOptions.model_json_schema
+      ~PathBidPriceTracerOptions.model_parametrized_name
+      ~PathBidPriceTracerOptions.model_post_init
+      ~PathBidPriceTracerOptions.model_rebuild
+      ~PathBidPriceTracerOptions.model_validate
+      ~PathBidPriceTracerOptions.model_validate_json
+      ~PathBidPriceTracerOptions.model_validate_strings
+      ~PathBidPriceTracerOptions.parse_file
+      ~PathBidPriceTracerOptions.parse_obj
+      ~PathBidPriceTracerOptions.parse_raw
+      ~PathBidPriceTracerOptions.schema
+      ~PathBidPriceTracerOptions.schema_json
+      ~PathBidPriceTracerOptions.update_forward_refs
+      ~PathBidPriceTracerOptions.validate
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PathBidPriceTracerOptions.model_computed_fields
+      ~PathBidPriceTracerOptions.model_config
+      ~PathBidPriceTracerOptions.model_extra
+      ~PathBidPriceTracerOptions.model_fields
+      ~PathBidPriceTracerOptions.model_fields_set
+      ~PathBidPriceTracerOptions.path_ids
+      ~PathBidPriceTracerOptions.priority
+   
+   

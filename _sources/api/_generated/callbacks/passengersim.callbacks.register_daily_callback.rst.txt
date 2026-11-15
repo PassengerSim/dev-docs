@@ -1,0 +1,6 @@
+﻿register\_daily\_callback
+=========================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_daily_callback
