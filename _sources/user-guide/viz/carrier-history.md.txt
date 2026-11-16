@@ -20,18 +20,13 @@ good results for another.
 You can read about the underlying data and how to collect it in
 [Carrier Histories](../summary-tables/carrier-history.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
 Both figures use `carrier_history2`, which is collected directly without database recording. Neither
-has a dedicated `Contrast` equivalent.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
+has a dedicated [`Contrast`](passengersim.contrast.Contrast) equivalent.
 
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -43,17 +38,19 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## How much does revenue vary?
+## Sample Revenue Distribution
 
-This chart shows a smoothed distribution of revenue for each carrier. A wider shape means revenue
-varies more from sample to sample; a narrow shape means the results are more consistent.
+This chart shows a smoothed distribution of revenue outcomes over samples for each carrier. A wider
+shape means revenue varies more from sample to sample; a narrow shape means the results are more
+consistent.
 
-Uses `carrier_history2`, collected without a database. `raw_df=True` is not implemented and raises
-`NotImplementedError`; `also_df` is ignored. Read `summary.carrier_history2` directly for the
+This figure uses the results collected in the `carrier_history2` table. The `raw_df` option is not
+implemented for this figure, but you can access `summary.carrier_history2` directly for the
 underlying observations.
 
 For one run, call
-[fig_carrier_revenue_distribution](passengersim.summaries.SimulationTables.fig_carrier_revenue_distribution):
+[`fig_carrier_revenue_distribution`](passengersim.summaries.SimulationTables.fig_carrier_revenue_distribution)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_revenue_distribution()
@@ -62,21 +59,39 @@ summary.fig_carrier_revenue_distribution()
 To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
 for this figure.
 
-## Comparing two carriers within a run
+## Comparing Revenue for Two Carriers
 
-Each point pairs the revenues of two carriers from the same simulation sample. This lets you see
-whether the carriers tend to do well together, or whether a good result for one often comes with a
-weaker result for the other.
+The univariate distribution above shows each carrier’s revenue separately. This chart compares two
+selected carriers head-to-head, showing how their revenues vary together from sample to sample
+within a single simulation run. Each point represents one simulation sample, with the x-coordinate
+showing one carrier’s revenue and the y-coordinate showing the other’s.
 
-Choose `x_carrier` and `y_carrier`. With `mean_adjusted=True` (default), each axis is relative to
-that carrier’s mean; set it to `False` for revenue in currency units. This compares carriers, not
-simulation runs.
+This lets you see whether the carriers tend to do well together, or whether a good result for one
+often comes with a weaker result for the other.
+
+Choose both `x_carrier` and `y_carrier` for a single head-to-head plot. With `mean_adjusted=True`
+(default), each axis is relative to that carrier’s mean; set it to `False` for revenue in currency
+units.
 
 For one run, call
-[fig_carrier_head_to_head_revenue](passengersim.summaries.SimulationTables.fig_carrier_head_to_head_revenue):
+[`fig_carrier_head_to_head_revenue`](passengersim.summaries.SimulationTables.fig_carrier_head_to_head_revenue)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_head_to_head_revenue(x_carrier="Tapas", y_carrier="Stroop")
+```
+
+Omit both carrier names to generate a scatter plot matrix for all carriers. Each row and column
+represents a carrier, and each panel pairs revenues from the same trial and sample. The red line
+marks equal revenue (or equal percentages of mean revenue when mean adjustment is enabled).
+
+Call
+[`fig_carrier_head_to_head_revenue`](passengersim.summaries.SimulationTables.fig_carrier_head_to_head_revenue)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object without carrier
+arguments:
+
+```{code-cell} ipython3
+summary.fig_carrier_head_to_head_revenue()
 ```
 
 To compare scenarios, make this chart once for each result. There isn’t a combined comparison method

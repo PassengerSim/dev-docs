@@ -17,6 +17,7 @@ SimTabDemandToCome
       ~SimTabDemandToCome.aggregate_demand_history
       ~SimTabDemandToCome.close
       ~SimTabDemandToCome.extract
+      ~SimTabDemandToCome.fig_demand_to_come
       ~SimTabDemandToCome.fig_runtime_breakdown
       ~SimTabDemandToCome.file_info
       ~SimTabDemandToCome.from_file

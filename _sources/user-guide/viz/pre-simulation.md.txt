@@ -13,8 +13,11 @@ kernelspec:
 
 # Configuration Visualizations
 
-Some PassengerSim visualization tools can operate on a Config object directly, because they don't
-rely on the outputs of a simulation. Some examples are shown here.
+Before running a simulation, you can use these charts to review the network and its demand inputs.
+They work directly with a [`Config`](passengersim.config.Config) object, so you do not need
+simulation results.
+
+Here we’ll load the 3MKT demo configuration to see its routes and booking curves:
 
 ```{code-cell} ipython3
 import passengersim as pax
@@ -24,12 +27,20 @@ cfg = pax.Config.from_yaml(pax.demo_network("3MKT/DEMO"))
 
 ## Route Map
 
-You can generate a map of all the legs in the network, or all the legs offered by a particular
-carrier (here the maps look the same, as the 3MKT network is symmetric).
+This map shows the routes offered in the network. It helps you check which airports are connected
+and review the geographic coverage before running the simulation.
+
+To show the whole network, call [`fig_route_map`](passengersim.config._figures.fig_route_map) on a
+[`Config`](passengersim.config.Config) object:
 
 ```{code-cell} ipython3
 cfg.fig_route_map()
 ```
+
+To focus on one carrier, pass its name to
+[`fig_route_map`](passengersim.config._figures.fig_route_map) on the same
+[`Config`](passengersim.config.Config) object. The maps look the same in this example because the
+carriers in 3MKT serve the same routes:
 
 ```{code-cell} ipython3
 cfg.fig_route_map("AL1")
@@ -37,8 +48,12 @@ cfg.fig_route_map("AL1")
 
 ## Booking Curves
 
-You can review the booking curves, which control the average fraction of each passenger type
-arriving in each timeframe.
+Booking curves describe when passengers arrive during the booking horizon. This chart shows the
+cumulative fraction of demand arriving by each day, so you can see which curves put more demand
+early in the horizon and which concentrate it closer to departure.
+
+Call [`fig_booking_curves`](passengersim.config._figures.fig_booking_curves) on a
+[`Config`](passengersim.config.Config) object:
 
 ```{code-cell} ipython3
 cfg.fig_booking_curves()

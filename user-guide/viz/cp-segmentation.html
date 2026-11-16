@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#set-up-the-europa-examples" class="md-skip">
+        <a href="#sales-using-continuous-pricing" class="md-skip">
           Skip to content
         </a>
       
@@ -893,30 +893,6 @@
   
   
     <li class="md-nav__item">
-      <a href="demand-to-come.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Demand to Come</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="fare-class-mix.html" class="md-nav__link">
         
   
@@ -988,20 +964,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#sales-using-continuous-pricing" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Sales using continuous pricing</span>
+      <span>Sales Using Continuous Pricing</span>
     </span>
   </a>
   
@@ -1905,6 +1871,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2464,20 +2458,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#sales-using-continuous-pricing" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Sales using continuous pricing</span>
+      <span>Sales Using Continuous Pricing</span>
     </span>
   </a>
   
@@ -2505,36 +2489,18 @@ This chart puts those sales alongside total sales so you can see where continuou
 most.</p>
 <p>You can read about the underlying data and how to collect it in
 <a class="reference internal" href="../summary-tables/cp-segmentation.html"><span class="std std-doc">Continuous Price Segmentation</span></a>.</p>
-<p>The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.</p>
-<h2 id="set-up-the-europa-examples">Set up the Europa examples<a class="headerlink" href="#set-up-the-europa-examples" title="Link to this heading">¶</a></h2>
-<p>We’ll use <code class="docutils literal notranslate"><span class="pre">europa/upe</span></code> for the single-run charts and compare it with <code class="docutils literal notranslate"><span class="pre">europa</span></code>. The first load may
-run the demo; later calls reuse its cached result.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
-
-<span class="c1"># Keep all observations available when a figure contains more than 5,000 rows.</span>
-<span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
-<span class="n">summary</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">(</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">)</span>
-<span class="n">contrast</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">({</span><span class="s2">&quot;europa&quot;</span><span class="p">:</span> <span class="s2">&quot;europa&quot;</span><span class="p">,</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">:</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">})</span>
-<span class="n">baseline</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa&quot;</span><span class="p">]</span>
-<span class="n">alternative</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">]</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="sales-using-continuous-pricing">Sales using continuous pricing<a class="headerlink" href="#sales-using-continuous-pricing" title="Link to this heading">¶</a></h2>
+<h2 id="sales-using-continuous-pricing">Sales Using Continuous Pricing<a class="headerlink" href="#sales-using-continuous-pricing" title="Link to this heading">¶</a></h2>
 <p>Neither of these Europa demos enables continuous pricing, so their continuous-priced sales are zero.
 You’ll see total sales in the charts below; a simulation with continuous pricing enabled would also
 show the continuous-priced portion.</p>
 <p>Here we can compare total sales with sales made using continuous pricing in each booking class. This
 helps you see which classes account for most of the continuous-price sales.</p>
-<p>Uses <code class="docutils literal notranslate"><span class="pre">cp_segmentation</span></code>. The comparison supports <code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">height</span></code>, and <code class="docutils literal notranslate"><span class="pre">width</span></code>; the single-run
-figure uses its built-in layout.</p>
+<p>The values come from the <code class="docutils literal notranslate"><span class="pre">cp_segmentation</span></code> table. When comparing runs, you can change the title with
+<code class="docutils literal notranslate"><span class="pre">title</span></code> and adjust the panel size with <code class="docutils literal notranslate"><span class="pre">height</span></code> and <code class="docutils literal notranslate"><span class="pre">width</span></code>. The single-run figure uses its built-in
+layout.</p>
 <p>For one run, call
-<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_cp_segmentation" title="passengersim.summaries.SimulationTables.fig_cp_segmentation (Python method)"><span class="xref myst py py-meth">fig_cp_segmentation</span></a>:</p>
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_cp_segmentation" title="passengersim.summaries.SimulationTables.fig_cp_segmentation (Python method)"><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_cp_segmentation</span></code></span></a> on a single
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_cp_segmentation</span><span class="p">()</span>
@@ -2544,23 +2510,23 @@ figure uses its built-in layout.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-967d070aaddb4faa88d4d35ef6472bcd.vega-embed {
+  #altair-viz-9dbc2fc63aa14b119e10cc28686c65e6.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-967d070aaddb4faa88d4d35ef6472bcd.vega-embed details,
-  #altair-viz-967d070aaddb4faa88d4d35ef6472bcd.vega-embed details summary {
+  #altair-viz-9dbc2fc63aa14b119e10cc28686c65e6.vega-embed details,
+  #altair-viz-9dbc2fc63aa14b119e10cc28686c65e6.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-967d070aaddb4faa88d4d35ef6472bcd"></div>
+<div id="altair-viz-9dbc2fc63aa14b119e10cc28686c65e6"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-967d070aaddb4faa88d4d35ef6472bcd") {
-      outputDiv = document.getElementById("altair-viz-967d070aaddb4faa88d4d35ef6472bcd");
+    if (outputDiv.id !== "altair-viz-9dbc2fc63aa14b119e10cc28686c65e6") {
+      outputDiv = document.getElementById("altair-viz-9dbc2fc63aa14b119e10cc28686c65e6");
     }
 
     const paths = {
@@ -2611,7 +2577,8 @@ figure uses its built-in layout.</p>
   })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-31ffd58ef63c2bac14f6624a0a060664"}, "facet": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "booking_class", "sort": null, "title": "Booking Class", "type": "nominal"}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "booking_class", "title": "Booking Class", "type": "nominal"}, {"field": "sold", "format": ",", "title": "Total Sold", "type": "quantitative"}, {"field": "cp_sold", "format": ",", "title": "Continuous Priced Sold", "type": "quantitative"}], "x": {"axis": {}, "field": "sold", "stack": false, "title": "Total Sold", "type": "quantitative"}, "y": {"field": "booking_class", "sort": null, "title": "Booking Class", "type": "nominal"}}}, {"mark": {"type": "errorbar", "extent": "ci", "ticks": true}, "encoding": {"color": {"value": "black"}, "strokeWidth": {"value": 2}, "tooltip": [{"field": "carrier", "title": "Carrier", "type": "nominal"}, {"field": "booking_class", "title": "Booking Class", "type": "nominal"}, {"field": "sold", "format": ",", "title": "Total Sold", "type": "quantitative"}, {"field": "cp_sold", "format": ",", "title": "Continuous Priced Sold", "type": "quantitative"}], "x": {"field": "cp_sold", "title": "Continuous Priced Sold", "type": "quantitative"}, "x2": {"field": "Zero", "title": "Zero"}, "y": {"field": "booking_class", "sort": null, "title": "Booking Class", "type": "nominal"}}, "transform": [{"filter": "(datum.cp_sold > 0)"}]}], "height": 500, "width": 300}, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-31ffd58ef63c2bac14f6624a0a060664": [{"carrier": "Tapas", "booking_class": "Y0", "sold": 0.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Tapas", "booking_class": "Y1", "sold": 20412.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Tapas", "booking_class": "Y2", "sold": 42755.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Tapas", "booking_class": "Y3", "sold": 97759.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Tapas", "booking_class": "Y4", "sold": 140726.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Tapas", "booking_class": "Y5", "sold": 803992.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y0", "sold": 5560.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y1", "sold": 30355.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y2", "sold": 113419.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y3", "sold": 152705.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y4", "sold": 276560.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Stroop", "booking_class": "Y5", "sold": 630709.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y0", "sold": 7668.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y1", "sold": 36848.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y2", "sold": 120964.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y3", "sold": 174968.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y4", "sold": 315335.0, "cp_sold": 0.0, "Zero": 0}, {"carrier": "Brat", "booking_class": "Y5", "sold": 762305.0, "cp_sold": 0.0, "Zero": 0}]}}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
-<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_cp_segmentation.html#passengersim.contrast.fig_cp_segmentation" title="passengersim.contrast.fig_cp_segmentation (Python function) — Generate a figure contrasting continuous price segmentation for one or more runs."><span class="xref myst py py-func">fig_cp_segmentation</span></a>:</p>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_cp_segmentation.html#passengersim.contrast.fig_cp_segmentation" title="passengersim.contrast.fig_cp_segmentation (Python function) — Generate a figure contrasting continuous price segmentation for one or more runs."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_cp_segmentation</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.Contrast.html#passengersim.contrast.Contrast" title="passengersim.contrast.Contrast (Python class) — Bases: dict"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Contrast</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_cp_segmentation</span><span class="p">()</span>
@@ -2621,23 +2588,23 @@ figure uses its built-in layout.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-976f8458644845119d7bc9c8829e17ba.vega-embed {
+  #altair-viz-3072e8435dd24aa9b361819f09b89e31.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-976f8458644845119d7bc9c8829e17ba.vega-embed details,
-  #altair-viz-976f8458644845119d7bc9c8829e17ba.vega-embed details summary {
+  #altair-viz-3072e8435dd24aa9b361819f09b89e31.vega-embed details,
+  #altair-viz-3072e8435dd24aa9b361819f09b89e31.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-976f8458644845119d7bc9c8829e17ba"></div>
+<div id="altair-viz-3072e8435dd24aa9b361819f09b89e31"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-976f8458644845119d7bc9c8829e17ba") {
-      outputDiv = document.getElementById("altair-viz-976f8458644845119d7bc9c8829e17ba");
+    if (outputDiv.id !== "altair-viz-3072e8435dd24aa9b361819f09b89e31") {
+      outputDiv = document.getElementById("altair-viz-3072e8435dd24aa9b361819f09b89e31");
     }
 
     const paths = {

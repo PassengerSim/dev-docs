@@ -22,19 +22,17 @@ legs or paths.
 You can read about the underlying data and how to collect it in
 [Forecasts](../summary-tables/forecasts.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
+To use the forecast tables, record `bucket` data for legs and `pathclass` data for paths during the
+simulation. The linked table guide explains how to prepare the reports or retain the database so you
+can load them later.
 
-Leg forecasts require recorded `bucket` data and path forecasts require `pathclass` data. Use the
-linked table guide to prepare these reports or retain the backing database. Forecast standard
-deviations describe forecast uncertainty, not variability of the plotted average across samples.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
+The standard deviations in these charts describe uncertainty in the demand forecast. They do not
+measure how much the plotted average varies across simulation samples.
 
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -46,7 +44,7 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Record forecasts for these demos
+## Collecting Forecasts
 
 The cached demo summaries do not include the detailed forecast tables or tracer observations. We’ll
 replay the same two demos with those collectors enabled. This changes only recording, not the
@@ -87,7 +85,7 @@ recorded = Contrast({name: collect_demo(name) for name in ("europa", "europa/upe
 recorded_summary = recorded["europa/upe"]
 ```
 
-## Forecasts for individual legs
+## Forecasts for Individual Legs
 
 Choose a leg to see how its demand forecasts changed over the booking horizon—the period leading up
 to departure. You can separate the booking classes to see which forecasts are driving the overall
@@ -102,19 +100,21 @@ Use `by_leg_id` to choose a leg. With `by_class=True`, you can see the booking c
 class name selects just that class. When comparing runs, `agg_booking_classes=True` combines the
 classes.
 
-For one run, call [fig_leg_forecasts](passengersim.summaries.SimulationTables.fig_leg_forecasts):
+For one run, call [`fig_leg_forecasts`](passengersim.summaries.SimulationTables.fig_leg_forecasts)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_leg_forecasts(by_leg_id=111, of="mu")
 ```
 
-To compare runs, use [fig_leg_forecasts](passengersim.contrast.fig_leg_forecasts):
+To compare runs, use [`fig_leg_forecasts`](passengersim.contrast.fig_leg_forecasts) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 recorded.fig_leg_forecasts(by_leg_id=111, of="mu")
 ```
 
-## Forecasts for passenger paths
+## Forecasts for Passenger Paths
 
 A path is an itinerary that may use one leg or several connecting legs. This chart lets you follow
 its demand forecasts, how often it was closed to bookings, or its adjusted fares as departure
@@ -127,54 +127,74 @@ closures. Paths also support `of="adj_price"` to show adjusted fares. Choose a p
 For comparisons, you can request several measures with a list, give paths friendlier labels with
 `path_names`, or combine booking classes with `agg_booking_classes=True`.
 
-For one run, call [fig_path_forecasts](passengersim.summaries.SimulationTables.fig_path_forecasts):
+For one run, call [`fig_path_forecasts`](passengersim.summaries.SimulationTables.fig_path_forecasts)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_path_forecasts(by_path_id=111, of="mu")
 ```
 
-To compare runs, use [fig_path_forecasts](passengersim.contrast.fig_path_forecasts):
+To compare runs, use [`fig_path_forecasts`](passengersim.contrast.fig_path_forecasts) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 recorded.fig_path_forecasts(by_path_id=111, of="mu")
 ```
 
-## Tracer forecast dashboards
+## Tracer Analysis: Forecast Dashboards
 
-These dashboards use attached forecast tracers rather than the database-backed forecast tables
-above. Attach the relevant tracer before running each simulation:
+These dashboards bring several recorded forecast measures together, so you can examine a leg or path
+in more detail. They use observations collected by forecast tracers during the simulation. Attach
+[`LegForecastTracer`](passengersim.tracers.forecasts.LegForecastTracer) or
+[`PathForecastTracer`](passengersim.tracers.forecasts.PathForecastTracer) before each run; the
+collection code above attaches both to each demo.
 
-The collection cell above has already attached both tracers to each demo run.
+### Leg Forecast Dashboard
 
-### `fig_leg_forecast_dashboard`
+This dashboard shows forecast statistics for one leg across booking classes and days. It helps you
+see which classes contribute to the forecast and how those expectations change as departure
+approaches. Choose the leg with `leg_id`.
 
-Inspect the collected forecast statistics for one leg across booking classes and days. Pass a
-summary for one run or a `Contrast` for side-by-side dashboards. `include` restricts comparison
-sources. This is a module function, not a `SimulationTables` or `Contrast` method.
+For one run, call
+[`fig_leg_forecast_dashboard`](passengersim.tracers.forecasts.fig_leg_forecast_dashboard) with a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object. This is a standalone
+function, imported in the collection code above:
 
 ```{code-cell} ipython3
 fig_leg_forecast_dashboard(recorded_summary, leg_id=111)
 ```
 
+To compare runs, call
+[`fig_leg_forecast_dashboard`](passengersim.tracers.forecasts.fig_leg_forecast_dashboard) with a
+[`Contrast`](passengersim.contrast.Contrast) object. Use `include` to select which runs appear side
+by side:
+
 ```{code-cell} ipython3
 fig_leg_forecast_dashboard(recorded, leg_id=111, include=("europa", "europa/upe"))
 ```
 
-API: [`fig_leg_forecast_dashboard`](passengersim.tracers.forecasts.fig_leg_forecast_dashboard).
+### Path Forecast Dashboard
 
-### `fig_path_forecast_dashboard`
+This dashboard follows forecast statistics for a particular path. It also includes a panel of
+adjusted fares by timeframe, so you can review those alongside the demand forecasts. Choose the path
+with `path_id`.
 
-Inspect the collected forecast statistics for a particular path. Like the leg dashboard, it accepts
-a summary or a `Contrast` and supports `include` for comparison sources. Neither dashboard offers
-`raw_df`; inspect the tracer data if you need its observations. The path dashboard also has a panel
-of adjusted fares by timeframe.
+For one run, call
+[`fig_path_forecast_dashboard`](passengersim.tracers.forecasts.fig_path_forecast_dashboard) with a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 fig_path_forecast_dashboard(recorded_summary, path_id=111)
 ```
 
+To compare runs, call
+[`fig_path_forecast_dashboard`](passengersim.tracers.forecasts.fig_path_forecast_dashboard) with a
+[`Contrast`](passengersim.contrast.Contrast) object. As with the leg dashboard, `include` selects
+which runs to show:
+
 ```{code-cell} ipython3
 fig_path_forecast_dashboard(recorded, path_id=111, include=("europa", "europa/upe"))
 ```
 
-API: [`fig_path_forecast_dashboard`](passengersim.tracers.forecasts.fig_path_forecast_dashboard).
+Neither dashboard supports `raw_df`. If you need the underlying observations, inspect the collected
+tracer data described in [Forecasts](../summary-tables/forecasts.md).

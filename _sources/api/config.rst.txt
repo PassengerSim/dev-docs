@@ -30,3 +30,12 @@ config
 
     ~passengersim.config.base.YamlConfig
     ~passengersim.config.pretty.PrettyModel
+
+Configuration Figures
+---------------------
+
+These functions are also available as methods on a ``Config`` object.
+
+.. autofunction:: passengersim.config._figures.fig_route_map
+
+.. autofunction:: passengersim.config._figures.fig_booking_curves

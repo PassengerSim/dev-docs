@@ -43,13 +43,16 @@ most legs have similar loads or whether the network has a mixture of full and li
 flights.
 
 For one run, call
-[fig_leg_load_factor_distribution](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution):
+[`fig_leg_load_factor_distribution`](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_factor_distribution()
 ```
 
-Pass a carrier name to focus on just that carrier, as below.
+To focus on one carrier, pass its name to
+[`fig_leg_load_factor_distribution`](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution)
+on the same [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_factor_distribution(by_carrier="Tapas")
@@ -58,11 +61,17 @@ summary.fig_leg_load_factor_distribution(by_carrier="Tapas")
 `normalize=True` shows the fraction of legs in each range instead of their count, which helps when
 carriers have different numbers of flights.
 
+Call
+[`fig_leg_load_factor_distribution`](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object with that option:
+
 ```{code-cell} ipython3
 summary.fig_leg_load_factor_distribution(normalize=True)
 ```
 
-You can choose your own range boundaries with `breakpoints`.
+To choose your own range boundaries, pass `breakpoints` to
+[`fig_leg_load_factor_distribution`](passengersim.summaries.SimulationTables.fig_leg_load_factor_distribution)
+on the same [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_factor_distribution(breakpoints=[70,80,90])
@@ -80,11 +89,16 @@ between their endpoints.
 Use `by_carrier`, `breakpoints`, and `normalize` as in the load-factor distribution.
 
 For one run, call
-[fig_leg_local_share_distribution](passengersim.summaries.SimulationTables.fig_leg_local_share_distribution):
+[`fig_leg_local_share_distribution`](passengersim.summaries.SimulationTables.fig_leg_local_share_distribution)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_local_share_distribution(normalize=True)
 ```
+
+To focus on one carrier, call
+[`fig_leg_local_share_distribution`](passengersim.summaries.SimulationTables.fig_leg_local_share_distribution)
+on the same [`SimulationTables`](passengersim.summaries.SimulationTables) object with `by_carrier`:
 
 ```{code-cell} ipython3
 summary.fig_leg_local_share_distribution(by_carrier="Tapas", normalize=True)
@@ -100,13 +114,16 @@ represents a leg. By plotting load factor against the share of local passengers,
 patterns—for example, whether legs carrying more connecting passengers also tend to be fuller.
 
 For one run, call
-[fig_leg_load_v_local](passengersim.summaries.SimulationTables.fig_leg_load_v_local):
+[`fig_leg_load_v_local`](passengersim.summaries.SimulationTables.fig_leg_load_v_local) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_v_local()
 ```
 
-Filter with `orig`, `dest`, `place` (either endpoint), or `carrier`.
+Filter with `orig`, `dest`, `place` (either endpoint), or `carrier`. For example, call
+[`fig_leg_load_v_local`](passengersim.summaries.SimulationTables.fig_leg_load_v_local) on the same
+[`SimulationTables`](passengersim.summaries.SimulationTables) object to select one carrier:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_v_local(carrier="Tapas")
@@ -123,13 +140,17 @@ for this figure.
 
 Are longer flights fuller than shorter ones? This scatter plot puts each leg’s load factor alongside
 its distance so you can explore that question. For one run, call
-[fig_leg_load_v_distance](passengersim.summaries.SimulationTables.fig_leg_load_v_distance):
+[`fig_leg_load_v_distance`](passengersim.summaries.SimulationTables.fig_leg_load_v_distance) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_v_distance()
 ```
 
-Filter with `orig`, `dest`, `place`, or `carrier`, the same as for `fig_leg_load_v_local`.
+Filter with `orig`, `dest`, `place`, or `carrier`, the same as for
+[`fig_leg_load_v_local`](passengersim.summaries.SimulationTables.fig_leg_load_v_local). For example,
+call [`fig_leg_load_v_distance`](passengersim.summaries.SimulationTables.fig_leg_load_v_distance) on
+the same [`SimulationTables`](passengersim.summaries.SimulationTables) object to select an airport:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_v_distance(place="MAD")
@@ -137,6 +158,10 @@ summary.fig_leg_load_v_distance(place="MAD")
 
 This figure is particularly prone to having many overlapping points. The `beeswarm` argument can
 separate points that overlap, by moving points slightly so they don't overlap as much.
+
+Pass `beeswarm` to
+[`fig_leg_load_v_distance`](passengersim.summaries.SimulationTables.fig_leg_load_v_distance) on the
+same [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_load_v_distance(beeswarm=1000)
@@ -154,7 +179,8 @@ Generating this figure requires that both `path_legs` and `pathclasses` tables a
 select-leg analysis.
 
 For one run, call
-[fig_select_leg_analysis](passengersim.summaries.SimulationTables.fig_select_leg_analysis):
+[`fig_select_leg_analysis`](passengersim.summaries.SimulationTables.fig_select_leg_analysis) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_select_leg_analysis(leg_id=111)
@@ -162,6 +188,10 @@ summary.fig_select_leg_analysis(leg_id=111)
 
 The breakdown of leg customers can be one of two metrics: either `bookings` (the default) or
 `revenue`.
+
+To show revenue, call
+[`fig_select_leg_analysis`](passengersim.summaries.SimulationTables.fig_select_leg_analysis) on the
+same [`SimulationTables`](passengersim.summaries.SimulationTables) object with `metric="revenue"`:
 
 ```{code-cell} ipython3
 summary.fig_select_leg_analysis(leg_id=111, metric="revenue")
@@ -178,15 +208,18 @@ This figure will compare load factor and local share for the same legs in two ru
 baseline to treatment and points mark treatment outcomes, with marker size representing leg
 capacity. Use this tool for matched networks (i.e. before and after treatments).
 
+To compare two runs, call [`fig_leg_shifts`](passengersim.contrast.duo.fig_leg_shifts) with two
+[`SimulationTables`](passengersim.summaries.SimulationTables) objects: the baseline first, followed
+by the treatment. This is a standalone function, so import it before calling it:
+
 ```{code-cell} ipython3
 from passengersim.contrast.duo import fig_leg_shifts
 
 fig_leg_shifts(baseline, alternative, coloring="change_revenue_pct")
 ```
 
-This is a paired-run function, not a `Contrast` method or a single-run method. See the API
-documentation on [`fig_leg_shifts`](passengersim.contrast.duo.fig_leg_shifts) for additional
-details.
+This function compares exactly two results. It is not a method on a
+[`Contrast`](passengersim.contrast.Contrast) object and has no single-run equivalent.
 
 ## Callback Analysis: Leg Booking Detail
 
@@ -224,9 +257,18 @@ def collect_demo(name: str) -> pax.SimulationTables:
 recorded_summary = collect_demo("europa/upe")
 ```
 
+For one run, call
+[`fig_leg_booking_detail_rake`](passengersim.callbacks.booking_detail.fig_leg_booking_detail_rake)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
+
 ```{code-cell} ipython3
 recorded_summary.fig_leg_booking_detail_rake(leg_id=111)
 ```
+
+To inspect another leg, call
+[`fig_leg_booking_detail_rake`](passengersim.callbacks.booking_detail.fig_leg_booking_detail_rake)
+on the same [`SimulationTables`](passengersim.summaries.SimulationTables) object with a different
+`leg_id`:
 
 ```{code-cell} ipython3
 recorded_summary.fig_leg_booking_detail_rake(leg_id=201)
@@ -236,7 +278,4 @@ The collector can also be enabled in a configuration instead of attached in Pyth
 `callbacks: {leg_booking_detail: {parameters: {leg_ids: [111, 201]}}}`; the summary methods are the
 same either way.
 
-There is no dedicated comparison method; collect and plot the same leg in each run separately. See
-the API documentation on
-[`fig_leg_booking_detail_rake`](passengersim.callbacks.booking_detail.fig_leg_booking_detail_rake)
-for additional details.
+There is no dedicated comparison method; collect and plot the same leg in each run separately.

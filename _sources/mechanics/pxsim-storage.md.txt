@@ -35,6 +35,9 @@ it? Where are its bytes?** They do not hold three copies of the data.
 
 Imagine saving a results table under the illustrative name `bookings`:
 
+```{rst-class} nowrap-first-column
+```
+
 | Container table  | Purpose                                       | Example                                                                      |
 | ---------------- | --------------------------------------------- | ---------------------------------------------------------------------------- |
 | `pxsim_entries`  | A directory of named results                  | “`bookings` is payload 42.”                                                  |
@@ -67,6 +70,9 @@ stored sizes without decoding the actual data.
 ## What the version 2 tables contain
 
 One additional table identifies the format. Together, the four tables have these responsibilities:
+
+```{rst-class} nowrap-first-column
+```
 
 | Table            | Stored information                                                                                                                                                                      |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

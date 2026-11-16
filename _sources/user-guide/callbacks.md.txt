@@ -51,6 +51,9 @@ sim = pax.Simulation(cfg)
 To collect data, we can write a function that will interrogate the simulation and grab whatever info
 we are looking for. There are five lifecycle hooks:
 
+```{rst-class} nowrap-first-column
+```
+
 | Hook                | Execution   | Timing                                                                                                      |
 | ------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
 | `initialize_sample` | Synchronous | After the sample number, random seed, and counters are initialized, before demand generation                |
@@ -336,6 +339,9 @@ Python to add callbacks. This config can then be passed to `Simulation`, `MultiS
 preparation, with fresh state for each simulation and each multi-sim trial worker. A single
 `Simulation` running several trials retains a tracer's existing accumulation across those trials.
 
+```{rst-class} nowrap-first-column
+```
+
 | Option       | Meaning                                                                           |
 | ------------ | --------------------------------------------------------------------------------- |
 | `name`       | Registered implementation; defaults to the declaration ID                         |
@@ -371,6 +377,9 @@ when timing relative to RM updates matters.
 
 Built-ins callbacks and tracers (those that are part of the PassengerSim library) are per-registered
 for use, and do not require the user to register them:
+
+```{rst-class} nowrap-first-column
+```
 
 | Registry name             | Hook         | Parameters                                                         | Result key                |
 | ------------------------- | ------------ | ------------------------------------------------------------------ | ------------------------- |

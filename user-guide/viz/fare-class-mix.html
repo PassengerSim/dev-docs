@@ -11,7 +11,7 @@
       
       
       
-        <link rel="prev" href="demand-to-come.html">
+        <link rel="prev" href="demands.html">
       
       
         <link rel="next" href="cp-segmentation.html">
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#set-up-the-europa-examples" class="md-skip">
+        <a href="#bookings-by-fare-class" class="md-skip">
           Skip to content
         </a>
       
@@ -889,30 +889,6 @@
                 
   
   
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="demand-to-come.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Demand to Come</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
     
   
     
@@ -964,30 +940,20 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#bookings-by-fare-class" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Bookings by fare class</span>
+      <span>Bookings by Fare Class</span>
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#looking-at-one-market" class="md-nav__link">
+  <a href="#fare-class-mix-by-market" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Looking at one market</span>
+      <span>Fare Class Mix by Market</span>
     </span>
   </a>
   
@@ -1915,6 +1881,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2474,30 +2468,20 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#bookings-by-fare-class" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Bookings by fare class</span>
+      <span>Bookings by Fare Class</span>
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#looking-at-one-market" class="md-nav__link">
+  <a href="#fare-class-mix-by-market" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Looking at one market</span>
+      <span>Fare Class Mix by Market</span>
     </span>
   </a>
   
@@ -2525,33 +2509,16 @@ charts help you see whether bookings are moving toward higher or lower classes, 
 network or in one market.</p>
 <p>You can read about the underlying data and how to collect it in
 <a class="reference internal" href="../summary-tables/fare-class-mix.html"><span class="std std-doc">Fare Class Mix</span></a>.</p>
-<p>The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.</p>
-<h2 id="set-up-the-europa-examples">Set up the Europa examples<a class="headerlink" href="#set-up-the-europa-examples" title="Link to this heading">¶</a></h2>
-<p>We’ll use <code class="docutils literal notranslate"><span class="pre">europa/upe</span></code> for the single-run charts and compare it with <code class="docutils literal notranslate"><span class="pre">europa</span></code>. The first load may
-run the demo; later calls reuse its cached result.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
-
-<span class="c1"># Keep all observations available when a figure contains more than 5,000 rows.</span>
-<span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
-<span class="n">summary</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">(</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">)</span>
-<span class="n">contrast</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">({</span><span class="s2">&quot;europa&quot;</span><span class="p">:</span> <span class="s2">&quot;europa&quot;</span><span class="p">,</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">:</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">})</span>
-<span class="n">baseline</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa&quot;</span><span class="p">]</span>
-<span class="n">alternative</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">]</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="bookings-by-fare-class">Bookings by fare class<a class="headerlink" href="#bookings-by-fare-class" title="Link to this heading">¶</a></h2>
+<h2 id="bookings-by-fare-class">Bookings by Fare Class<a class="headerlink" href="#bookings-by-fare-class" title="Link to this heading">¶</a></h2>
 <p>Each bar shows average bookings for a carrier, with the fare classes stacked within the bar.
 Comparing the sizes of those pieces helps you see which classes account for the bookings.</p>
-<p><code class="docutils literal notranslate"><span class="pre">label_threshold</span></code> suppresses labels on small segments (default 0.06). <code class="docutils literal notranslate"><span class="pre">group_by</span></code> accepts
-<code class="docutils literal notranslate"><span class="pre">&quot;fare_class&quot;</span></code> (the default), <code class="docutils literal notranslate"><span class="pre">&quot;booking_class&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;brand&quot;</span></code>; the returned plotting data uses the
-same aggregation. The comparison uses the same booking-class stacks for each source.</p>
-<p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_fare_class_mix" title="passengersim.summaries.SimulationTables.fig_fare_class_mix (Python method) — Plot the fare class mix data."><span class="xref myst py py-meth">fig_fare_class_mix</span></a>:</p>
+<p>You can group bookings by <code class="docutils literal notranslate"><span class="pre">&quot;fare_class&quot;</span></code> (the default), <code class="docutils literal notranslate"><span class="pre">&quot;booking_class&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;brand&quot;</span></code> using
+<code class="docutils literal notranslate"><span class="pre">group_by</span></code>. This also determines how the data is grouped when you request the underlying values. The
+comparison uses the same grouping for each run, so you can see which parts of the mix changed.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">label_threshold</span></code> to keep labels off the smallest portions of each bar. Its default is 0.06,
+which sets the cutoff at 6% of the largest carrier’s total bookings in the chart.</p>
+<p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_fare_class_mix" title="passengersim.summaries.SimulationTables.fig_fare_class_mix (Python method) — Plot the fare class mix data."><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_fare_class_mix</span></code></span></a>
+on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_fare_class_mix</span><span class="p">()</span>
@@ -2561,23 +2528,23 @@ same aggregation. The comparison uses the same booking-class stacks for each sou
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0.vega-embed {
+  #altair-viz-0ca9369ab2144f37b8c2f2eb22995177.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0.vega-embed details,
-  #altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0.vega-embed details summary {
+  #altair-viz-0ca9369ab2144f37b8c2f2eb22995177.vega-embed details,
+  #altair-viz-0ca9369ab2144f37b8c2f2eb22995177.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0"></div>
+<div id="altair-viz-0ca9369ab2144f37b8c2f2eb22995177"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0") {
-      outputDiv = document.getElementById("altair-viz-2d7fc3d59f5a45dda932e064b15fe3b0");
+    if (outputDiv.id !== "altair-viz-0ca9369ab2144f37b8c2f2eb22995177") {
+      outputDiv = document.getElementById("altair-viz-0ca9369ab2144f37b8c2f2eb22995177");
     }
 
     const paths = {
@@ -2628,7 +2595,8 @@ same aggregation. The comparison uses the same booking-class stacks for each sou
   })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "fare_class", "type": "nominal"}, "tooltip": [{"field": "carrier", "type": "nominal"}, {"field": "fare_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "title": "Fare Class Mix", "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}, {"mark": {"type": "text", "baseline": "top", "color": "white", "dx": 0, "dy": 3}, "encoding": {"opacity": {"condition": {"test": "datum.avg_sold < 94.539", "value": 0}, "value": 1}, "order": {"field": "fare_class", "sort": "descending", "type": "nominal"}, "text": {"field": "avg_sold", "format": ".2f", "type": "quantitative"}, "tooltip": [{"field": "carrier", "type": "nominal"}, {"field": "fare_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "title": "Fare Class Mix", "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}], "data": {"name": "data-9e87a4dc87c1c98c508a9f44aaf36e42"}, "height": 300, "width": 400, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-9e87a4dc87c1c98c508a9f44aaf36e42": [{"carrier": "Tapas", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 0.0}, {"carrier": "Tapas", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 22.68}, {"carrier": "Tapas", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 47.50555555555555}, {"carrier": "Tapas", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 108.6211111111111}, {"carrier": "Tapas", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 156.36222222222221}, {"carrier": "Tapas", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 893.3244444444445}, {"carrier": "Stroop", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 6.177777777777778}, {"carrier": "Stroop", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 33.727777777777774}, {"carrier": "Stroop", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 126.02111111111111}, {"carrier": "Stroop", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 169.67222222222222}, {"carrier": "Stroop", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 307.2888888888889}, {"carrier": "Stroop", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 700.7877777777778}, {"carrier": "Brat", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 8.52}, {"carrier": "Brat", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 40.94222222222222}, {"carrier": "Brat", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 134.40444444444444}, {"carrier": "Brat", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 194.4088888888889}, {"carrier": "Brat", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 350.3722222222222}, {"carrier": "Brat", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 847.0055555555556}]}}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
-<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_fare_class_mix.html#passengersim.contrast.fig_fare_class_mix" title="passengersim.contrast.fig_fare_class_mix (Python function) — Generate a figure contrasting carrier fare class mix for one or more runs."><span class="xref myst py py-func">fig_fare_class_mix</span></a>:</p>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_fare_class_mix.html#passengersim.contrast.fig_fare_class_mix" title="passengersim.contrast.fig_fare_class_mix (Python function) — Generate a figure contrasting carrier fare class mix for one or more runs."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_fare_class_mix</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.Contrast.html#passengersim.contrast.Contrast" title="passengersim.contrast.Contrast (Python class) — Bases: dict"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Contrast</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_fare_class_mix</span><span class="p">()</span>
@@ -2638,23 +2606,23 @@ same aggregation. The comparison uses the same booking-class stacks for each sou
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-97693c1e5c7d4512aa2d10305c1f6c70.vega-embed {
+  #altair-viz-bfd8a110b0684bf3b609e4763b94f77d.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-97693c1e5c7d4512aa2d10305c1f6c70.vega-embed details,
-  #altair-viz-97693c1e5c7d4512aa2d10305c1f6c70.vega-embed details summary {
+  #altair-viz-bfd8a110b0684bf3b609e4763b94f77d.vega-embed details,
+  #altair-viz-bfd8a110b0684bf3b609e4763b94f77d.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-97693c1e5c7d4512aa2d10305c1f6c70"></div>
+<div id="altair-viz-bfd8a110b0684bf3b609e4763b94f77d"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-97693c1e5c7d4512aa2d10305c1f6c70") {
-      outputDiv = document.getElementById("altair-viz-97693c1e5c7d4512aa2d10305c1f6c70");
+    if (outputDiv.id !== "altair-viz-bfd8a110b0684bf3b609e4763b94f77d") {
+      outputDiv = document.getElementById("altair-viz-bfd8a110b0684bf3b609e4763b94f77d");
     }
 
     const paths = {
@@ -2705,13 +2673,15 @@ same aggregation. The comparison uses the same booking-class stacks for each sou
   })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-52d42245437802eaf647b8dcaf2cea1e"}, "facet": {"column": {"field": "carrier", "title": "Carrier", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "fare_class", "type": "nominal"}, "tooltip": [{"field": "source", "type": "nominal"}, {"field": "fare_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "source", "sort": ["europa", "europa/upe"], "title": "Source", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}, {"mark": {"type": "text", "baseline": "top", "color": "white", "dx": 0, "dy": 3}, "encoding": {"opacity": {"condition": {"test": "datum.avg_sold < 95.358", "value": 0}, "value": 1}, "order": {"field": "fare_class", "sort": "descending", "type": "nominal"}, "text": {"field": "avg_sold", "format": ".2f", "type": "quantitative"}, "tooltip": [{"field": "source", "type": "nominal"}, {"field": "fare_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "source", "sort": ["europa", "europa/upe"], "title": "Source", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}], "height": 300, "width": 200}, "title": "Carrier Fare Class Mix", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-52d42245437802eaf647b8dcaf2cea1e": [{"source": "europa", "carrier": "Tapas", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 0.0}, {"source": "europa", "carrier": "Tapas", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 24.954444444444444}, {"source": "europa", "carrier": "Tapas", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 52.11888888888889}, {"source": "europa", "carrier": "Tapas", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 114.7311111111111}, {"source": "europa", "carrier": "Tapas", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 155.92555555555555}, {"source": "europa", "carrier": "Tapas", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 859.07}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 3.312222222222222}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 27.42222222222222}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 115.03222222222222}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 161.94333333333333}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 279.57}, {"source": "europa", "carrier": "Stroop", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 782.2833333333333}, {"source": "europa", "carrier": "Brat", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 3.311111111111111}, {"source": "europa", "carrier": "Brat", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 32.37111111111111}, {"source": "europa", "carrier": "Brat", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 121.4811111111111}, {"source": "europa", "carrier": "Brat", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 179.68666666666667}, {"source": "europa", "carrier": "Brat", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 291.0566666666667}, {"source": "europa", "carrier": "Brat", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 961.3888888888889}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 0.0}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 22.68}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 47.50555555555555}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 108.6211111111111}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 156.36222222222221}, {"source": "europa/upe", "carrier": "Tapas", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 893.3244444444445}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 6.177777777777778}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 33.727777777777774}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 126.02111111111111}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 169.67222222222222}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 307.2888888888889}, {"source": "europa/upe", "carrier": "Stroop", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 700.7877777777778}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y0", "booking_class": "Y0", "brand": "", "avg_sold": 8.52}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y1", "booking_class": "Y1", "brand": "", "avg_sold": 40.94222222222222}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y2", "booking_class": "Y2", "brand": "", "avg_sold": 134.40444444444444}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y3", "booking_class": "Y3", "brand": "", "avg_sold": 194.4088888888889}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y4", "booking_class": "Y4", "brand": "", "avg_sold": 350.3722222222222}, {"source": "europa/upe", "carrier": "Brat", "fare_class": "Y5", "booking_class": "Y5", "brand": "", "avg_sold": 847.0055555555556}]}}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
-<h2 id="looking-at-one-market">Looking at one market<a class="headerlink" href="#looking-at-one-market" title="Link to this heading">¶</a></h2>
+<h2 id="fare-class-mix-by-market">Fare Class Mix by Market<a class="headerlink" href="#fare-class-mix-by-market" title="Link to this heading">¶</a></h2>
 <p>If you want to understand a particular market, choose its origin and destination. You will get the
 same kind of fare-class view, limited to passengers traveling between those airports.</p>
-<p>Provide <code class="docutils literal notranslate"><span class="pre">orig</span></code> and <code class="docutils literal notranslate"><span class="pre">dest</span></code>. Uses <code class="docutils literal notranslate"><span class="pre">pathclasses</span></code>; <code class="docutils literal notranslate"><span class="pre">label_threshold</span></code> controls small-segment labels. The
-comparison requires the same market to be present in the selected results.</p>
+<p>Pass the airport codes as <code class="docutils literal notranslate"><span class="pre">orig</span></code> and <code class="docutils literal notranslate"><span class="pre">dest</span></code>. This chart uses the <code class="docutils literal notranslate"><span class="pre">pathclasses</span></code> table, and the
+selected market must be present in each result you want to compare. As above, <code class="docutils literal notranslate"><span class="pre">label_threshold</span></code>
+controls whether small portions of the bars receive labels.</p>
 <p>For one run, call
-<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_od_fare_class_mix" title="passengersim.summaries.SimulationTables.fig_od_fare_class_mix (Python method) — Plot the fare class mix data for a specific origin-destination pair."><span class="xref myst py py-meth">fig_od_fare_class_mix</span></a>:</p>
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_od_fare_class_mix" title="passengersim.summaries.SimulationTables.fig_od_fare_class_mix (Python method) — Plot the fare class mix data for a specific origin-destination pair."><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_od_fare_class_mix</span></code></span></a> on a single
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_od_fare_class_mix</span><span class="p">(</span><span class="n">orig</span><span class="o">=</span><span class="s2">&quot;KEF&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;MAD&quot;</span><span class="p">)</span>
@@ -2721,23 +2691,23 @@ comparison requires the same market to be present in the selected results.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-54754f62a909414bab9de703f4104908.vega-embed {
+  #altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-54754f62a909414bab9de703f4104908.vega-embed details,
-  #altair-viz-54754f62a909414bab9de703f4104908.vega-embed details summary {
+  #altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f.vega-embed details,
+  #altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-54754f62a909414bab9de703f4104908"></div>
+<div id="altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-54754f62a909414bab9de703f4104908") {
-      outputDiv = document.getElementById("altair-viz-54754f62a909414bab9de703f4104908");
+    if (outputDiv.id !== "altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f") {
+      outputDiv = document.getElementById("altair-viz-6174ed85ee5f4da399e7b1b3cc27f29f");
     }
 
     const paths = {
@@ -2788,7 +2758,8 @@ comparison requires the same market to be present in the selected results.</p>
   })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 12, "titleFontSize": 12}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif", "labelFontSize": 15, "titleFontSize": 12}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "booking_class", "type": "nominal"}, "tooltip": [{"field": "carrier", "type": "nominal"}, {"field": "booking_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "title": "Fare Class Mix for KEF to MAD - by Booking Class", "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}, {"mark": {"type": "text", "baseline": "top", "color": "white", "dx": 0, "dy": 3}, "encoding": {"opacity": {"condition": {"test": "datum.avg_sold < 7.143", "value": 0}, "value": 1}, "order": {"field": "booking_class", "sort": "descending", "type": "nominal"}, "text": {"field": "avg_sold", "format": ".2f", "type": "quantitative"}, "tooltip": [{"field": "carrier", "type": "nominal"}, {"field": "booking_class", "type": "nominal"}, {"field": "avg_sold", "format": ".2f", "type": "quantitative"}], "x": {"field": "carrier", "title": "Carrier", "type": "nominal"}, "y": {"field": "avg_sold", "stack": "zero", "title": "Seats", "type": "quantitative"}}, "title": "Fare Class Mix for KEF to MAD - by Booking Class", "transform": [{"calculate": "datum.avg_sold / 2.0", "as": "halfsold"}]}], "data": {"name": "data-756d2fc84747bde218f1da397daf8190"}, "height": 300, "width": 400, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-756d2fc84747bde218f1da397daf8190": [{"carrier": "Tapas", "booking_class": "Y0", "avg_sold": 0.0}, {"carrier": "Tapas", "booking_class": "Y1", "avg_sold": 2.486666666666667}, {"carrier": "Tapas", "booking_class": "Y2", "avg_sold": 4.926666666666667}, {"carrier": "Tapas", "booking_class": "Y3", "avg_sold": 10.71888888888889}, {"carrier": "Tapas", "booking_class": "Y4", "avg_sold": 13.471111111111112}, {"carrier": "Tapas", "booking_class": "Y5", "avg_sold": 87.45222222222222}]}}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
-<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_od_fare_class_mix.html#passengersim.contrast.fig_od_fare_class_mix" title="passengersim.contrast.fig_od_fare_class_mix (Python function) — Generate a figure contrasting O-D fare class mix for one or more runs."><span class="xref myst py py-func">fig_od_fare_class_mix</span></a>:</p>
+<p>To compare runs, use <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_od_fare_class_mix.html#passengersim.contrast.fig_od_fare_class_mix" title="passengersim.contrast.fig_od_fare_class_mix (Python function) — Generate a figure contrasting O-D fare class mix for one or more runs."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_od_fare_class_mix</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.Contrast.html#passengersim.contrast.Contrast" title="passengersim.contrast.Contrast (Python class) — Bases: dict"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Contrast</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_od_fare_class_mix</span><span class="p">(</span><span class="n">orig</span><span class="o">=</span><span class="s2">&quot;KEF&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;MAD&quot;</span><span class="p">)</span>
@@ -2798,23 +2769,23 @@ comparison requires the same market to be present in the selected results.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac.vega-embed {
+  #altair-viz-ac49d2be68fe4addb62e317fc0bd298c.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac.vega-embed details,
-  #altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac.vega-embed details summary {
+  #altair-viz-ac49d2be68fe4addb62e317fc0bd298c.vega-embed details,
+  #altair-viz-ac49d2be68fe4addb62e317fc0bd298c.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac"></div>
+<div id="altair-viz-ac49d2be68fe4addb62e317fc0bd298c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac") {
-      outputDiv = document.getElementById("altair-viz-66bd7e604fdf48a582d7b6ff5b0581ac");
+    if (outputDiv.id !== "altair-viz-ac49d2be68fe4addb62e317fc0bd298c") {
+      outputDiv = document.getElementById("altair-viz-ac49d2be68fe4addb62e317fc0bd298c");
     }
 
     const paths = {

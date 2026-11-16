@@ -20,15 +20,10 @@ network or in one market.
 You can read about the underlying data and how to collect it in
 [Fare Class Mix](../summary-tables/fare-class-mix.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -40,43 +35,51 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Bookings by fare class
+## Bookings by Fare Class
 
 Each bar shows average bookings for a carrier, with the fare classes stacked within the bar.
 Comparing the sizes of those pieces helps you see which classes account for the bookings.
 
-`label_threshold` suppresses labels on small segments (default 0.06). `group_by` accepts
-`"fare_class"` (the default), `"booking_class"`, or `"brand"`; the returned plotting data uses the
-same aggregation. The comparison uses the same booking-class stacks for each source.
+You can group bookings by `"fare_class"` (the default), `"booking_class"`, or `"brand"` using
+`group_by`. This also determines how the data is grouped when you request the underlying values. The
+comparison uses the same grouping for each run, so you can see which parts of the mix changed.
 
-For one run, call [fig_fare_class_mix](passengersim.summaries.SimulationTables.fig_fare_class_mix):
+Use `label_threshold` to keep labels off the smallest portions of each bar. Its default is 0.06,
+which sets the cutoff at 6% of the largest carrier's total bookings in the chart.
+
+For one run, call [`fig_fare_class_mix`](passengersim.summaries.SimulationTables.fig_fare_class_mix)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_fare_class_mix()
 ```
 
-To compare runs, use [fig_fare_class_mix](passengersim.contrast.fig_fare_class_mix):
+To compare runs, use [`fig_fare_class_mix`](passengersim.contrast.fig_fare_class_mix) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_fare_class_mix()
 ```
 
-## Looking at one market
+## Fare Class Mix by Market
 
 If you want to understand a particular market, choose its origin and destination. You will get the
 same kind of fare-class view, limited to passengers traveling between those airports.
 
-Provide `orig` and `dest`. Uses `pathclasses`; `label_threshold` controls small-segment labels. The
-comparison requires the same market to be present in the selected results.
+Pass the airport codes as `orig` and `dest`. This chart uses the `pathclasses` table, and the
+selected market must be present in each result you want to compare. As above, `label_threshold`
+controls whether small portions of the bars receive labels.
 
 For one run, call
-[fig_od_fare_class_mix](passengersim.summaries.SimulationTables.fig_od_fare_class_mix):
+[`fig_od_fare_class_mix`](passengersim.summaries.SimulationTables.fig_od_fare_class_mix) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_od_fare_class_mix(orig="KEF", dest="MAD")
 ```
 
-To compare runs, use [fig_od_fare_class_mix](passengersim.contrast.fig_od_fare_class_mix):
+To compare runs, use [`fig_od_fare_class_mix`](passengersim.contrast.fig_od_fare_class_mix) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_od_fare_class_mix(orig="KEF", dest="MAD")

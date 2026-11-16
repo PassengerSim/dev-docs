@@ -22,15 +22,10 @@ or market.
 You can read about the underlying data and how to collect it in
 [Segmentation and Booking Timeframes](../summary-tables/segmentation.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -42,58 +37,69 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## When do passengers book?
+## Bookings and Revenue by Timeframe
 
 This chart shows bookings or revenue within each booking timeframe, separated by passenger segment.
 It is useful for seeing whether different groups book early or wait until close to departure.
 
-The required `metric` is `"bookings"` or `"revenue"`. `by_carrier` and `by_class` accept booleans or
-a specific name. Single-run `exclude_nogo=True` excludes the no-go carrier. Comparisons instead
-offer `source_labels` and `ratio`.
+Choose `metric="bookings"` to count bookings or `metric="revenue"` to show the revenue they
+generate. Use `by_carrier` and `by_class` to separate carriers and booking classes: `True` shows
+them separately, `False` combines them, and a name selects just that carrier or class.
+
+For a single run, `exclude_nogo=True` leaves out the no-go carrier, which represents passengers who
+did not book. Comparisons offer `source_labels` to identify the runs on the chart and `ratio` to add
+reference values to the tooltips.
 
 For one run, call
-[fig_segmentation_by_timeframe](passengersim.summaries.SimulationTables.fig_segmentation_by_timeframe):
+[`fig_segmentation_by_timeframe`](passengersim.summaries.SimulationTables.fig_segmentation_by_timeframe)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_segmentation_by_timeframe(metric="revenue", by_carrier="Tapas")
 ```
 
 To compare runs, use
-[fig_segmentation_by_timeframe](passengersim.contrast.fig_segmentation_by_timeframe):
+[`fig_segmentation_by_timeframe`](passengersim.contrast.fig_segmentation_by_timeframe) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_segmentation_by_timeframe(metric="revenue", by_carrier="Tapas")
 ```
 
-## A shortcut for plotting bookings
+## Bookings by Timeframe
 
 If you are interested in bookings rather than revenue, you can use this shortcut. For a single run,
 it gives the same result as `fig_segmentation_by_timeframe("bookings", ...)`.
 
-Choose `by_carrier` and `by_class`. Comparisons additionally support `by_segment`,
-`source_labels=True` for static images, and `ratio` for reference values in tooltips.
+Use `by_carrier` and `by_class` as above. Comparisons also let you select a passenger segment with
+`by_segment`. Set `source_labels=True` to label runs directly, which is useful when you share a
+static image without hover tooltips.
 
 For one run, call
-[fig_bookings_by_timeframe](passengersim.summaries.SimulationTables.fig_bookings_by_timeframe):
+[`fig_bookings_by_timeframe`](passengersim.summaries.SimulationTables.fig_bookings_by_timeframe) on
+a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_bookings_by_timeframe(by_carrier="Tapas", by_class=True)
 ```
 
-To compare runs, use [fig_bookings_by_timeframe](passengersim.contrast.fig_bookings_by_timeframe):
+To compare runs, use [`fig_bookings_by_timeframe`](passengersim.contrast.fig_bookings_by_timeframe)
+on a [`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_bookings_by_timeframe(by_carrier="Tapas", by_class=True)
 ```
 
-## Taking a closer look at a market
+## Cumulative Bookings by Market
 
 This view adds market detail to the passenger-segment breakdown. Unlike the timeframe charts above,
 its booking counts are cumulative: a point includes bookings made up to that day.
 
-Uses `segmentation_detail`, backed by recorded booking detail. Choose `by_carrier`, `by_class`,
-`orig`, and `dest`. Follow the linked table’s activation instructions before running. There is no
-`Contrast` method of this name.
+This chart uses the `segmentation_detail` table, which requires booking detail to be recorded during
+the simulation. Follow the collection instructions in
+[Segmentation and Booking Timeframes](../summary-tables/segmentation.md) before running your own
+network. You can focus on a carrier or booking class with `by_carrier` and `by_class`, and choose a
+market with `orig` and `dest`.
 
 The default demo archive has no fare-detail records. To show this chart, we replay the same demo
 configurations with fare recording enabled and prepare `segmentation_detail` before discarding the
@@ -127,21 +133,21 @@ recorded_summary = recorded["europa/upe"]
 ```
 
 For one run, call
-[fig_segmentation_detail](passengersim.summaries.SimulationTables.fig_segmentation_detail):
+[`fig_segmentation_detail`](passengersim.summaries.SimulationTables.fig_segmentation_detail) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_segmentation_detail(by_carrier="Tapas", orig="KEF", dest="MAD")
 ```
 
-**Contrasting runs:** use the standalone comparison helper below. It is not exposed as a `Contrast`
-method. It accepts the same carrier, class, and market filters, plus `width` and `height` for the
-layout.
+To compare runs, call
+[`fig_segmentation_detail`](passengersim.summaries.segmentation_detail.fig_segmentation_detail) with
+a [`Contrast`](passengersim.contrast.Contrast) object. This is a standalone function, so import it
+before calling it. It accepts the same carrier, class, and market filters, plus `width` and `height`
+to adjust the layout.
 
 ```{code-cell} ipython3
 from passengersim.summaries.segmentation_detail import fig_segmentation_detail
 
 fig_segmentation_detail(recorded, by_carrier="Tapas", orig="KEF", dest="MAD")
 ```
-
-API:
-[`fig_segmentation_detail`](passengersim.summaries.segmentation_detail.fig_segmentation_detail).

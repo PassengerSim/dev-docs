@@ -32,7 +32,6 @@ carriers
 carrier-history
 cabins
 demands
-demand-to-come
 fare-class-mix
 cp-segmentation
 segmentation
@@ -69,7 +68,8 @@ contains the baseline `europa` network and the `europa/upe` variant.
 them. They are generally available as Python functions in the `passengersim.contrast.duo` module,
 and passed two results explicitly.
 
-The following code will reproduce the `summary` and `contrast` objects used throughout this guide:
+The following code will reproduce the `summary` and `contrast` objects used throughout the
+"Visualization" section of the guide:
 
 ```{code-cell} ipython3
 import altair as alt

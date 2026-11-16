@@ -1,0 +1,355 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "5ae477a5",
+   "metadata": {},
+   "source": [
+    "# Ahab Baseline Network\n",
+    "\n",
+    "This page reviews the configuration of the Ahab network and runs a baseline simulation, with its\n",
+    "only carrier, Pequod, using revenue management system `E`. See the\n",
+    "{doc}`Ahab network overview <index>` for a description of this single-flight test network."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b1bff84e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import passengersim as pax\n",
+    "from passengersim.config.checks import check_config\n",
+    "\n",
+    "pax.versions()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "dc66115a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import plotly.io as pio\n",
+    "\n",
+    "pio.renderers.default = \"notebook_connected\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "40d8a401",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg = pax.Config.from_yaml(pax.demo_network(\"ahab/baseline\"))\n",
+    "\n",
+    "# MultiSimulation needs temporary storage rather than the baseline in-memory database.\n",
+    "cfg.db.filename = None\n",
+    "cfg.db.result_storage = \"temporary\""
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "7cf51ce4",
+   "metadata": {},
+   "source": [
+    "## Route Map\n",
+    "\n",
+    "Pequod operates one flight from Nantucket (ACK) to Nadi (NAN). The map is centered on the Pacific to\n",
+    "show both ends of this long-haul route."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "89f05954",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg.plotly_route_map(center_lon=-140, center_lat=15, zoom=0.7)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "3ebdb929",
+   "metadata": {},
+   "source": [
+    "As in the Europa example, we pre-build the paths before inspecting the configuration. There are no\n",
+    "connecting itineraries in this network."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4e18fac4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from passengersim.connection_builder import prebuild_connections\n",
+    "\n",
+    "cfg = prebuild_connections(cfg, inplace=False)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "782f1f57",
+   "metadata": {},
+   "source": [
+    "## Check Configuration"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6d2fae92",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "check_config(cfg)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "5a10aa88",
+   "metadata": {},
+   "source": [
+    "### List of Markets\n",
+    "\n",
+    "There is one directional market, ACK–NAN. No return service is included."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "770149da",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg.dataframes.markets"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "1883bd51",
+   "metadata": {},
+   "source": [
+    "### Fares\n",
+    "\n",
+    "The six fare classes range from $1,000 to $4,000. Lower fares carry advance-purchase requirements\n",
+    "and restrictions; these are configuration inputs, not simulation results."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9153fbce",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg.dataframes.fares"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cbe160d6",
+   "metadata": {},
+   "source": [
+    "### Demand\n",
+    "\n",
+    "Business and leisure travelers have different reference prices and booking curves. The base demands\n",
+    "total 100 passengers, matching the flight capacity, but realized demand and bookings vary across\n",
+    "samples."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c82b7257",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg.dataframes.demands"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "222d1075",
+   "metadata": {},
+   "source": [
+    "### Carrier Service Capacity\n",
+    "\n",
+    "The network contains one 100-seat flight operated by Pequod."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cb64c19b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "cfg.dataframes.legs"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6548acad",
+   "metadata": {},
+   "source": [
+    "## Simulation Results\n",
+    "\n",
+    "We use the supplied baseline settings: one trial with 1,000 samples and a 100-sample burn-in. The\n",
+    "summaries below therefore cover 900 retained samples."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2ede3816",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sim = pax.MultiSimulation(cfg)\n",
+    "out = sim.run()\n",
+    "out.n_total_samples"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "49a4abd9",
+   "metadata": {},
+   "source": [
+    "### Carrier Performance"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4ef60272",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_carrier_revenues()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "39ca86d5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_carrier_load_factors()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "98f5bbf7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_carrier_rasm()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bc0890ef",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_carrier_yields()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d94af36d",
+   "metadata": {},
+   "source": [
+    "### Fare Class Mix\n",
+    "\n",
+    "The fare class mix shows how Pequod's bookings are distributed across the six classes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a2a881d2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_fare_class_mix()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6441350b",
+   "metadata": {},
+   "source": [
+    "### Flight Load Factor\n",
+    "\n",
+    "With only one flight, this chart has one point. It shows the average load factor for the ACK–NAN leg\n",
+    "against its distance."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2a146150",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.fig_leg_load_v_distance(carrier=\"Pequod\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f599b492",
+   "metadata": {},
+   "source": [
+    "### Market Shares\n",
+    "\n",
+    "Pequod is the only carrier, so the market-share table is a baseline check rather than a comparison\n",
+    "of competitors. A single carrier does not imply that all demand books a seat."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d8dba5a0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "out.market_shares()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.13"
+  },
+  "mystnb": {
+   "execution_timeout": 1200
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

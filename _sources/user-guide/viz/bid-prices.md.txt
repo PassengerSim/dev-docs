@@ -22,21 +22,16 @@ carrier averages and then looking at individual legs and paths.
 You can read about the underlying data and how to collect it in
 [Bid Prices and Displacement](../summary-tables/bid-prices.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
 When you plot twelve or fewer legs or paths, colors help you tell them apart. With more lines, the
 charts leave out those ID colors to avoid an oversized legend. You can still hover over a line to
 see its ID, day, mean price, standard deviation, and observation count. Path tooltips also identify
 the cabin, and comparison tooltips tell you which run the line belongs to. Missing statistics are
 left missing rather than treated as zero.
 
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -48,7 +43,7 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Collect the extra price histories
+## Collecting Price Histories
 
 The standard demo archive does not contain path-price history or the callback observations used
 later on this page. Here we replay the same demos, enabling those collectors. We keep the original
@@ -90,30 +85,35 @@ recorded = Contrast({name: collect_demo(name) for name in ("europa", "europa/upe
 recorded_summary = recorded["europa/upe"]
 ```
 
-## Average bid prices by carrier
+## Average Bid Prices by Carrier
 
 Start with this chart for a broad view of bid prices. Each carrier’s line averages across its legs,
 so it is a useful overview before you investigate individual flights.
 
-Use `by_carrier` to separate carriers or filter to one. `cap=None` includes all reporting prices,
-`"some"` restricts to remaining-capacity observations, and `"zero"` selects sold-out observations.
-`show_stdev=True` shows a two-standard-deviation band, or supply a multiplier. For comparison bands,
-select one carrier. Single-run `trial` selects a trial instead of combining them.
+Use `by_carrier` to separate carriers or focus on one. You can also choose which capacity conditions
+to include with `cap`: `None` includes all reporting prices, `"some"` includes only observations
+with remaining capacity, and `"zero"` includes only sold-out observations.
+
+Set `show_stdev=True` to add a band extending two standard deviations around the mean, or pass a
+number to choose a different multiplier. When comparing runs, select one carrier to show these
+bands. For a single run, `trial` lets you inspect one trial instead of combining all trials.
 
 For one run, call
-[fig_bid_price_history](passengersim.summaries.SimulationTables.fig_bid_price_history):
+[`fig_bid_price_history`](passengersim.summaries.SimulationTables.fig_bid_price_history) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_bid_price_history(by_carrier="Tapas", show_stdev=True)
 ```
 
-To compare runs, use [fig_bid_price_history](passengersim.contrast.fig_bid_price_history):
+To compare runs, use [`fig_bid_price_history`](passengersim.contrast.fig_bid_price_history) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_bid_price_history(by_carrier="Tapas", show_stdev=True)
 ```
 
-## Bid prices for individual legs
+## Bid Prices for Individual Legs
 
 To see what is happening on particular flights, plot the native leg history. You get the daily mean
 price and, by default, a second panel showing how much prices varied across the samples and trials
@@ -128,19 +128,21 @@ Each of those three filters accepts one name or a tuple of names. These filters 
 table, so keep that table with your results. When comparing runs, `include` lets you choose which
 runs to show.
 
-For one run, call [fig_leg_bid_prices](passengersim.summaries.SimulationTables.fig_leg_bid_prices):
+For one run, call [`fig_leg_bid_prices`](passengersim.summaries.SimulationTables.fig_leg_bid_prices)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_leg_bid_prices(carrier="Tapas", std_dev=False)
 ```
 
-To compare runs, use [fig_leg_bid_prices](passengersim.contrast.fig_leg_bid_prices):
+To compare runs, use [`fig_leg_bid_prices`](passengersim.contrast.fig_leg_bid_prices) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_leg_bid_prices(carrier="Tapas", std_dev=False)
 ```
 
-## Bid prices for passenger paths
+## Bid Prices for Passenger Paths
 
 This chart follows bid prices for each path and cabin. Separate lines keep the cabins distinct, and
 the second panel shows how much the prices varied across the retained observations.
@@ -156,13 +158,15 @@ include the reference-class fare adjustment described in the
 variability panel, and `include` selects runs in a comparison.
 
 For one run, call
-[fig_path_bid_prices](passengersim.summaries.SimulationTables.fig_path_bid_prices):
+[`fig_path_bid_prices`](passengersim.summaries.SimulationTables.fig_path_bid_prices) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_path_bid_prices(ids=(211,), augmented=True)
 ```
 
-To compare runs, use [fig_path_bid_prices](passengersim.contrast.fig_path_bid_prices):
+To compare runs, use [`fig_path_bid_prices`](passengersim.contrast.fig_path_bid_prices) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 recorded.fig_path_bid_prices(ids=(211,), augmented=True)
@@ -173,28 +177,31 @@ observations for this path. Although both results are included in the comparison
 appears here. The tracer path-price comparison later on this page records reporting prices in both
 runs and can show both lines.
 
-## Displacement costs
+## Displacement Costs
 
 Displacement costs describe the opportunity cost of using capacity for a booking. This chart shows
 the daily averages reported by the revenue-management system for each carrier.
 
-Choose `by_carrier` and `show_stdev` as for carrier bid prices. Single-run `trial` selects a trial.
-Comparison bands require selecting one carrier; comparison `width` and `height` control facet size.
+Use `by_carrier` and `show_stdev` as for carrier bid prices. For a single run, you can focus on one
+trial with `trial`. When comparing runs, select one carrier to show a standard-deviation band;
+`width` and `height` let you adjust the size of each panel.
 
 For one run, call
-[fig_displacement_history](passengersim.summaries.SimulationTables.fig_displacement_history):
+[`fig_displacement_history`](passengersim.summaries.SimulationTables.fig_displacement_history) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_displacement_history(by_carrier="Tapas", show_stdev=True)
 ```
 
-To compare runs, use [fig_displacement_history](passengersim.contrast.fig_displacement_history):
+To compare runs, use [`fig_displacement_history`](passengersim.contrast.fig_displacement_history) on
+a [`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_displacement_history(by_carrier="Tapas", show_stdev=True)
 ```
 
-## Callback bid-price distributions
+## Callback Analysis: Bid-Price Distributions
 
 Sometimes an average and a standard deviation aren’t enough. You may want to see the median price,
 or the range containing most of the observed prices. The callback figures below can show those
@@ -211,75 +218,113 @@ callbacks:
 
 The collection cell above has already attached the daily callback for flight 211.
 
-### `fig_leg_bid_price_detail_rake`
+### Price Percentiles for One Leg
 
-Show a selected leg's median, mean, and percentile trajectories through the booking horizon. Choose
-`leg_id`; `color` and `mean_color` control the marks. `raw_df=True` returns the summarized
-observations. There is no dedicated contrast method; plot each run separately.
+This chart follows a leg's median, mean, and selected price percentiles through the booking horizon.
+The percentiles help you see the range containing most observations, including when prices are
+spread unevenly around the mean.
+
+Choose the flight with `leg_id`. You can change the colors with `color` and `mean_color`, or use
+`raw_df=True` to inspect the summarized observations.
+
+For one run, call
+[`fig_leg_bid_price_detail_rake`](passengersim.callbacks.bid_price_detail.fig_leg_bid_price_detail_rake)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_leg_bid_price_detail_rake(leg_id=211)
 ```
 
-API:
-[`fig_leg_bid_price_detail_rake`](passengersim.callbacks.bid_price_detail.fig_leg_bid_price_detail_rake).
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
 
-### `fig_leg_bid_price_history`
+### Price Histories Across a Carrier's Legs
 
-Plot one statistic across a carrier's legs. Specify `carrier` and `measure`: `"mean"`, `"q10"`,
-`"q25"`, `"q50"`, `"q75"`, `"q90"`, or `"median"`. This callback method is not the native
-`fig_leg_bid_prices` method. It also needs leg definitions for labels and haul grouping. Set
-`haul_category_labels=None` to avoid distance-quantile facets, for example on small networks with
-repeated leg distances. `opacity` controls overplotting; `max_rows` limits the displayed data. There
-is no `raw_df` or dedicated contrast method.
+This chart lets you follow one price statistic across a carrier's legs. For example, plotting the
+median for each flight can help you find flights whose typical prices are higher than the rest.
+Choose a `carrier` and a `measure`: `"mean"`, `"q10"`, `"q25"`, `"q50"`, `"q75"`, `"q90"`, or
+`"median"`.
+
+The chart uses callback observations and leg definitions for labels and distance groups. Set
+`haul_category_labels=None` to keep all distances in one panel, which is useful on small networks
+where several legs have the same distance. Use `opacity` to make overlapping lines easier to see and
+`max_rows` to limit the displayed data. This method does not support `raw_df`.
+
+For one run, call
+[`fig_leg_bid_price_history`](passengersim.callbacks.bid_price_detail.fig_leg_bid_price_history) on
+a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 recorded_summary.fig_leg_bid_price_history("Stroop", measure="median", haul_category_labels=None)
 ```
 
-API:
-[`fig_leg_bid_price_history`](passengersim.callbacks.bid_price_detail.fig_leg_bid_price_history).
+To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
+for this figure.
 
-## Tracer bid-price figures
+## Tracer Analysis: Bid Prices
 
-The functions in `passengersim.tracers.bid_price` consume attached tracer data. Their names overlap
-the native summary methods, so use a module alias to make the source explicit. See
-[Tracers](../tracers.md) for lifecycle and collection details. Attach a fresh tracer before each
-run; an existing result cannot reconstruct observations that were not collected.
+Tracers let you collect price observations for selected legs and paths. Attach a fresh tracer before
+each run, as described in [Tracers](../tracers.md). The observations must be collected during the
+simulation; they cannot be recovered from an existing result afterward.
+
+These plotting functions live in `passengersim.tracers.bid_price`. They share some names with the
+summary methods above, so the examples use the module alias `traced_bp` to show which version is
+being called.
 
 The setup above attaches the leg and path tracers to both demo runs.
 
-### Tracer `fig_leg_bid_prices` and `fig_path_bid_prices`
+### Leg and Path Price Histories
 
-Plot tracer means and optionally standard deviations. Both accept `ids`, `std_dev`, and `raw_df`;
-for a `Contrast`, `include` restricts sources. These functions do not have the native metadata
-filters or the native path `augmented` option. Native and callback timing can produce different
-values.
+These charts show the mean prices recorded by a tracer and, optionally, their standard deviations.
+Choose legs or paths with `ids`, hide the standard-deviation panel with `std_dev=False`, or inspect
+the plotted values with `raw_df=True`. When comparing runs, `include` selects which runs to show.
+
+The tracer functions do not accept the carrier and airport filters or the path `augmented` option
+used by the summary methods above. They can also record at different times, so their values may
+differ from the native histories.
+
+For one run, call [`fig_leg_bid_prices`](passengersim.tracers.bid_price.fig_leg_bid_prices) with a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 traced_bp.fig_leg_bid_prices(recorded_summary, ids=(211,))
 ```
 
+For a path, call [`fig_path_bid_prices`](passengersim.tracers.bid_price.fig_path_bid_prices) with a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
+
 ```{code-cell} ipython3
 traced_bp.fig_path_bid_prices(recorded_summary, ids=(211,))
 ```
+
+To compare leg prices across runs, call
+[`fig_leg_bid_prices`](passengersim.tracers.bid_price.fig_leg_bid_prices) with a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 traced_bp.fig_leg_bid_prices(recorded, include=("europa", "europa/upe"))
 ```
 
+To compare path prices across runs, call
+[`fig_path_bid_prices`](passengersim.tracers.bid_price.fig_path_bid_prices) with a
+[`Contrast`](passengersim.contrast.Contrast) object:
+
 ```{code-cell} ipython3
 traced_bp.fig_path_bid_prices(recorded, include=("europa", "europa/upe"))
 ```
 
-API: [`fig_leg_bid_prices`](passengersim.tracers.bid_price.fig_leg_bid_prices),
-[`fig_path_bid_prices`](passengersim.tracers.bid_price.fig_path_bid_prices).
+### Bid-Price Arrays
 
-### `fig_leg_bid_price_array`
+This heatmap shows a leg's mean bid-price array across seats sold and days prior to departure. It
+helps you see how prices change with the number of seats sold as well as with time.
 
-A heatmap of a selected leg's mean bid-price array across seats sold and days prior. Attach
-`LegBidPriceArrayTracer([211])` before the run. It captures arrays at the beginning of samples, so
-the plot does not represent within-sample price updates.
+Attach [`LegBidPriceArrayTracer`](passengersim.tracers.bid_price.LegBidPriceArrayTracer) before the
+run. It captures arrays at the beginning of samples, so this chart does not show price updates
+within a sample. The collection code above attaches it for leg 211.
+
+For one run, call
+[`fig_leg_bid_price_array`](passengersim.tracers.bid_price.fig_leg_bid_price_array) with a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 traced_bp.fig_leg_bid_price_array(recorded_summary, leg_id=211)
@@ -288,17 +333,20 @@ traced_bp.fig_leg_bid_price_array(recorded_summary, leg_id=211)
 Use `raw_df=True` to inspect the plotted values. This is a single-summary function; call it
 separately for each run to compare arrays.
 
-API: [`fig_leg_bid_price_array`](passengersim.tracers.bid_price.fig_leg_bid_price_array).
+### Bid-Price Vectors
 
-### `fig_leg_bid_price_vectors`
+This heatmap shows the mean bid-price vectors for one leg. You can use it to inspect how the
+recorded prices vary across the vector and the booking horizon.
 
-A heatmap of the mean bid-price vectors for one leg. Attach `LegBidPriceVectorTracer` to collect the
-vectors before generating the figure.
+Attach [`LegBidPriceVectorTracer`](passengersim.tracers.bid_price.LegBidPriceVectorTracer) before
+running the simulation. The collection code above does this for leg 211.
+
+For one run, call
+[`fig_leg_bid_price_vectors`](passengersim.tracers.bid_price.fig_leg_bid_price_vectors) with a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 traced_bp.fig_leg_bid_price_vectors(recorded_summary, leg_id=211)
 ```
 
 Use `raw_df=True` for the plotted data. This is a single-summary function, not a `Contrast` method.
-
-API: [`fig_leg_bid_price_vectors`](passengersim.tracers.bid_price.fig_leg_bid_price_vectors).

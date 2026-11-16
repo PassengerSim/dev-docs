@@ -1,0 +1,30 @@
+---
+title: Ahab Network
+icon: custom/peg-leg
+---
+
+# Ahab Network
+
+Ahab is a very small network intended to support testing of the PassengerSim simulation engine. It
+has just one directional market between two airports: Nantucket (ACK), Massachusetts, and Nadi
+(NAN), Fiji. It is a fictional example, not a realistic representation of rational travel between
+these locations. With only one long voyage and no connections or competing carriers, it is smaller
+and simpler than any other test network, but it may be suitable for single-minded pursuits such as
+hunting white whales (or software bugs).
+
+**Pequod** (`Pequod`) is the network's only carrier. It operates one 100-seat voyage from ACK to
+NAN, with no return trip. It has six fare classes, and baseline fares range from $1,000 to $4,000,
+with advance-purchase requirements and restrictions that vary by fare class. Demand consists of
+business and leisure travelers, with base demands of 40 and 60 passengers, respectively.
+
+The baseline uses revenue management system `E` and runs one trial of 1,000 samples, discarding the
+first 100 samples as burn-in. The network is included with PassengerSim and can be loaded with
+`pax.Config.from_yaml(pax.demo_network("ahab/baseline"))`.
+
+```{toctree}
+---
+maxdepth: 1
+hidden:
+---
+Baseline Results <baseline>
+```

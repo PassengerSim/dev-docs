@@ -20,15 +20,10 @@ most.
 You can read about the underlying data and how to collect it in
 [Continuous Price Segmentation](../summary-tables/cp-segmentation.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -40,7 +35,7 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Sales using continuous pricing
+## Sales Using Continuous Pricing
 
 Neither of these Europa demos enables continuous pricing, so their continuous-priced sales are zero.
 You’ll see total sales in the charts below; a simulation with continuous pricing enabled would also
@@ -49,17 +44,20 @@ show the continuous-priced portion.
 Here we can compare total sales with sales made using continuous pricing in each booking class. This
 helps you see which classes account for most of the continuous-price sales.
 
-Uses `cp_segmentation`. The comparison supports `title`, `height`, and `width`; the single-run
-figure uses its built-in layout.
+The values come from the `cp_segmentation` table. When comparing runs, you can change the title with
+`title` and adjust the panel size with `height` and `width`. The single-run figure uses its built-in
+layout.
 
 For one run, call
-[fig_cp_segmentation](passengersim.summaries.SimulationTables.fig_cp_segmentation):
+[`fig_cp_segmentation`](passengersim.summaries.SimulationTables.fig_cp_segmentation) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_cp_segmentation()
 ```
 
-To compare runs, use [fig_cp_segmentation](passengersim.contrast.fig_cp_segmentation):
+To compare runs, use [`fig_cp_segmentation`](passengersim.contrast.fig_cp_segmentation) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_cp_segmentation()

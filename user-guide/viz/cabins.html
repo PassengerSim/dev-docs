@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#set-up-the-europa-examples" class="md-skip">
+        <a href="#cabin-load-factors" class="md-skip">
           Skip to content
         </a>
       
@@ -892,20 +892,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
+  <a href="#cabin-load-factors" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-full-is-each-cabin" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>How full is each cabin?</span>
+      <span>Cabin Load Factors</span>
     </span>
   </a>
   
@@ -934,30 +924,6 @@
   
   <span class="md-ellipsis">
     <span>Demands</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="demand-to-come.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Demand to Come</span>
     
   </span>
   
@@ -1905,6 +1871,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2464,20 +2458,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
+  <a href="#cabin-load-factors" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-full-is-each-cabin" class="md-nav__link">
-    
-    <span class="md-ellipsis">
-      <span>How full is each cabin?</span>
+      <span>Cabin Load Factors</span>
     </span>
   </a>
   
@@ -2504,34 +2488,16 @@
 cabins separately helps you see differences that disappear in the carrier-wide average.</p>
 <p>You can read about the underlying data and how to collect it in
 <a class="reference internal" href="../summary-tables/cabins.html"><span class="std std-doc">Cabins</span></a>.</p>
-<p>The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.</p>
-<h2 id="set-up-the-europa-examples">Set up the Europa examples<a class="headerlink" href="#set-up-the-europa-examples" title="Link to this heading">¶</a></h2>
-<p>We’ll use <code class="docutils literal notranslate"><span class="pre">europa/upe</span></code> for the single-run charts and compare it with <code class="docutils literal notranslate"><span class="pre">europa</span></code>. The first load may
-run the demo; later calls reuse its cached result.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
-
-<span class="c1"># Keep all observations available when a figure contains more than 5,000 rows.</span>
-<span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
-<span class="n">summary</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">(</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">)</span>
-<span class="n">contrast</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">({</span><span class="s2">&quot;europa&quot;</span><span class="p">:</span> <span class="s2">&quot;europa&quot;</span><span class="p">,</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">:</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">})</span>
-<span class="n">baseline</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa&quot;</span><span class="p">]</span>
-<span class="n">alternative</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">]</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="how-full-is-each-cabin">How full is each cabin?<a class="headerlink" href="#how-full-is-each-cabin" title="Link to this heading">¶</a></h2>
+<h2 id="cabin-load-factors">Cabin Load Factors<a class="headerlink" href="#cabin-load-factors" title="Link to this heading">¶</a></h2>
 <p>The Europa demos have one cabin, <code class="docutils literal notranslate"><span class="pre">Y</span></code>, so this example produces a single cabin panel. With a
 multicabin network, the same method adds a panel for each cabin in your results.</p>
 <p>This chart shows load factors for each carrier and cabin. It is useful when you want to check
 whether one cabin is filling up while another still has room.</p>
-<p>Uses <code class="docutils literal notranslate"><span class="pre">cabins</span></code>; <code class="docutils literal notranslate"><span class="pre">raw_df=True</span></code> returns the plotted data. There is no dedicated contrast function.</p>
+<p>The values come from the <code class="docutils literal notranslate"><span class="pre">cabins</span></code> table. Use <code class="docutils literal notranslate"><span class="pre">raw_df=True</span></code> if you want to inspect the data behind
+the chart.</p>
 <p>For one run, call
-<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_cabin_load_factors" title="passengersim.summaries.SimulationTables.fig_cabin_load_factors (Python method)"><span class="xref myst py py-meth">fig_cabin_load_factors</span></a>:</p>
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_cabin_load_factors" title="passengersim.summaries.SimulationTables.fig_cabin_load_factors (Python method) — Plot distance-weighted load factors by carrier and cabin."><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_cabin_load_factors</span></code></span></a> on a
+single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_cabin_load_factors</span><span class="p">()</span>
@@ -2541,23 +2507,23 @@ whether one cabin is filling up while another still has room.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3.vega-embed {
+  #altair-viz-869c510dbd6043e690259bbb4c9dcf76.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3.vega-embed details,
-  #altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3.vega-embed details summary {
+  #altair-viz-869c510dbd6043e690259bbb4c9dcf76.vega-embed details,
+  #altair-viz-869c510dbd6043e690259bbb4c9dcf76.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3"></div>
+<div id="altair-viz-869c510dbd6043e690259bbb4c9dcf76"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3") {
-      outputDiv = document.getElementById("altair-viz-14fc25d2b13c47658b8357ac8b2ecfe3");
+    if (outputDiv.id !== "altair-viz-869c510dbd6043e690259bbb4c9dcf76") {
+      outputDiv = document.getElementById("altair-viz-869c510dbd6043e690259bbb4c9dcf76");
     }
 
     const paths = {
@@ -2605,7 +2571,7 @@ whether one cabin is filling up while another still has room.</p>
         .catch(showError)
         .then(() => displayChart(vegaEmbed));
     }
-  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "vconcat": [{"facet": {"row": {"field": "carrier", "title": "", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "experiment", "type": "nominal"}, "text": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "tooltip": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "x": {"axis": {"format": ".0%"}, "field": "load_factor", "scale": {"domain": [0, 1]}, "title": "Load Factor", "type": "quantitative"}, "y": {"field": "experiment", "title": "", "type": "nominal"}}}, {"mark": {"type": "text", "baseline": "top", "color": "black", "dx": 20, "dy": -5}, "encoding": {"color": {"field": "experiment", "type": "nominal"}, "text": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "tooltip": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "x": {"axis": {"format": ".0%"}, "field": "load_factor", "scale": {"domain": [0, 1]}, "title": "Load Factor", "type": "quantitative"}, "y": {"field": "experiment", "title": "", "type": "nominal"}}}]}, "title": {"text": "Cabin: Y", "anchor": "middle"}}], "data": {"name": "data-21f4d6e83800bb6cd58011743c6b8065"}, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-21f4d6e83800bb6cd58011743c6b8065": [{"carrier": "Brat", "cabin": "Y", "asm": 4037445000, "rpm": 3466677285, "load_factor": 0.8586314575183067, "experiment": "Simulation"}, {"carrier": "Stroop", "cabin": "Y", "asm": 4082346000, "rpm": 3443952095, "load_factor": 0.8436208236636483, "experiment": "Simulation"}, {"carrier": "Tapas", "cabin": "Y", "asm": 2034720000, "rpm": 1748053882, "load_factor": 0.8591127437681844, "experiment": "Simulation"}]}}, {"mode": "vega-lite"});
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "vconcat": [{"facet": {"row": {"field": "carrier", "title": "", "type": "nominal"}}, "spec": {"layer": [{"mark": {"type": "bar"}, "encoding": {"color": {"field": "carrier", "type": "nominal"}, "text": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "tooltip": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "x": {"axis": {"format": ".0%"}, "field": "load_factor", "scale": {"domain": [0, 1]}, "title": "Load Factor", "type": "quantitative"}, "y": {"field": "carrier", "title": "", "type": "nominal"}}}, {"mark": {"type": "text", "baseline": "top", "color": "black", "dx": 20, "dy": -5}, "encoding": {"color": {"field": "carrier", "type": "nominal"}, "text": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "tooltip": {"field": "load_factor", "format": ".1%", "type": "quantitative"}, "x": {"axis": {"format": ".0%"}, "field": "load_factor", "scale": {"domain": [0, 1]}, "title": "Load Factor", "type": "quantitative"}, "y": {"field": "carrier", "title": "", "type": "nominal"}}}]}, "title": {"text": "Cabin: Y", "anchor": "middle"}}], "data": {"name": "data-8da8793637e159f7955c4710325e8974"}, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-8da8793637e159f7955c4710325e8974": [{"carrier": "Brat", "cabin": "Y", "asm": 4037445000, "rpm": 3466677285, "sold": 2078537, "revenue": 871697448.7500004, "load_factor": 0.8586314575183067}, {"carrier": "Stroop", "cabin": "Y", "asm": 4082346000, "rpm": 3443952095, "sold": 1761393, "revenue": 841929157.4999998, "load_factor": 0.8436208236636483}, {"carrier": "Tapas", "cabin": "Y", "asm": 2034720000, "rpm": 1748053882, "sold": 1284090, "revenue": 262567245.00000003, "load_factor": 0.8591127437681844}]}}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
 <p>To compare scenarios, make this chart once for each result. There isn’t a combined comparison method

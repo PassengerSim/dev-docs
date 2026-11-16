@@ -19,15 +19,10 @@ revenue, passenger bookings, and how much of the available capacity is being use
 You can read about the underlying data and how to collect it in
 [Carriers](../summary-tables/carriers.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -39,140 +34,151 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Revenue by carrier
+## Revenue
 
 Let’s start with average revenue for each carrier. This is a useful first check when you want to
 know whether a change to the simulation helped or hurt revenue.
 
-Contrast bars support `orient="h"` or `"v"`, `width`, and `ratio` for reference comparisons.
-
 For one run, call
-[fig_carrier_revenues](passengersim.summaries.SimulationTables.fig_carrier_revenues):
+[`fig_carrier_revenues`](passengersim.summaries.SimulationTables.fig_carrier_revenues) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_revenues()
 ```
 
-To compare runs, use [fig_carrier_revenues](passengersim.contrast.fig_carrier_revenues):
+To compare runs, use [`fig_carrier_revenues`](passengersim.contrast.fig_carrier_revenues) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_revenues()
 ```
 
-## Revenue per passenger mile
+## Yield
 
-Yield tells us how much revenue a carrier earns for each passenger mile. Looking at it alongside
-total revenue can help you understand whether a revenue change comes from pricing or from carrying
-more traffic. The values use your simulation’s currency per mile.
+Yield tells us how much revenue a carrier earns for each passenger mile (not available seat mile,
+only occupied seats count). Looking at it alongside total revenue can help you understand whether a
+revenue change comes from pricing or from carrying more traffic. The values use your simulation’s
+currency per mile.
 
 The comparison supports the same orientation, width, and ratio options as carrier revenues.
 
-For one run, call [fig_carrier_yields](passengersim.summaries.SimulationTables.fig_carrier_yields):
+For one run, call [`fig_carrier_yields`](passengersim.summaries.SimulationTables.fig_carrier_yields)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_yields()
 ```
 
-To compare runs, use [fig_carrier_yields](passengersim.contrast.fig_carrier_yields):
+To compare runs, use [`fig_carrier_yields`](passengersim.contrast.fig_carrier_yields) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_yields()
 ```
 
-## Revenue per available seat mile
+## Revenue per Available Seat Mile (RASM)
 
 RASM stands for revenue per available seat mile. It relates revenue to the capacity offered, so both
 ticket prices and the number of occupied seats affect the result.
 
-Contrast supports `orient`, `width`, and `ratio`.
-
-For one run, call [fig_carrier_rasm](passengersim.summaries.SimulationTables.fig_carrier_rasm):
+For one run, call [`fig_carrier_rasm`](passengersim.summaries.SimulationTables.fig_carrier_rasm) on
+a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_rasm()
 ```
 
-To compare runs, use [fig_carrier_rasm](passengersim.contrast.fig_carrier_rasm):
+To compare runs, use [`fig_carrier_rasm`](passengersim.contrast.fig_carrier_rasm) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_rasm()
 ```
 
-## Passenger bookings
+## Bookings
 
 This chart shows average bookings for each carrier. A passenger on a connecting itinerary counts
 once here, even though that passenger occupies seats on more than one leg.
 
-Contrast supports `orient`, `width`, and `ratio`.
-
 For one run, call
-[fig_carrier_total_bookings](passengersim.summaries.SimulationTables.fig_carrier_total_bookings):
+[`fig_carrier_total_bookings`](passengersim.summaries.SimulationTables.fig_carrier_total_bookings)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_total_bookings()
 ```
 
-To compare runs, use [fig_carrier_total_bookings](passengersim.contrast.fig_carrier_total_bookings):
+To compare runs, use
+[`fig_carrier_total_bookings`](passengersim.contrast.fig_carrier_total_bookings) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_total_bookings()
 ```
 
-## How full are the flights?
+## Load Factor
 
 Load factor describes how much of the available capacity is used. The default system measure,
 `sys_lf`, divides passenger miles by available seat miles, so longer flights contribute more to the
 result.
 
-Use `load_measure="avg_leg_lf"` for average leg load factor instead. Both measures are available for
-comparisons.
+Use `load_measure="avg_leg_lf"` for average leg load factor instead. This version weights all legs
+equally, regardless of their length. Both measures are available for comparisons.
 
 For one run, call
-[fig_carrier_load_factors](passengersim.summaries.SimulationTables.fig_carrier_load_factors):
+[`fig_carrier_load_factors`](passengersim.summaries.SimulationTables.fig_carrier_load_factors) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_load_factors(load_measure="avg_leg_lf")
 ```
 
-To compare runs, use [fig_carrier_load_factors](passengersim.contrast.fig_carrier_load_factors):
+To compare runs, use [`fig_carrier_load_factors`](passengersim.contrast.fig_carrier_load_factors) on
+a [`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_load_factors(load_measure="avg_leg_lf")
 ```
 
-## Local and connecting passengers
+## Local and Connecting Mix
 
-Here we can see the share of passengers traveling locally, on a single leg, rather than making a
-connection. This can help explain why similar numbers of bookings produce different amounts of
-traffic on the legs.
+Here we can see the percentage of passengers traveling locally (a single leg is their entire
+itinerary) rather than making a connection. Differences in this mix can help explain why similar
+numbers of bookings produce different amounts of traffic on the legs.
 
-`load_measure="bookings"` uses itinerary bookings; `"leg_pax"` uses leg passengers, counting
-connecting passengers on each leg. The same switch is supported in comparisons.
+There are two ways to measure this percentage, which is a ratio of two totals. The numerator is
+always the number of local passengers, but the denominator can be either the total number of
+passenger legs (`leg_pax`, the default) or the total number of bookings (`bookings`). For example,
+if you have only two total bookings, one for a single non-stop itinerary and one for a connecting
+itinerary with two legs, the local share is 33% if you use `leg_pax` (one leg has two passengers and
+another leg has one, totalling 3) but 50% if you use `bookings` (1 local booking out of 2 total
+bookings).
 
 For one run, call
-[fig_carrier_local_share](passengersim.summaries.SimulationTables.fig_carrier_local_share):
+[`fig_carrier_local_share`](passengersim.summaries.SimulationTables.fig_carrier_local_share) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_local_share(load_measure="leg_pax")
 ```
 
-To compare runs, use [fig_carrier_local_share](passengersim.contrast.fig_carrier_local_share):
+To compare runs, use [`fig_carrier_local_share`](passengersim.contrast.fig_carrier_local_share) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
 
 ```{code-cell} ipython3
 contrast.fig_carrier_local_share(load_measure="leg_pax")
 ```
 
-## Capacity offered and traffic carried
+## Revenue Passenger Miles
 
 Available seat miles (ASM) describe the capacity offered: seats multiplied by distance. Revenue
 passenger miles (RPM) describe the traffic carried: passengers multiplied by distance. This chart
 shows both for each carrier, averaged over the samples kept after burn-in.
 
-Use this to distinguish capacity supplied from traffic carried. There is no dedicated contrast
-function; generate one chart per run.
-
 For one run, call
-[fig_carrier_mileage](passengersim.summaries.SimulationTables.fig_carrier_mileage):
+[`fig_carrier_mileage`](passengersim.summaries.SimulationTables.fig_carrier_mileage) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_carrier_mileage()

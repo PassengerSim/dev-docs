@@ -14,7 +14,7 @@
         <link rel="prev" href="cabins.html">
       
       
-        <link rel="next" href="demand-to-come.html">
+        <link rel="next" href="fare-class-mix.html">
       
       
       <link rel="icon" href="../../_static/favicon.png">
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#set-up-the-europa-examples" class="md-skip">
+        <a href="#demand-segmentation-distribution" class="md-skip">
           Skip to content
         </a>
       
@@ -916,20 +916,20 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
+  <a href="#demand-segmentation-distribution" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
+      <span>Demand Segmentation Distribution</span>
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#comparing-demand-between-passenger-segments" class="md-nav__link">
+  <a href="#demand-to-come" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Comparing demand between passenger segments</span>
+      <span>Demand to Come</span>
     </span>
   </a>
   
@@ -939,30 +939,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="demand-to-come.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Demand to Come</span>
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -1905,6 +1881,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2464,20 +2468,20 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#set-up-the-europa-examples" class="md-nav__link">
+  <a href="#demand-segmentation-distribution" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Set up the Europa examples</span>
+      <span>Demand Segmentation Distribution</span>
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#comparing-demand-between-passenger-segments" class="md-nav__link">
+  <a href="#demand-to-come" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Comparing demand between passenger segments</span>
+      <span>Demand to Come</span>
     </span>
   </a>
   
@@ -2505,35 +2509,20 @@ lets you compare passenger segments across markets—for example, to see which m
 business demand and which have more leisure demand.</p>
 <p>You can read about the underlying data and how to collect it in
 <a class="reference internal" href="../summary-tables/demands.html"><span class="std std-doc">Demands</span></a>.</p>
-<p>The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.</p>
-<h2 id="set-up-the-europa-examples">Set up the Europa examples<a class="headerlink" href="#set-up-the-europa-examples" title="Link to this heading">¶</a></h2>
-<p>We’ll use <code class="docutils literal notranslate"><span class="pre">europa/upe</span></code> for the single-run charts and compare it with <code class="docutils literal notranslate"><span class="pre">europa</span></code>. The first load may
-run the demo; later calls reuse its cached result.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
-
-<span class="c1"># Keep all observations available when a figure contains more than 5,000 rows.</span>
-<span class="n">alt</span><span class="o">.</span><span class="n">data_transformers</span><span class="o">.</span><span class="n">disable_max_rows</span><span class="p">()</span>
-<span class="n">summary</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">(</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">)</span>
-<span class="n">contrast</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">demo_result</span><span class="p">({</span><span class="s2">&quot;europa&quot;</span><span class="p">:</span> <span class="s2">&quot;europa&quot;</span><span class="p">,</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">:</span> <span class="s2">&quot;europa/upe&quot;</span><span class="p">})</span>
-<span class="n">baseline</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa&quot;</span><span class="p">]</span>
-<span class="n">alternative</span> <span class="o">=</span> <span class="n">contrast</span><span class="p">[</span><span class="s2">&quot;europa/upe&quot;</span><span class="p">]</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="comparing-demand-between-passenger-segments">Comparing demand between passenger segments<a class="headerlink" href="#comparing-demand-between-passenger-segments" title="Link to this heading">¶</a></h2>
+<h2 id="demand-segmentation-distribution">Demand Segmentation Distribution<a class="headerlink" href="#demand-segmentation-distribution" title="Link to this heading">¶</a></h2>
+<p>This scatterplot shows the demand for selected passenger segments across all origin–destination
+markets. If you have more than two segments, you can compare one particular segment with another, or
+with total demand. You can also make multiple charts to compare different pairs of segments.</p>
 <p>Each point represents an origin–destination market. The axes show demand for different passenger
 segments, making it easier to spot markets with a different mix of passengers.</p>
-<p>The values come from the <code class="docutils literal notranslate"><span class="pre">base_demand</span></code> you configured, so this helps you review the network’s demand
-inputs rather than the random demand realized in individual samples. You can choose segment names
-with <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>. If you leave them out, the chart uses the first segment on the horizontal axis and
-either the second segment or total demand on the vertical axis.</p>
+<p>The values come from the <code class="docutils literal notranslate"><span class="pre">base_demand</span></code> in the configuration, so this helps you review the network’s
+demand inputs rather than the random demand realized in individual samples. You can choose segment
+names by passing them as <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> arguments to the plotting function. If you leave them out, the
+chart uses the first segment on the horizontal axis and either the second segment or total demand on
+the vertical axis.</p>
 <p>For one run, call
-<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution" title="passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution (Python method) — Create a scatter plot showing the distribution of demands by segment."><span class="xref myst py py-meth">fig_demand_segmentation_distribution</span></a>:</p>
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution" title="passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution (Python method) — Create a scatter plot showing the distribution of demands by segment."><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_demand_segmentation_distribution</span></code></span></a>
+on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_demand_segmentation_distribution</span><span class="p">()</span>
@@ -2543,23 +2532,23 @@ either the second segment or total demand on the vertical axis.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75.vega-embed {
+  #altair-viz-1844853fca294023aad7f8164fd315eb.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75.vega-embed details,
-  #altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75.vega-embed details summary {
+  #altair-viz-1844853fca294023aad7f8164fd315eb.vega-embed details,
+  #altair-viz-1844853fca294023aad7f8164fd315eb.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75"></div>
+<div id="altair-viz-1844853fca294023aad7f8164fd315eb"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75") {
-      outputDiv = document.getElementById("altair-viz-a8d9175e3e67498a9e50cfb16bbf2d75");
+    if (outputDiv.id !== "altair-viz-1844853fca294023aad7f8164fd315eb") {
+      outputDiv = document.getElementById("altair-viz-1844853fca294023aad7f8164fd315eb");
     }
 
     const paths = {
@@ -2612,6 +2601,178 @@ either the second segment or total demand on the vertical axis.</p>
 </div>
 <p>To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
 for this figure.</p>
+<h2 id="demand-to-come">Demand to Come<a class="headerlink" href="#demand-to-come" title="Link to this heading">¶</a></h2>
+<p>This figure shows how much future demand remains at each time step, by passenger segment. It is
+useful for understanding the temporal dynamics of demand and how it evolves over the course of the
+simulation.</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">func=&quot;mean&quot;</span></code> to see the average remaining demand. To see how much it varies between samples,
+use <code class="docutils literal notranslate"><span class="pre">&quot;std&quot;</span></code> for the standard deviation. You can also ask for both panels with a list.</p>
+<p>For a single result, call
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_demand_to_come" title="passengersim.summaries.SimulationTables.fig_demand_to_come (Python method) — Plot remaining demand by passenger segment for a single result."><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_demand_to_come</span></code></span></a> on a single
+<a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, SimTabServices, SimTabPathLegs, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabSegByTimeframe, SimTabLegBuckets, SimTabPaths, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">summary</span><span class="o">.</span><span class="n">fig_demand_to_come</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-0c7920080be346c79b84433e332f861b.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-0c7920080be346c79b84433e332f861b.vega-embed details,
+  #altair-viz-0c7920080be346c79b84433e332f861b.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-0c7920080be346c79b84433e332f861b"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-0c7920080be346c79b84433e332f861b") {
+      outputDiv = document.getElementById("altair-viz-0c7920080be346c79b84433e332f861b");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "data": {"name": "data-58afe9096549e80eb304a13dd2fe9d51"}, "mark": {"type": "line"}, "encoding": {"color": {"field": "segment", "title": "Segment", "type": "nominal"}, "tooltip": [{"field": "segment", "type": "nominal"}, {"field": "days_prior", "type": "ordinal"}, {"field": "dtc", "format": ",.2f", "type": "quantitative"}], "x": {"field": "days_prior", "scale": {"reverse": true}, "title": "Days Prior to Departure", "type": "ordinal"}, "y": {"field": "dtc", "title": "Mean Demand to Come", "type": "quantitative"}}, "title": "Demand to Come", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-58afe9096549e80eb304a13dd2fe9d51": [{"segment": "business", "days_prior": 63, "dtc": 1186.515555555556}, {"segment": "business", "days_prior": 56, "dtc": 1165.3444444444444}, {"segment": "business", "days_prior": 49, "dtc": 1150.576666666667}, {"segment": "business", "days_prior": 42, "dtc": 1105.8555555555558}, {"segment": "business", "days_prior": 35, "dtc": 992.652222222222}, {"segment": "business", "days_prior": 31, "dtc": 912.3366666666664}, {"segment": "business", "days_prior": 28, "dtc": 858.8066666666664}, {"segment": "business", "days_prior": 24, "dtc": 784.4511111111111}, {"segment": "business", "days_prior": 21, "dtc": 713.4722222222224}, {"segment": "business", "days_prior": 17, "dtc": 597.936666666667}, {"segment": "business", "days_prior": 14, "dtc": 497.23333333333335}, {"segment": "business", "days_prior": 10, "dtc": 349.0900000000001}, {"segment": "business", "days_prior": 7, "dtc": 221.6955555555555}, {"segment": "business", "days_prior": 5, "dtc": 144.75666666666666}, {"segment": "business", "days_prior": 3, "dtc": 91.41888888888889}, {"segment": "business", "days_prior": 1, "dtc": 41.29333333333334}, {"segment": "business", "days_prior": 0, "dtc": 0.0}, {"segment": "leisure", "days_prior": 63, "dtc": 3631.9222222222215}, {"segment": "leisure", "days_prior": 56, "dtc": 3092.307777777779}, {"segment": "leisure", "days_prior": 49, "dtc": 2723.2522222222233}, {"segment": "leisure", "days_prior": 42, "dtc": 2153.0144444444445}, {"segment": "leisure", "days_prior": 35, "dtc": 1616.4322222222224}, {"segment": "leisure", "days_prior": 31, "dtc": 1205.9511111111108}, {"segment": "leisure", "days_prior": 28, "dtc": 1005.0455555555554}, {"segment": "leisure", "days_prior": 24, "dtc": 840.2977777777778}, {"segment": "leisure", "days_prior": 21, "dtc": 739.8211111111111}, {"segment": "leisure", "days_prior": 17, "dtc": 575.058888888889}, {"segment": "leisure", "days_prior": 14, "dtc": 438.31888888888886}, {"segment": "leisure", "days_prior": 10, "dtc": 301.4411111111111}, {"segment": "leisure", "days_prior": 7, "dtc": 200.96888888888896}, {"segment": "leisure", "days_prior": 5, "dtc": 136.86111111111117}, {"segment": "leisure", "days_prior": 3, "dtc": 72.7388888888889}, {"segment": "leisure", "days_prior": 1, "dtc": 36.42333333333333}, {"segment": "leisure", "days_prior": 0, "dtc": 0.0}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">summary.fig_demand_to_come(func=[&quot;mean&quot;,</span> <span class="pre">&quot;std&quot;])</span></code> to show both statistics side by side. The
+single-result method uses the automatically collected <code class="docutils literal notranslate"><span class="pre">demand_to_come_summary</span></code> table, falling back
+to sample-level <code class="docutils literal notranslate"><span class="pre">demand_to_come</span></code> data when needed. <code class="docutils literal notranslate"><span class="pre">raw_df=True</span></code> returns the plotted data;
+<code class="docutils literal notranslate"><span class="pre">also_df=True</span></code> returns a chart/data pair. For a list of statistics, the data includes a <code class="docutils literal notranslate"><span class="pre">statistic</span></code>
+column identifying each panel.</p>
+<p>To compare runs, call <a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.fig_demand_to_come.html#passengersim.contrast.fig_demand_to_come" title="passengersim.contrast.fig_demand_to_come (Python function) — Generate a figure contrasting demand-to-come curves for one or more runs."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_demand_to_come</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/contrast/passengersim.contrast.Contrast.html#passengersim.contrast.Contrast" title="passengersim.contrast.Contrast (Python class) — Bases: dict"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Contrast</span></code></span></a> object:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">contrast</span><span class="o">.</span><span class="n">fig_demand_to_come</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">])</span>
+</code></pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+  #altair-viz-86484af06083429998ef6343a69405d3.vega-embed {
+    width: 100%;
+    display: flex;
+  }
+
+  #altair-viz-86484af06083429998ef6343a69405d3.vega-embed details,
+  #altair-viz-86484af06083429998ef6343a69405d3.vega-embed details summary {
+    position: relative;
+  }
+</style>
+<div id="altair-viz-86484af06083429998ef6343a69405d3"></div>
+<script type="text/javascript">
+  var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
+  (function(spec, embedOpt){
+    let outputDiv = document.currentScript.previousElementSibling;
+    if (outputDiv.id !== "altair-viz-86484af06083429998ef6343a69405d3") {
+      outputDiv = document.getElementById("altair-viz-86484af06083429998ef6343a69405d3");
+    }
+
+    const paths = {
+      "vega": "https://cdn.jsdelivr.net/npm/vega@6?noext",
+      "vega-lib": "https://cdn.jsdelivr.net/npm/vega-lib?noext",
+      "vega-lite": "https://cdn.jsdelivr.net/npm/vega-lite@6.4.1?noext",
+      "vega-embed": "https://cdn.jsdelivr.net/npm/vega-embed@7?noext",
+    };
+
+    function maybeLoadScript(lib, version) {
+      var key = `${lib.replace("-", "")}_version`;
+      return (VEGA_DEBUG[key] == version) ?
+        Promise.resolve(paths[lib]) :
+        new Promise(function(resolve, reject) {
+          var s = document.createElement('script');
+          document.getElementsByTagName("head")[0].appendChild(s);
+          s.async = true;
+          s.onload = () => {
+            VEGA_DEBUG[key] = version;
+            return resolve(paths[lib]);
+          };
+          s.onerror = () => reject(`Error loading script: ${paths[lib]}`);
+          s.src = paths[lib];
+        });
+    }
+
+    function showError(err) {
+      outputDiv.innerHTML = `<div class="error" style="color:red;">${err}</div>`;
+      throw err;
+    }
+
+    function displayChart(vegaEmbed) {
+      vegaEmbed(outputDiv, spec, embedOpt)
+        .catch(err => showError(`Javascript Error: ${err.message}<br>This usually means there's a typo in your chart specification. See the javascript console for the full traceback.`));
+    }
+
+    if(typeof define === "function" && define.amd) {
+      requirejs.config({paths});
+      let deps = ["vega-embed"];
+      require(deps, displayChart, err => showError(`Error loading script: ${err.message}`));
+    } else {
+      maybeLoadScript("vega", "6")
+        .then(() => maybeLoadScript("vega-lite", "6.4.1"))
+        .then(() => maybeLoadScript("vega-embed", "7"))
+        .catch(showError)
+        .then(() => displayChart(vegaEmbed));
+    }
+  })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "hconcat": [{"data": {"name": "data-a07e0b4d1816a227ef7e67ab8eb0652c"}, "mark": {"type": "line"}, "encoding": {"color": {"field": "segment", "type": "nominal"}, "strokeDash": {"field": "source", "type": "nominal"}, "x": {"field": "days_prior", "scale": {"reverse": true}, "title": "Days Prior to Departure", "type": "ordinal"}, "y": {"field": "dtc", "title": "Mean Demand to Come", "type": "quantitative"}}}, {"data": {"name": "data-f2ea0a458c24c6f45274f2db598a3605"}, "mark": {"type": "line"}, "encoding": {"color": {"field": "segment", "type": "nominal"}, "strokeDash": {"field": "source", "type": "nominal"}, "x": {"field": "days_prior", "scale": {"reverse": true}, "title": "Days Prior to Departure", "type": "ordinal"}, "y": {"field": "dtc", "title": "Std Dev Demand to Come", "type": "quantitative"}}}], "title": "Demand to Come", "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json", "datasets": {"data-a07e0b4d1816a227ef7e67ab8eb0652c": [{"segment": "business", "days_prior": 63, "source": "europa", "dtc": 1186.515555555556}, {"segment": "business", "days_prior": 63, "source": "europa/upe", "dtc": 1186.515555555556}, {"segment": "business", "days_prior": 56, "source": "europa", "dtc": 1165.3444444444444}, {"segment": "business", "days_prior": 56, "source": "europa/upe", "dtc": 1165.3444444444444}, {"segment": "business", "days_prior": 49, "source": "europa", "dtc": 1150.576666666667}, {"segment": "business", "days_prior": 49, "source": "europa/upe", "dtc": 1150.576666666667}, {"segment": "business", "days_prior": 42, "source": "europa", "dtc": 1105.8555555555558}, {"segment": "business", "days_prior": 42, "source": "europa/upe", "dtc": 1105.8555555555558}, {"segment": "business", "days_prior": 35, "source": "europa", "dtc": 992.652222222222}, {"segment": "business", "days_prior": 35, "source": "europa/upe", "dtc": 992.652222222222}, {"segment": "business", "days_prior": 31, "source": "europa", "dtc": 912.3366666666664}, {"segment": "business", "days_prior": 31, "source": "europa/upe", "dtc": 912.3366666666664}, {"segment": "business", "days_prior": 28, "source": "europa", "dtc": 858.8066666666664}, {"segment": "business", "days_prior": 28, "source": "europa/upe", "dtc": 858.8066666666664}, {"segment": "business", "days_prior": 24, "source": "europa", "dtc": 784.4511111111111}, {"segment": "business", "days_prior": 24, "source": "europa/upe", "dtc": 784.4511111111111}, {"segment": "business", "days_prior": 21, "source": "europa", "dtc": 713.4722222222224}, {"segment": "business", "days_prior": 21, "source": "europa/upe", "dtc": 713.4722222222224}, {"segment": "business", "days_prior": 17, "source": "europa", "dtc": 597.936666666667}, {"segment": "business", "days_prior": 17, "source": "europa/upe", "dtc": 597.936666666667}, {"segment": "business", "days_prior": 14, "source": "europa", "dtc": 497.23333333333335}, {"segment": "business", "days_prior": 14, "source": "europa/upe", "dtc": 497.23333333333335}, {"segment": "business", "days_prior": 10, "source": "europa", "dtc": 349.0900000000001}, {"segment": "business", "days_prior": 10, "source": "europa/upe", "dtc": 349.0900000000001}, {"segment": "business", "days_prior": 7, "source": "europa", "dtc": 221.6955555555555}, {"segment": "business", "days_prior": 7, "source": "europa/upe", "dtc": 221.6955555555555}, {"segment": "business", "days_prior": 5, "source": "europa", "dtc": 144.75666666666666}, {"segment": "business", "days_prior": 5, "source": "europa/upe", "dtc": 144.75666666666666}, {"segment": "business", "days_prior": 3, "source": "europa", "dtc": 91.41888888888889}, {"segment": "business", "days_prior": 3, "source": "europa/upe", "dtc": 91.41888888888889}, {"segment": "business", "days_prior": 1, "source": "europa", "dtc": 41.29333333333334}, {"segment": "business", "days_prior": 1, "source": "europa/upe", "dtc": 41.29333333333334}, {"segment": "business", "days_prior": 0, "source": "europa", "dtc": 0.0}, {"segment": "business", "days_prior": 0, "source": "europa/upe", "dtc": 0.0}, {"segment": "leisure", "days_prior": 63, "source": "europa", "dtc": 3631.9222222222215}, {"segment": "leisure", "days_prior": 63, "source": "europa/upe", "dtc": 3631.9222222222215}, {"segment": "leisure", "days_prior": 56, "source": "europa", "dtc": 3092.307777777779}, {"segment": "leisure", "days_prior": 56, "source": "europa/upe", "dtc": 3092.307777777779}, {"segment": "leisure", "days_prior": 49, "source": "europa", "dtc": 2723.2522222222233}, {"segment": "leisure", "days_prior": 49, "source": "europa/upe", "dtc": 2723.2522222222233}, {"segment": "leisure", "days_prior": 42, "source": "europa", "dtc": 2153.0144444444445}, {"segment": "leisure", "days_prior": 42, "source": "europa/upe", "dtc": 2153.0144444444445}, {"segment": "leisure", "days_prior": 35, "source": "europa", "dtc": 1616.4322222222224}, {"segment": "leisure", "days_prior": 35, "source": "europa/upe", "dtc": 1616.4322222222224}, {"segment": "leisure", "days_prior": 31, "source": "europa", "dtc": 1205.9511111111108}, {"segment": "leisure", "days_prior": 31, "source": "europa/upe", "dtc": 1205.9511111111108}, {"segment": "leisure", "days_prior": 28, "source": "europa", "dtc": 1005.0455555555554}, {"segment": "leisure", "days_prior": 28, "source": "europa/upe", "dtc": 1005.0455555555554}, {"segment": "leisure", "days_prior": 24, "source": "europa", "dtc": 840.2977777777778}, {"segment": "leisure", "days_prior": 24, "source": "europa/upe", "dtc": 840.2977777777778}, {"segment": "leisure", "days_prior": 21, "source": "europa", "dtc": 739.8211111111111}, {"segment": "leisure", "days_prior": 21, "source": "europa/upe", "dtc": 739.8211111111111}, {"segment": "leisure", "days_prior": 17, "source": "europa", "dtc": 575.058888888889}, {"segment": "leisure", "days_prior": 17, "source": "europa/upe", "dtc": 575.058888888889}, {"segment": "leisure", "days_prior": 14, "source": "europa", "dtc": 438.31888888888886}, {"segment": "leisure", "days_prior": 14, "source": "europa/upe", "dtc": 438.31888888888886}, {"segment": "leisure", "days_prior": 10, "source": "europa", "dtc": 301.4411111111111}, {"segment": "leisure", "days_prior": 10, "source": "europa/upe", "dtc": 301.4411111111111}, {"segment": "leisure", "days_prior": 7, "source": "europa", "dtc": 200.96888888888896}, {"segment": "leisure", "days_prior": 7, "source": "europa/upe", "dtc": 200.96888888888896}, {"segment": "leisure", "days_prior": 5, "source": "europa", "dtc": 136.86111111111117}, {"segment": "leisure", "days_prior": 5, "source": "europa/upe", "dtc": 136.86111111111117}, {"segment": "leisure", "days_prior": 3, "source": "europa", "dtc": 72.7388888888889}, {"segment": "leisure", "days_prior": 3, "source": "europa/upe", "dtc": 72.7388888888889}, {"segment": "leisure", "days_prior": 1, "source": "europa", "dtc": 36.42333333333333}, {"segment": "leisure", "days_prior": 1, "source": "europa/upe", "dtc": 36.42333333333333}, {"segment": "leisure", "days_prior": 0, "source": "europa", "dtc": 0.0}, {"segment": "leisure", "days_prior": 0, "source": "europa/upe", "dtc": 0.0}], "data-f2ea0a458c24c6f45274f2db598a3605": [{"segment": "business", "days_prior": 63, "source": "europa", "dtc": 172.56397560163404}, {"segment": "business", "days_prior": 63, "source": "europa/upe", "dtc": 172.56397560163404}, {"segment": "business", "days_prior": 56, "source": "europa", "dtc": 169.71528609394986}, {"segment": "business", "days_prior": 56, "source": "europa/upe", "dtc": 169.71528609394986}, {"segment": "business", "days_prior": 49, "source": "europa", "dtc": 167.64519617931867}, {"segment": "business", "days_prior": 49, "source": "europa/upe", "dtc": 167.64519617931867}, {"segment": "business", "days_prior": 42, "source": "europa", "dtc": 161.34118507141204}, {"segment": "business", "days_prior": 42, "source": "europa/upe", "dtc": 161.34118507141204}, {"segment": "business", "days_prior": 35, "source": "europa", "dtc": 145.08938653135175}, {"segment": "business", "days_prior": 35, "source": "europa/upe", "dtc": 145.08938653135175}, {"segment": "business", "days_prior": 31, "source": "europa", "dtc": 133.5636520712735}, {"segment": "business", "days_prior": 31, "source": "europa/upe", "dtc": 133.5636520712735}, {"segment": "business", "days_prior": 28, "source": "europa", "dtc": 125.80022105446608}, {"segment": "business", "days_prior": 28, "source": "europa/upe", "dtc": 125.80022105446608}, {"segment": "business", "days_prior": 24, "source": "europa", "dtc": 115.27851290788082}, {"segment": "business", "days_prior": 24, "source": "europa/upe", "dtc": 115.27851290788082}, {"segment": "business", "days_prior": 21, "source": "europa", "dtc": 104.95483591175334}, {"segment": "business", "days_prior": 21, "source": "europa/upe", "dtc": 104.95483591175334}, {"segment": "business", "days_prior": 17, "source": "europa", "dtc": 88.11247356518378}, {"segment": "business", "days_prior": 17, "source": "europa/upe", "dtc": 88.11247356518378}, {"segment": "business", "days_prior": 14, "source": "europa", "dtc": 73.42592917033664}, {"segment": "business", "days_prior": 14, "source": "europa/upe", "dtc": 73.42592917033664}, {"segment": "business", "days_prior": 10, "source": "europa", "dtc": 51.92128154424615}, {"segment": "business", "days_prior": 10, "source": "europa/upe", "dtc": 51.92128154424615}, {"segment": "business", "days_prior": 7, "source": "europa", "dtc": 33.42663479149678}, {"segment": "business", "days_prior": 7, "source": "europa/upe", "dtc": 33.42663479149678}, {"segment": "business", "days_prior": 5, "source": "europa", "dtc": 22.152512870414146}, {"segment": "business", "days_prior": 5, "source": "europa/upe", "dtc": 22.152512870414146}, {"segment": "business", "days_prior": 3, "source": "europa", "dtc": 14.424483222213146}, {"segment": "business", "days_prior": 3, "source": "europa/upe", "dtc": 14.424483222213146}, {"segment": "business", "days_prior": 1, "source": "europa", "dtc": 7.140459537219556}, {"segment": "business", "days_prior": 1, "source": "europa/upe", "dtc": 7.140459537219556}, {"segment": "business", "days_prior": 0, "source": "europa", "dtc": 0.0}, {"segment": "business", "days_prior": 0, "source": "europa/upe", "dtc": 0.0}, {"segment": "leisure", "days_prior": 63, "source": "europa", "dtc": 506.8009380706747}, {"segment": "leisure", "days_prior": 63, "source": "europa/upe", "dtc": 506.8009380706747}, {"segment": "leisure", "days_prior": 56, "source": "europa", "dtc": 433.1317644922697}, {"segment": "leisure", "days_prior": 56, "source": "europa/upe", "dtc": 433.1317644922697}, {"segment": "leisure", "days_prior": 49, "source": "europa", "dtc": 383.12579762086045}, {"segment": "leisure", "days_prior": 49, "source": "europa/upe", "dtc": 383.12579762086045}, {"segment": "leisure", "days_prior": 42, "source": "europa", "dtc": 304.58004570311795}, {"segment": "leisure", "days_prior": 42, "source": "europa/upe", "dtc": 304.58004570311795}, {"segment": "leisure", "days_prior": 35, "source": "europa", "dtc": 229.61754453465835}, {"segment": "leisure", "days_prior": 35, "source": "europa/upe", "dtc": 229.61754453465835}, {"segment": "leisure", "days_prior": 31, "source": "europa", "dtc": 171.60680750959884}, {"segment": "leisure", "days_prior": 31, "source": "europa/upe", "dtc": 171.60680750959884}, {"segment": "leisure", "days_prior": 28, "source": "europa", "dtc": 143.00648776178002}, {"segment": "leisure", "days_prior": 28, "source": "europa/upe", "dtc": 143.00648776178002}, {"segment": "leisure", "days_prior": 24, "source": "europa", "dtc": 119.55258729801785}, {"segment": "leisure", "days_prior": 24, "source": "europa/upe", "dtc": 119.55258729801785}, {"segment": "leisure", "days_prior": 21, "source": "europa", "dtc": 105.19424375785604}, {"segment": "leisure", "days_prior": 21, "source": "europa/upe", "dtc": 105.19424375785604}, {"segment": "leisure", "days_prior": 17, "source": "europa", "dtc": 81.77880499544955}, {"segment": "leisure", "days_prior": 17, "source": "europa/upe", "dtc": 81.77880499544955}, {"segment": "leisure", "days_prior": 14, "source": "europa", "dtc": 62.531606948063846}, {"segment": "leisure", "days_prior": 14, "source": "europa/upe", "dtc": 62.531606948063846}, {"segment": "leisure", "days_prior": 10, "source": "europa", "dtc": 43.18725400698566}, {"segment": "leisure", "days_prior": 10, "source": "europa/upe", "dtc": 43.18725400698566}, {"segment": "leisure", "days_prior": 7, "source": "europa", "dtc": 29.125044532305303}, {"segment": "leisure", "days_prior": 7, "source": "europa/upe", "dtc": 29.125044532305303}, {"segment": "leisure", "days_prior": 5, "source": "europa", "dtc": 19.906556985071127}, {"segment": "leisure", "days_prior": 5, "source": "europa/upe", "dtc": 19.906556985071127}, {"segment": "leisure", "days_prior": 3, "source": "europa", "dtc": 10.68403729046867}, {"segment": "leisure", "days_prior": 3, "source": "europa/upe", "dtc": 10.68403729046867}, {"segment": "leisure", "days_prior": 1, "source": "europa", "dtc": 5.917650489784242}, {"segment": "leisure", "days_prior": 1, "source": "europa/upe", "dtc": 5.917650489784242}, {"segment": "leisure", "days_prior": 0, "source": "europa", "dtc": 0.0}, {"segment": "leisure", "days_prior": 0, "source": "europa/upe", "dtc": 0.0}]}}, {"mode": "vega-lite"});
+</script></div></div>
+</div>
+<p>For comparisons with a single statistic, <code class="docutils literal notranslate"><span class="pre">raw_df=True</span></code> returns the assembled data and <code class="docutils literal notranslate"><span class="pre">also_df=True</span></code>
+returns a chart/data pair. With a list of statistics, <code class="docutils literal notranslate"><span class="pre">raw_df=True</span></code> is not implemented and <code class="docutils literal notranslate"><span class="pre">also_df</span></code>
+does not return a data pair; request each statistic separately for its data. Use <code class="docutils literal notranslate"><span class="pre">title</span></code> to override
+the heading. Comparisons use source labels to distinguish runs.</p>
 
 
 

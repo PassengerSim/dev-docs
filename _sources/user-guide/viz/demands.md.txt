@@ -20,15 +20,10 @@ business demand and which have more leisure demand.
 You can read about the underlying data and how to collect it in
 [Demands](../summary-tables/demands.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -40,18 +35,24 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## Comparing demand between passenger segments
+## Demand Segmentation Distribution
+
+This scatterplot shows the demand for selected passenger segments across all origin–destination
+markets. If you have more than two segments, you can compare one particular segment with another, or
+with total demand. You can also make multiple charts to compare different pairs of segments.
 
 Each point represents an origin–destination market. The axes show demand for different passenger
 segments, making it easier to spot markets with a different mix of passengers.
 
-The values come from the `base_demand` you configured, so this helps you review the network’s demand
-inputs rather than the random demand realized in individual samples. You can choose segment names
-with `x` and `y`. If you leave them out, the chart uses the first segment on the horizontal axis and
-either the second segment or total demand on the vertical axis.
+The values come from the `base_demand` in the configuration, so this helps you review the network’s
+demand inputs rather than the random demand realized in individual samples. You can choose segment
+names by passing them as `x` and `y` arguments to the plotting function. If you leave them out, the
+chart uses the first segment on the horizontal axis and either the second segment or total demand on
+the vertical axis.
 
 For one run, call
-[fig_demand_segmentation_distribution](passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution):
+[`fig_demand_segmentation_distribution`](passengersim.summaries.SimulationTables.fig_demand_segmentation_distribution)
+on a single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_demand_segmentation_distribution()
@@ -59,3 +60,38 @@ summary.fig_demand_segmentation_distribution()
 
 To compare scenarios, make this chart once for each result. There isn’t a combined comparison method
 for this figure.
+
+## Demand to Come
+
+This figure shows how much future demand remains at each time step, by passenger segment. It is
+useful for understanding the temporal dynamics of demand and how it evolves over the course of the
+simulation.
+
+Use `func="mean"` to see the average remaining demand. To see how much it varies between samples,
+use `"std"` for the standard deviation. You can also ask for both panels with a list.
+
+For a single result, call
+[`fig_demand_to_come`](passengersim.summaries.SimulationTables.fig_demand_to_come) on a single
+[`SimulationTables`](passengersim.summaries.SimulationTables) object:
+
+```{code-cell} ipython3
+summary.fig_demand_to_come(func="mean")
+```
+
+Use `summary.fig_demand_to_come(func=["mean", "std"])` to show both statistics side by side. The
+single-result method uses the automatically collected `demand_to_come_summary` table, falling back
+to sample-level `demand_to_come` data when needed. `raw_df=True` returns the plotted data;
+`also_df=True` returns a chart/data pair. For a list of statistics, the data includes a `statistic`
+column identifying each panel.
+
+To compare runs, call [`fig_demand_to_come`](passengersim.contrast.fig_demand_to_come) on a
+[`Contrast`](passengersim.contrast.Contrast) object:
+
+```{code-cell} ipython3
+contrast.fig_demand_to_come(func=["mean", "std"])
+```
+
+For comparisons with a single statistic, `raw_df=True` returns the assembled data and `also_df=True`
+returns a chart/data pair. With a list of statistics, `raw_df=True` is not implemented and `also_df`
+does not return a data pair; request each statistic separately for its data. Use `title` to override
+the heading. Comparisons use source labels to distinguish runs.

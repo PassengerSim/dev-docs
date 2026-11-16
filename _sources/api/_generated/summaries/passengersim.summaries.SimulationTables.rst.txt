@@ -33,6 +33,7 @@ SimulationTables
       ~SimulationTables.fig_carrier_yields
       ~SimulationTables.fig_cp_segmentation
       ~SimulationTables.fig_demand_segmentation_distribution
+      ~SimulationTables.fig_demand_to_come
       ~SimulationTables.fig_displacement_history
       ~SimulationTables.fig_fare_class_mix
       ~SimulationTables.fig_leg_bid_price_detail_rake

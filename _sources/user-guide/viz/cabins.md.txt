@@ -19,15 +19,10 @@ cabins separately helps you see differences that disappear in the carrier-wide a
 You can read about the underlying data and how to collect it in
 [Cabins](../summary-tables/cabins.md).
 
-The setup below loads both demo results. We’ll use their actual carrier names and airport codes, so
-you can run these examples without substituting your own data.
-
-## Set up the Europa examples
-
-We’ll use `europa/upe` for the single-run charts and compare it with `europa`. The first load may
-run the demo; later calls reuse its cached result.
-
 ```{code-cell} ipython3
+---
+tags: [remove-cell]
+---
 import altair as alt
 import passengersim as pax
 
@@ -39,7 +34,7 @@ baseline = contrast["europa"]
 alternative = contrast["europa/upe"]
 ```
 
-## How full is each cabin?
+## Cabin Load Factors
 
 The Europa demos have one cabin, `Y`, so this example produces a single cabin panel. With a
 multicabin network, the same method adds a panel for each cabin in your results.
@@ -47,10 +42,12 @@ multicabin network, the same method adds a panel for each cabin in your results.
 This chart shows load factors for each carrier and cabin. It is useful when you want to check
 whether one cabin is filling up while another still has room.
 
-Uses `cabins`; `raw_df=True` returns the plotted data. There is no dedicated contrast function.
+The values come from the `cabins` table. Use `raw_df=True` if you want to inspect the data behind
+the chart.
 
 For one run, call
-[fig_cabin_load_factors](passengersim.summaries.SimulationTables.fig_cabin_load_factors):
+[`fig_cabin_load_factors`](passengersim.summaries.SimulationTables.fig_cabin_load_factors) on a
+single [`SimulationTables`](passengersim.summaries.SimulationTables) object:
 
 ```{code-cell} ipython3
 summary.fig_cabin_load_factors()

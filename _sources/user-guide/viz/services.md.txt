@@ -38,8 +38,9 @@ This chart shows load factors and local shares by service, and how that changes 
 line runs from the baseline result to the treatment result, which is marked by a point. Larger
 points represent services with more capacity.
 
-This is a function in `passengersim.contrast.duo`, not a `Contrast` method. There is no single-run
-`fig_service_shifts` method.
+To compare two runs, call [`fig_service_shifts`](passengersim.contrast.duo.fig_service_shifts) with
+two [`SimulationTables`](passengersim.summaries.SimulationTables) objects: the baseline first,
+followed by the treatment. This is a standalone function, so import it before calling it:
 
 ```{code-cell} ipython3
 from passengersim.contrast.duo import fig_service_shifts
@@ -47,6 +48,5 @@ from passengersim.contrast.duo import fig_service_shifts
 fig_service_shifts(baseline, alternative, coloring="change_revenue")
 ```
 
-This is a paired-run function, not a `Contrast` method or a single-run method. See the API
-documentation on [`fig_service_shifts`](passengersim.contrast.duo.fig_service_shifts) for additional
-details.
+This function compares exactly two results. It is not a method on a
+[`Contrast`](passengersim.contrast.Contrast) object and has no single-run equivalent.

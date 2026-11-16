@@ -893,30 +893,6 @@
   
   
     <li class="md-nav__item">
-      <a href="demand-to-come.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Demand to Come</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="fare-class-mix.html" class="md-nav__link">
         
   
@@ -1905,6 +1881,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2500,8 +2504,10 @@
 
 
 <h1 id="configuration-visualizations">Configuration Visualizations<a class="headerlink" href="#configuration-visualizations" title="Link to this heading">¶</a></h1>
-<p>Some PassengerSim visualization tools can operate on a Config object directly, because they don’t
-rely on the outputs of a simulation. Some examples are shown here.</p>
+<p>Before running a simulation, you can use these charts to review the network and its demand inputs.
+They work directly with a <a class="reference internal" href="../../api/_generated/configs/passengersim.config.Config.html#passengersim.config.Config" title="passengersim.config.Config (Python class) — Bases: YamlConfig"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Config</span></code></span></a> object, so you do not need
+simulation results.</p>
+<p>Here we’ll load the 3MKT demo configuration to see its routes and booking curves:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pax</span>
@@ -2512,8 +2518,10 @@ rely on the outputs of a simulation. Some examples are shown here.</p>
 </div>
 </div>
 <h2 id="route-map">Route Map<a class="headerlink" href="#route-map" title="Link to this heading">¶</a></h2>
-<p>You can generate a map of all the legs in the network, or all the legs offered by a particular
-carrier (here the maps look the same, as the 3MKT network is symmetric).</p>
+<p>This map shows the routes offered in the network. It helps you check which airports are connected
+and review the geographic coverage before running the simulation.</p>
+<p>To show the whole network, call <a class="reference internal" href="../../api/config.html#passengersim.config._figures.fig_route_map" title="passengersim.config._figures.fig_route_map (Python function) — Create a figure showing the route map for the configured network."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_route_map</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/configs/passengersim.config.Config.html#passengersim.config.Config" title="passengersim.config.Config (Python class) — Bases: YamlConfig"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Config</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">cfg</span><span class="o">.</span><span class="n">fig_route_map</span><span class="p">()</span>
@@ -2590,6 +2598,10 @@ carrier (here the maps look the same, as the 3MKT network is symmetric).</p>
   })({"config": {"view": {"continuousHeight": 300, "continuousWidth": 400}, "range": {"category": ["#6a3d9a", "#cab2d6", "#33a02c", "#b2df8a", "#ff7f00", "#fdbf6f", "#1f78b4", "#a6cee3", "#e31a1c", "#fb9a99", "#b15928", "#e3d086"], "heatmap": "plasma"}, "title": {"font": "Roboto, Arial, sans-serif", "fontSize": 18, "anchor": "start", "offset": 8}, "axis": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "header": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "legend": {"labelFont": "Roboto, Arial, sans-serif", "titleFont": "Roboto, Arial, sans-serif"}, "bar": {"color": "#6a3d9a"}, "mark": {"color": "#6a3d9a"}, "line": {"color": "#6a3d9a"}}, "layer": [{"data": {"values": [{"id": "BOS-ORD", "type": "Feature", "properties": {}, "geometry": {"type": "LineString", "coordinates": [[-71.0098, 42.3656], [-71.55488996132321, 42.39222066630639], [-72.10041834192597, 42.41624745693631], [-72.64634083256462, 42.437676241425436], [-73.19261285172183, 42.45650332908533], [-73.73918957576997, 42.47272547197733], [-74.28602596953084, 42.486339867537296], [-74.83307681718327, 42.49734416084631], [-75.38029675346866, 42.50573644654265], [-75.92764029514343, 42.51151527037165], [-76.475061872627, 42.51467963037025], [-77.0225158617929, 42.51522897768394], [-77.56995661585063, 42.513163217014565], [-78.11733849726502, 42.50848270669813], [-78.66461590966034, 42.5011882584124], [-79.21174332965589, 42.49128113651479], [-79.75867533858059, 42.478763057012095], [-80.30536665401387, 42.46363618616378], [-80.8517721611012, 42.4459031387217], [-81.39784694359291, 42.4255669758096], [-81.94354631455624, 42.40263120244661], [-82.48882584671095, 42.37709976471929], [-83.03364140234078, 42.34897704660792], [-83.57794916273336, 42.31826786647285], [-84.12170565710375, 42.284977473207825], [-84.66486779095713, 42.24911154206737], [-85.20739287384889, 42.21067617017622], [-85.74923864650148, 42.169677871729164], [-86.29036330723953, 42.12612357289003], [-86.8307255377068, 42.08002060639967], [-87.37028452783039, 42.03137670590215], [-87.909, 41.9802]]}}, {"id": "ORD-LAX", "type": "Feature", "properties": {}, "geometry": {"type": "LineString", "coordinates": [[-87.909, 41.9802], [-88.9877849083312, 41.85544438930321], [-90.06221632666794, 41.72059373274602], [-91.13199892010472, 41.57573692973525], [-92.19684915505414, 41.420968409456606], [-93.25649579659294, 41.256387859825836], [-94.31068033842757, 41.08209994765185], [-95.35915736533202, 40.89821403174885], [-96.40169484851475, 40.70484387071429], [-97.43807437493695, 40.50210732705163], [-98.4680913121278, 40.290126069265824], [-99.49155491051623, 40.06902527349397], [-100.50828834572134, 39.83893332615731], [-101.51812870361074, 39.59998152903434], [-102.52092691124845, 39.35230380806065], [-103.51654761710965, 39.09603642706051], [-104.50486902413988, 38.83131770751017], [-105.48578267938396, 38.55828775532471], [-106.45919322400556, 38.2770881955511], [-107.42501810756657, 37.98786191574067], [-108.38318727043952, 37.69075281866605], [-109.33364279818932, 37.38590558494236], [-110.27633855168865, 37.07346544601007], [-111.21123977662623, 36.75357796783933], [-112.13832269593631, 36.426388845622874], [-113.05757408852287, 36.09204370963726], [-113.96899085747904, 35.75068794237123], [-114.87257959081421, 35.40246650694501], [-115.76835611750344, 35.04752378677598], [-116.65634506146729, 34.686003436384404], [-117.53657939588085, 34.3180482431773], [-118.4091, 33.9438]]}}]}, "mark": {"type": "geoshape", "fill": "none", "stroke": "red", "strokeWidth": 1}, "projection": {"center": [0, 38], "scale": 550, "type": "albers"}, "title": "Route Map"}, {"data": {"url": "https://cdn.jsdelivr.net/npm/vega-datasets@v1.29.0/data/us-10m.json", "format": {"feature": "states", "type": "topojson"}}, "mark": {"type": "geoshape", "fill": "none", "stroke": "#cccccc"}, "projection": {"center": [0, 38], "scale": 550, "type": "albers"}}, {"data": {"values": [{"place_code": "BOS", "latitude": 42.3656, "longitude": -71.0098, "place_shape": "star"}, {"place_code": "ORD", "latitude": 41.9802, "longitude": -87.909, "place_shape": "star"}, {"place_code": "LAX", "latitude": 33.9438, "longitude": -118.4091, "place_shape": "star"}]}, "mark": {"type": "point", "fill": "black", "opacity": 1.0, "stroke": "white", "strokeWidth": 0.5}, "encoding": {"latitude": {"field": "latitude", "type": "quantitative"}, "longitude": {"field": "longitude", "type": "quantitative"}, "shape": {"field": "place_shape", "legend": null, "scale": {"domain": ["circle", "star"], "range": ["circle", "M0,.5L.6,.8L.5,.1L1,-.3L.3,-.4L0,-1L-.3,-.4L-1,-.3L-.5,.1L-.6,.8L0,.5Z"]}, "type": "nominal"}, "size": {"field": "place_shape", "legend": null, "scale": {"domain": ["circle", "star"], "range": [40, 200]}, "type": "nominal"}, "tooltip": [{"field": "place_code", "title": "Place", "type": "nominal"}]}, "projection": {"center": [0, 38], "scale": 550, "type": "albers"}}], "height": 275, "width": 430, "$schema": "https://vega.github.io/schema/vega-lite/v6.4.1.json"}, {"mode": "vega-lite"});
 </script></div></div>
 </div>
+<p>To focus on one carrier, pass its name to
+<a class="reference internal" href="../../api/config.html#passengersim.config._figures.fig_route_map" title="passengersim.config._figures.fig_route_map (Python function) — Create a figure showing the route map for the configured network."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_route_map</span></code></span></a> on the same
+<a class="reference internal" href="../../api/_generated/configs/passengersim.config.Config.html#passengersim.config.Config" title="passengersim.config.Config (Python class) — Bases: YamlConfig"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Config</span></code></span></a> object. The maps look the same in this example because the
+carriers in 3MKT serve the same routes:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">cfg</span><span class="o">.</span><span class="n">fig_route_map</span><span class="p">(</span><span class="s2">&quot;AL1&quot;</span><span class="p">)</span>
@@ -2667,8 +2679,11 @@ carrier (here the maps look the same, as the 3MKT network is symmetric).</p>
 </script></div></div>
 </div>
 <h2 id="booking-curves">Booking Curves<a class="headerlink" href="#booking-curves" title="Link to this heading">¶</a></h2>
-<p>You can review the booking curves, which control the average fraction of each passenger type
-arriving in each timeframe.</p>
+<p>Booking curves describe when passengers arrive during the booking horizon. This chart shows the
+cumulative fraction of demand arriving by each day, so you can see which curves put more demand
+early in the horizon and which concentrate it closer to departure.</p>
+<p>Call <a class="reference internal" href="../../api/config.html#passengersim.config._figures.fig_booking_curves" title="passengersim.config._figures.fig_booking_curves (Python function) — Create a figure showing all booking curves defined in the config."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_booking_curves</span></code></span></a> on a
+<a class="reference internal" href="../../api/_generated/configs/passengersim.config.Config.html#passengersim.config.Config" title="passengersim.config.Config (Python class) — Bases: YamlConfig"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">Config</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">cfg</span><span class="o">.</span><span class="n">fig_booking_curves</span><span class="p">()</span>

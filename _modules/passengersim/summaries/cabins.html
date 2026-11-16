@@ -1485,6 +1485,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2114,22 +2142,39 @@
 
 <div class="viewcode-block" id="SimTabCabins.fig_cabin_load_factors">
 <a class="viewcode-back" href="../../../api/_generated/summaries/passengersim.summaries.cabins.SimTabCabins.html#passengersim.summaries.cabins.SimTabCabins.fig_cabin_load_factors">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">fig_cabin_load_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_df</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fig_cabin_load_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raw_df</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">alt</span><span class="o">.</span><span class="n">VConcatChart</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Plot distance-weighted load factors by carrier and cabin.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        raw_df : bool, default False</span>
+<span class="sd">            Return aggregated cabin data instead of a chart.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        altair.VConcatChart or pandas.DataFrame</span>
+<span class="sd">            One panel per recorded cabin, or the data from `get_cabins_df`.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If cabin data is missing or empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
 
-        <span class="n">all_cabins_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cabin_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">all_cabins_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_cabins_df</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">raw_df</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">all_cabins_df</span>
 
         <span class="n">fig</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">vconcat</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">cabin</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">cabin</span> <span class="ow">in</span> <span class="n">all_cabins_df</span><span class="p">[</span><span class="s2">&quot;cabin&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">():</span>
             <span class="n">cabin_df</span> <span class="o">=</span> <span class="n">all_cabins_df</span><span class="p">[</span><span class="n">all_cabins_df</span><span class="p">[</span><span class="s2">&quot;cabin&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cabin</span><span class="p">]</span>
             <span class="n">base</span> <span class="o">=</span> <span class="n">alt</span><span class="o">.</span><span class="n">Chart</span><span class="p">(</span><span class="n">cabin_df</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-                <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;experiment:N&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">),</span>
+                <span class="n">y</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Y</span><span class="p">(</span><span class="s2">&quot;carrier:N&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">),</span>
                 <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span>
                     <span class="s2">&quot;load_factor:Q&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.0%&quot;</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Load Factor&quot;</span>
                 <span class="p">),</span>
-                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;experiment:N&quot;</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;carrier:N&quot;</span><span class="p">,</span>
                 <span class="n">tooltip</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Tooltip</span><span class="p">(</span><span class="s2">&quot;load_factor&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.1%&quot;</span><span class="p">),</span>
                 <span class="n">text</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;load_factor:Q&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;.1%&quot;</span><span class="p">),</span>
             <span class="p">)</span>
@@ -2144,27 +2189,35 @@
 
 <div class="viewcode-block" id="SimTabCabins.get_cabins_df">
 <a class="viewcode-back" href="../../../api/_generated/summaries/passengersim.summaries.cabins.SimTabCabins.html#passengersim.summaries.cabins.SimTabCabins.get_cabins_df">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_cabins_df</span><span class="p">(</span><span class="n">_summaries</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all the cabine data into a dataframe&quot;&quot;&quot;</span>
-        <span class="n">tmp_df</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">exp_df</span> <span class="ow">in</span> <span class="n">_summaries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">df2</span> <span class="o">=</span> <span class="n">exp_df</span><span class="o">.</span><span class="n">cabins</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
-            <span class="k">if</span> <span class="n">tmp_df</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">df2</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">tmp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">tmp_df</span><span class="p">,</span> <span class="n">df2</span><span class="p">])</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cabins_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Aggregate recorded cabin observations by carrier and cabin.</span>
 
-        <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;asm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;capacity&quot;</span><span class="p">]</span>
-        <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp_df</span><span class="p">[</span><span class="s2">&quot;sold&quot;</span><span class="p">]</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            Carrier and cabin identifiers, total available seat miles (``asm``),</span>
+<span class="sd">            revenue passenger miles (``rpm``), seats sold, revenue, and load factor.</span>
+<span class="sd">            Totals include all recorded samples. Load factor is RPM divided by</span>
+<span class="sd">            ASM and is undefined (NaN) when ASM is zero.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If cabin data is missing or empty.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cabins</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No cabin data available&quot;</span><span class="p">)</span>
+        <span class="c1"># Weight observations by distance before combining flights and samples.</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+            <span class="n">asm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="p">[</span><span class="s2">&quot;capacity&quot;</span><span class="p">],</span>
+            <span class="n">rpm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cabins</span><span class="p">[</span><span class="s2">&quot;sold&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
         <span class="n">cabin_df</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">tmp_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="s2">&quot;carrier&quot;</span><span class="p">,</span> <span class="s2">&quot;cabin&quot;</span><span class="p">])</span>
+            <span class="n">observations</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;carrier&quot;</span><span class="p">,</span> <span class="s2">&quot;cabin&quot;</span><span class="p">])</span>
             <span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;asm&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;rpm&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;sold&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;revenue&quot;</span><span class="p">:</span> <span class="s2">&quot;sum&quot;</span><span class="p">})</span>
             <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;load_factor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;asm&quot;</span><span class="p">]</span>
-        <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;sold&quot;</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">600</span>
-        <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;revenue&quot;</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">600</span>
+        <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;load_factor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;rpm&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;asm&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">cabin_df</span><span class="p">[</span><span class="s2">&quot;asm&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cabin_df</span></div>
 </div>
 
