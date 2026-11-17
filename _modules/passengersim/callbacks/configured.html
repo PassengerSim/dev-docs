@@ -1912,24 +1912,51 @@
 
 
 <h1>Source code for passengersim.callbacks.configured</h1><div class="highlight"><pre>
-<span></span><code><span class="sd">&quot;&quot;&quot;Named factories for config-selected callbacks, separate from global attachment.&quot;&quot;&quot;</span>
+<span></span><code><span class="sd">&quot;&quot;&quot;Registered implementations for config-selected callbacks, separate from global attachment.</span>
+
+<span class="sd">A registration makes a callback or tracer available by name to</span>
+<span class="sd">``config.callbacks``; it never attaches anything to a simulation. There are two</span>
+<span class="sd">families of registration functions:</span>
+
+<span class="sd">- :func:`register_callback` and :func:`register_tracer`, the preferred</span>
+<span class="sd">  decorators, which register a callback function or a tracer class directly;</span>
+<span class="sd">- :func:`register_callback_factory` and :func:`register_tracer_factory`, which</span>
+<span class="sd">  register a factory building a fresh callback from a validated options model,</span>
+<span class="sd">  and remain available unchanged.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">overload</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">create_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">TypeAdapter</span><span class="p">,</span> <span class="n">create_model</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">HOOKS</span><span class="p">,</span> <span class="n">Hook</span><span class="p">,</span> <span class="n">check_daily_priority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._signatures</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_signature</span><span class="p">,</span> <span class="n">resolve_annotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.registry</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">DEFAULT_DAILY_PRIORITY</span><span class="p">,</span>
+    <span class="n">HOOKS</span><span class="p">,</span>
+    <span class="n">QUEUED_HOOKS</span><span class="p">,</span>
+    <span class="n">SYNCHRONOUS_HOOKS</span><span class="p">,</span>
+    <span class="n">Hook</span><span class="p">,</span>
+    <span class="n">_as_whole_number</span><span class="p">,</span>
+    <span class="n">check_daily_priority</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.tracer</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericTracer</span><span class="p">,</span> <span class="n">tracer_hooks</span>
 
 <span class="n">_HOOKS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">HOOKS</span><span class="p">)</span>
+
+<span class="n">DefinitionKind</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;factory&quot;</span><span class="p">,</span> <span class="s2">&quot;callback&quot;</span><span class="p">,</span> <span class="s2">&quot;tracer&quot;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;How a definition was registered.</span>
+
+<span class="sd">``&quot;factory&quot;`` is :func:`register_callback_factory` or</span>
+<span class="sd">:func:`register_tracer_factory`; ``&quot;callback&quot;`` is :func:`register_callback`;</span>
+<span class="sd">``&quot;tracer&quot;`` is :func:`register_tracer`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="CallbackDefinition">
@@ -1951,11 +1978,102 @@
     <span class="n">version</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implementation version checked against an explicit config requirement.&quot;&quot;&quot;</span>
     <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonical tracer result key, or None for an ordinary callback.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Canonical tracer result key, or None for an ordinary callback.&quot;&quot;&quot;</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">DefinitionKind</span> <span class="o">=</span> <span class="s2">&quot;factory&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;How this definition was registered; see :data:`DefinitionKind`.&quot;&quot;&quot;</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The function or class given to :func:`register_callback` or :func:`register_tracer`.</span>
 
+<span class="sd">    None for a factory registration. Used to decide whether a later</span>
+<span class="sd">    registration under the same name may replace this one.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__reduce__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="c1"># Definitions are pickled to send them to spawned workers. A model built</span>
+        <span class="c1"># here with create_model cannot be pickled by reference, because it is</span>
+        <span class="c1"># not an attribute of any module. Its fields are sent instead, exactly as</span>
+        <span class="c1"># captured when it was built (resolved types, defaults, and constraints),</span>
+        <span class="c1"># and the worker builds an identical model from them. Nothing is read</span>
+        <span class="c1"># again from the registered function, whose module globals or defaults</span>
+        <span class="c1"># may differ in the worker or may have changed since registration.</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters_model</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_GENERATED_MODEL</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">_model_fields_recipe</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">_restore_definition</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">when</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+
+<span class="n">_GENERATED_MODEL</span> <span class="o">=</span> <span class="s2">&quot;__passengersim_generated_model__&quot;</span>
+<span class="sd">&quot;&quot;&quot;Class attribute marking an options model built here with ``create_model``.&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generated_model</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an options model with ``create_model``, marked so its definition can be pickled.&quot;&quot;&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">__config__</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">fields</span><span class="p">)</span>
+    <span class="c1"># type.__setattr__, so that Pydantic does not treat it as a private attribute.</span>
+    <span class="nb">type</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">_GENERATED_MODEL</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_model_fields_recipe</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Capture a generated model&#39;s name, configuration, and fields, to rebuild it elsewhere.&quot;&quot;&quot;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">annotation</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">model_fields</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="nb">dict</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model_config</span><span class="p">),</span> <span class="n">fields</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_restore_definition</span><span class="p">(</span>
+    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">Hook</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">DefinitionKind</span><span class="p">,</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackDefinition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rebuild a pickled :class:`CallbackDefinition`, rebuilding a generated options model from its fields.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">name</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">fields</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">_generated_model</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">CallbackDefinition</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">)</span>
 
 
 <span class="n">_DEFINITIONS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CallbackDefinition</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_publish</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">definition</span><span class="p">:</span> <span class="n">CallbackDefinition</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Store a fully validated definition.</span>
+
+<span class="sd">    A new object is always published, never an edit of the old one, so</span>
+<span class="sd">    definitions already handed to a running simulation or worker stay stable,</span>
+<span class="sd">    and validation cached against the old object is recognized as stale (see</span>
+<span class="sd">    :func:`_resolve`).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_DEFINITIONS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_definition_fields</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">Hook</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">],</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate the fields shared by every kind of definition, raising if any is invalid.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">when</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">output_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A callback factory without a hook must return a tracer, so it needs an output_name&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">when</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid callback hook: </span><span class="si">{</span><span class="n">when</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">output_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">output_name</span> <span class="ow">or</span> <span class="n">output_name</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reserved or empty callback output name: </span><span class="si">{</span><span class="n">output_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameters_model</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;A callable factory and BaseModel parameter class are required&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">version</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Callback version must be a nonempty string&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="register_callback_factory">
@@ -1970,6 +2088,9 @@
     <span class="n">output_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a factory available to YAML declarations without attaching it.</span>
+
+<span class="sd">    For a plain callback, :func:`register_callback` is usually simpler: it</span>
+<span class="sd">    registers the callback function itself, with no factory.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1999,18 +2120,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_DEFINITIONS</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Callback registry name </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is empty or already registered&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">when</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">output_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;A callback factory without a hook must return a tracer, so it needs an output_name&quot;</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">when</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid callback hook: </span><span class="si">{</span><span class="n">when</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">output_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">output_name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">output_name</span> <span class="ow">or</span> <span class="n">output_name</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reserved or empty callback output name: </span><span class="si">{</span><span class="n">output_name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parameters_model</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;A callable factory and BaseModel parameter class are required&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">version</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">version</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Callback version must be a nonempty string&quot;</span><span class="p">)</span>
-    <span class="n">_DEFINITIONS</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">CallbackDefinition</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="p">)</span></div>
+    <span class="n">_check_definition_fields</span><span class="p">(</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">when</span><span class="p">,</span> <span class="n">parameters_model</span><span class="o">=</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="o">=</span><span class="n">output_name</span>
+    <span class="p">)</span>
+    <span class="n">_publish</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">CallbackDefinition</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="p">))</span></div>
 
 
 
@@ -2049,13 +2162,10 @@
 <span class="sd">        If the constructor takes positional-only parameters, ``*args``, or</span>
 <span class="sd">        ``**kwargs``, which cannot be described by an options model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">signature</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">hints</span> <span class="o">=</span> <span class="n">typing</span><span class="o">.</span><span class="n">get_type_hints</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-        <span class="c1"># Annotations naming types that are only imported for type checking</span>
-        <span class="c1"># cannot be resolved; validate those parameters as Any.</span>
-        <span class="n">hints</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">is</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__init__</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="fm">__new__</span> <span class="ow">is</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">:</span>
+        <span class="c1"># The class accepts no options despite object.__init__ exposing *args and **kwargs.</span>
+        <span class="k">return</span> <span class="n">_generated_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">Options&quot;</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">),</span> <span class="p">{})</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="n">read_signature</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">)</span>
     <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
         <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">param_name</span> <span class="o">==</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span>
@@ -2065,11 +2175,61 @@
                 <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.__init__ has parameter </span><span class="si">{</span><span class="n">param_name</span><span class="si">!r}</span><span class="s2"> that cannot be given by keyword; &quot;</span>
                 <span class="s2">&quot;declare options_model on the class instead&quot;</span>
             <span class="p">)</span>
-        <span class="n">annotation</span> <span class="o">=</span> <span class="n">hints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="n">Any</span><span class="p">)</span>
+        <span class="n">annotation</span> <span class="o">=</span> <span class="n">Any</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">param</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">annotation</span> <span class="o">=</span> <span class="n">resolve_annotation</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="fm">__init__</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+                <span class="c1"># Type-checking-only names leave just this field unconstrained.</span>
+                <span class="k">pass</span>
         <span class="n">default</span> <span class="o">=</span> <span class="o">...</span> <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">create_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">Options&quot;</span><span class="p">,</span> <span class="n">__config__</span><span class="o">=</span><span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">fields</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">_generated_model</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">Options&quot;</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_tracer_definition</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">GenericTracer</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="n">DefinitionKind</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackDefinition</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build (but do not publish) the definition registering a tracer class.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If no options model is declared or given and none can be derived.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the class declares no hook, or an invalid hook or output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters_model</span> <span class="o">=</span> <span class="n">parameters_model</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;options_model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parameters_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">parameters_model</span> <span class="o">=</span> <span class="n">options_model_from_signature</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+    <span class="n">hooks</span> <span class="o">=</span> <span class="n">tracer_hooks</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">hooks</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> declares no hook; override one or more on_&lt;hook&gt; methods, &quot;</span>
+            <span class="s2">&quot;or set the class attribute &#39;hook&#39;&quot;</span>
+        <span class="p">)</span>
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">_TracerFactory</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+    <span class="c1"># A single-hook tracer keeps its hook on the definition, as before; a</span>
+    <span class="c1"># tracer with several hooks is attached to all of them at prepare.</span>
+    <span class="n">when</span> <span class="o">=</span> <span class="n">hooks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hooks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="n">version</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;options_version&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+    <span class="n">_check_definition_fields</span><span class="p">(</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">when</span><span class="p">,</span> <span class="n">parameters_model</span><span class="o">=</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">name</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">CallbackDefinition</span><span class="p">(</span>
+        <span class="n">factory</span><span class="p">,</span>
+        <span class="n">when</span><span class="p">,</span>
+        <span class="n">parameters_model</span><span class="p">,</span>
+        <span class="n">version</span><span class="p">,</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="n">kind</span><span class="p">,</span>
+        <span class="n">source</span><span class="o">=</span><span class="bp">cls</span> <span class="k">if</span> <span class="n">kind</span> <span class="o">!=</span> <span class="s2">&quot;factory&quot;</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="register_tracer_factory">
@@ -2082,6 +2242,9 @@
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a tracer using the configuration it declares on its class.</span>
+
+<span class="sd">    :func:`register_tracer` does the same and also works as a class</span>
+<span class="sd">    decorator; it is the preferred spelling.</span>
 
 <span class="sd">    The output name, options model, and version are read from the class</span>
 <span class="sd">    attributes ``name``, ``options_model``, and ``options_version``, and the</span>
@@ -2117,26 +2280,627 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected a GenericTracer subclass&quot;</span><span class="p">)</span>
-    <span class="n">parameters_model</span> <span class="o">=</span> <span class="n">parameters_model</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;options_model&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">parameters_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">parameters_model</span> <span class="o">=</span> <span class="n">options_model_from_signature</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-    <span class="n">hooks</span> <span class="o">=</span> <span class="n">tracer_hooks</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">hooks</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> declares no hook; override one or more on_&lt;hook&gt; methods, &quot;</span>
-            <span class="s2">&quot;or set the class attribute &#39;hook&#39;&quot;</span>
-        <span class="p">)</span>
+    <span class="n">definition</span> <span class="o">=</span> <span class="n">_tracer_definition</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">parameters_model</span><span class="o">=</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;factory&quot;</span><span class="p">)</span>
     <span class="n">register_callback_factory</span><span class="p">(</span>
         <span class="n">name</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="n">factory</span><span class="o">=</span><span class="n">_TracerFactory</span><span class="p">(</span><span class="bp">cls</span><span class="p">),</span>
-        <span class="c1"># A single-hook tracer keeps its hook on the definition, as before;</span>
-        <span class="c1"># a tracer with several hooks is attached to all of them at prepare.</span>
-        <span class="n">when</span><span class="o">=</span><span class="n">hooks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hooks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">parameters_model</span><span class="o">=</span><span class="n">parameters_model</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="n">version</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;options_version&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">),</span>
-        <span class="n">output_name</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">factory</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">factory</span><span class="p">,</span>
+        <span class="n">when</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">when</span><span class="p">,</span>
+        <span class="n">parameters_model</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">parameters_model</span><span class="p">,</span>
+        <span class="n">version</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+        <span class="n">output_name</span><span class="o">=</span><span class="n">definition</span><span class="o">.</span><span class="n">output_name</span><span class="p">,</span>
     <span class="p">)</span></div>
 
+
+
+<span class="c1"># --------------------------------------------------------------------------</span>
+<span class="c1"># register_callback and register_tracer</span>
+
+
+<span class="n">_RESERVED_PARAMETERS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">})</span>
+<span class="sd">&quot;&quot;&quot;Keyword-only parameter names refused by :func:`register_callback`.</span>
+
+<span class="sd">They are registration options. A configuration parameter of either name would</span>
+<span class="sd">look like one, but would never be applied as one.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_describe_origin</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name a registered function or class by its module and qualified name.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;__module__&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;?&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;__qualname__&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">repr</span><span class="p">(</span><span class="n">obj</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_local</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether `obj` is a lambda or a local function or class.</span>
+
+<span class="sd">    Such objects can share a module and qualified name with others (every</span>
+<span class="sd">    closure made by one factory does), so those names do not identify them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">qualname</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__qualname__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">&quot;&lt;locals&gt;&quot;</span> <span class="ow">in</span> <span class="n">qualname</span> <span class="ow">or</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span> <span class="ow">in</span> <span class="n">qualname</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_publish_new_style</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">definition</span><span class="p">:</span> <span class="n">CallbackDefinition</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Publish a :func:`register_callback` or :func:`register_tracer` definition.</span>
+
+<span class="sd">    A definition may replace an existing one of the same kind from the same</span>
+<span class="sd">    origin, so that re-running a notebook cell or reloading a module works.</span>
+<span class="sd">    For a module-level function or class, the same origin means the same</span>
+<span class="sd">    module and qualified name. A lambda or local object can only replace</span>
+<span class="sd">    itself (the identical object). Every other duplicate is an error.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the name is used by a definition that this one may not replace.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">existing</span> <span class="o">=</span> <span class="n">_DEFINITIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">existing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">new</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">old</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">same_origin</span> <span class="o">=</span> <span class="n">existing</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="n">definition</span><span class="o">.</span><span class="n">kind</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">old</span> <span class="ow">is</span> <span class="n">new</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">_is_local</span><span class="p">(</span><span class="n">old</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_local</span><span class="p">(</span><span class="n">new</span><span class="p">)</span> <span class="ow">and</span> <span class="n">_describe_origin</span><span class="p">(</span><span class="n">old</span><span class="p">)</span> <span class="o">==</span> <span class="n">_describe_origin</span><span class="p">(</span><span class="n">new</span><span class="p">))</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">same_origin</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">existing</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;factory&quot;</span><span class="p">:</span>
+                <span class="n">held_by</span> <span class="o">=</span> <span class="s2">&quot;a factory registration&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">held_by</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">existing</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">_describe_origin</span><span class="p">(</span><span class="n">old</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Callback registry name </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is already registered by </span><span class="si">{</span><span class="n">held_by</span><span class="si">}</span><span class="s2">, so &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">kind</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">_describe_origin</span><span class="p">(</span><span class="n">new</span><span class="p">)</span><span class="si">}</span><span class="s2"> cannot use it; choose a different name=&quot;</span>
+            <span class="p">)</span>
+    <span class="n">_publish</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_registry_name</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the registry name for a function or class, validating an explicit one.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Callback registry name </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is empty or not a string&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">name</span>
+    <span class="n">inferred</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inferred</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">inferred</span><span class="o">.</span><span class="n">isidentifier</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2"> has no usable name to register under; pass name=...&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inferred</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_async_or_generator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether `func`, or anything in its ``__wrapped__`` chain, is async or a generator.&quot;&quot;&quot;</span>
+    <span class="n">seen</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">current</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">func</span>
+    <span class="k">while</span> <span class="n">current</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">id</span><span class="p">(</span><span class="n">current</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">current</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">inspect</span><span class="o">.</span><span class="n">iscoroutinefunction</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isgeneratorfunction</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+            <span class="ow">or</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isasyncgenfunction</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_callback_kind</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Refuse anything but a synchronous plain function, naming the right decorator.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2"> is a tracer instance; register its class with register_tracer, not register_callback&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is a tracer class; register it with register_tracer, not register_callback&quot;</span>
+            <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;register_callback registers a function, not the class </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">; decorate a function&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;register_callback registers a plain function, not </span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2">; wrap it in a function. Callable &quot;</span>
+            <span class="s2">&quot;objects can carry state shared across simulations; a stateful collector belongs in a tracer&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">_is_async_or_generator</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> is a coroutine, generator, or async-generator function; callbacks must &quot;</span>
+            <span class="s2">&quot;execute synchronously and return their results directly&quot;</span>
+        <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_tracer_kind</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Refuse anything but a GenericTracer subclass, naming the right decorator.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2"> is a tracer instance; with register_tracer, decorate the class, not an instance&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isfunction</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_is_async_or_generator</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> is a function; register it with register_callback, not register_tracer&quot;</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;register_tracer registers tracer classes, and </span><span class="si">{</span><span class="n">obj</span><span class="si">!r}</span><span class="s2"> is not a GenericTracer subclass&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_configuration_parameters</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">hook</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check a callback&#39;s signature against its hook, and get its configuration parameters.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[inspect.Parameter]</span>
+<span class="sd">        The keyword-only parameters, in order.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the signature does not fit the hook.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">read_signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+    <span class="n">positional</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">POSITIONAL_ONLY</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">POSITIONAL_OR_KEYWORD</span><span class="p">)]</span>
+    <span class="n">needed</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span> <span class="k">else</span> <span class="mi">1</span>
+    <span class="n">arguments</span> <span class="o">=</span> <span class="s2">&quot;(sim, days_prior)&quot;</span> <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span> <span class="k">else</span> <span class="s2">&quot;(sim)&quot;</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">VAR_POSITIONAL</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">VAR_KEYWORD</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> takes </span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">, which cannot be described by configuration; &quot;</span>
+                <span class="s2">&quot;declare each configuration parameter after * instead&quot;</span>
+            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">positional</span> <span class="ow">and</span> <span class="n">positional</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;self&quot;</span><span class="p">,</span> <span class="s2">&quot;cls&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> takes </span><span class="si">{</span><span class="n">positional</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> first, so it looks like a method; register a plain &quot;</span>
+            <span class="s2">&quot;function defined outside a class body&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">positional</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">needed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;a </span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback is called as </span><span class="si">{</span><span class="n">arguments</span><span class="si">}</span><span class="s2">, but </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> takes too few positional parameters&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">positional</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">needed</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">positional</span><span class="p">[</span><span class="n">needed</span><span class="p">:])</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;a </span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback is called as </span><span class="si">{</span><span class="n">arguments</span><span class="si">}</span><span class="s2">, so </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;s parameter(s) </span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2"> must be &quot;</span>
+            <span class="s2">&quot;keyword-only configuration parameters, declared after *&quot;</span>
+        <span class="p">)</span>
+    <span class="n">configuration</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">p</span><span class="o">.</span><span class="n">KEYWORD_ONLY</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">configuration</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">_RESERVED_PARAMETERS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> has a parameter named </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2">, which is reserved for the registration &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;option of that name; pass </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">=... to register_callback instead&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;s configuration parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> cannot start with an underscore&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">configuration</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_inferred_model</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build an options model from a callback&#39;s keyword-only parameters.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If a parameter has no annotation, an annotation that cannot be</span>
+<span class="sd">        resolved, or one that Pydantic cannot validate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;s configuration parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> needs a type annotation, used to validate &quot;</span>
+                <span class="s2">&quot;its configured value; annotate it with Any to accept anything&quot;</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">annotation</span> <span class="o">=</span> <span class="n">resolve_annotation</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">annotation</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;the annotation of </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;s configuration parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> cannot be resolved at run &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;time (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">); import the type at module level, not only for type &quot;</span>
+                <span class="s2">&quot;checking, or pass parameters_model=&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">TypeAdapter</span><span class="p">(</span><span class="n">annotation</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&#39;s configuration parameter </span><span class="si">{</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is annotated with </span><span class="si">{</span><span class="n">annotation</span><span class="si">!r}</span><span class="s2">, which &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;cannot be validated from configuration (</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">); use a JSON-compatible type, or pass &quot;</span>
+                <span class="s2">&quot;parameters_model=&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
+        <span class="n">fields</span><span class="p">[</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="o">...</span> <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">param</span><span class="o">.</span><span class="n">empty</span> <span class="k">else</span> <span class="n">param</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_generated_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_check_explicit_model</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check that an explicit ``parameters_model`` matches the callback, without changing it.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If the model is not a Pydantic model class, does not forbid unknown</span>
+<span class="sd">        fields, or its fields do not match the keyword-only parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parameters_model must be a pydantic BaseModel subclass, not </span><span class="si">{</span><span class="n">model</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">model_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;extra&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;forbid&quot;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;parameters_model </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> must reject unknown fields, so that misspelled configuration &quot;</span>
+            <span class="s1">&#39;options are caught; declare it with extra=&quot;forbid&quot;&#39;</span>
+        <span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model_fields</span><span class="p">)</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">fields</span> <span class="o">!=</span> <span class="n">names</span><span class="p">:</span>
+        <span class="n">problems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">missing</span> <span class="o">:=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">names</span> <span class="o">-</span> <span class="n">fields</span><span class="p">):</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no field for parameter(s) </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">missing</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">extra</span> <span class="o">:=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fields</span> <span class="o">-</span> <span class="n">names</span><span class="p">):</span>
+            <span class="n">problems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;field(s) </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extra</span><span class="p">)</span><span class="si">}</span><span class="s2"> with no matching keyword-only parameter&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;parameters_model </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not match </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">problems</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_registration_options</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">hook</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve and validate the priority and burn-in option captured at registration.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple[int | None, bool]</span>
+<span class="sd">        The priority in whole seconds (None for a synchronous hook), and</span>
+<span class="sd">        whether burn-in samples are skipped.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If a priority is given for a synchronous hook, or a queued hook&#39;s</span>
+<span class="sd">        priority is zero or not a whole number of seconds.</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If `skip_burn` is not a bool.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">skip_burn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">resolved_skip</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">skip_burn</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="n">resolved_skip</span> <span class="o">=</span> <span class="n">skip_burn</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;skip_burn must be True or False, not </span><span class="si">{</span><span class="n">skip_burn</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">hook</span> <span class="ow">in</span> <span class="n">SYNCHRONOUS_HOOKS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">attribute</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">given</span> <span class="o">=</span> <span class="n">priority</span> <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">attribute</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;a </span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback runs directly, not as a timed event, so it has no priority; &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;remove the priority (</span><span class="si">{</span><span class="n">given</span><span class="si">!r}</span><span class="s2">) from </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">resolved_skip</span>
+    <span class="n">chosen</span> <span class="o">=</span> <span class="n">priority</span> <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">attribute</span> <span class="k">if</span> <span class="n">attribute</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">DEFAULT_DAILY_PRIORITY</span>
+    <span class="k">return</span> <span class="n">check_daily_priority</span><span class="p">(</span><span class="n">chosen</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">resolved_skip</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_BoundCallback</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A registered callback with one declaration&#39;s validated parameters bound to it.</span>
+
+<span class="sd">    This is what a simulation actually calls for a callback registered with</span>
+<span class="sd">    :func:`register_callback`. It is built fresh for every declaration and run,</span>
+<span class="sd">    and carries the options captured at registration, read by the scheduler</span>
+<span class="sd">    and dispatcher exactly as for a manual callback registered with options.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">result_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="o">=</span> <span class="n">func</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The registered function.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validated configuration parameters, passed by keyword on every call.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skip_burn</span> <span class="o">=</span> <span class="n">skip_burn</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Whether the dispatcher skips this callback during burn-in samples.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result_name</span> <span class="o">=</span> <span class="n">result_name</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Key under which returned dictionaries are stored: the declaration ID.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Set only for a queued hook; a synchronous one has no priority.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Offset in seconds from the DCP trigger time.&quot;&quot;&quot;</span>
+        <span class="c1"># The signature check in prepare() reads __signature__, which takes</span>
+        <span class="c1"># precedence over __wrapped__, so it sees the bound parameters with</span>
+        <span class="c1"># their values as defaults rather than the function&#39;s required ones.</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">read_signature</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__signature__</span> <span class="o">=</span> <span class="n">signature</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">parameters</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">])</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">signature</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># Lets remove_callback(func) recognize a configured callback, and</span>
+        <span class="c1"># explain that it must be disabled in the configuration instead.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__wrapped__</span> <span class="o">=</span> <span class="n">func</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">sim</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;configured </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> as </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">result_name</span><span class="si">!r}</span><span class="s2">&gt;&quot;</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_CallbackFactory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bind validated parameters to a function registered with :func:`register_callback`.</span>
+
+<span class="sd">    A module-level class rather than a closure, so that definitions holding it</span>
+<span class="sd">    can be sent to spawned workers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The registered function.&quot;&quot;&quot;</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Captured queued-hook offset in seconds, or None for a synchronous hook.&quot;&quot;&quot;</span>
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Captured burn-in option.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">result_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_BoundCallback</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Bind one validated options model to the function.</span>
+
+<span class="sd">        Every field of the model is passed by its canonical name, including</span>
+<span class="sd">        fields left at their defaults, so the model&#39;s defaults (not the</span>
+<span class="sd">        function&#39;s) apply to configured runs. Values are passed as validated,</span>
+<span class="sd">        so nested models stay models.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        options : pydantic.BaseModel</span>
+<span class="sd">            Validated options for one declaration. The caller passes a copy</span>
+<span class="sd">            that no other declaration shares.</span>
+<span class="sd">        result_name : str, optional</span>
+<span class="sd">            Key under which returned dictionaries are stored.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        _BoundCallback</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">type</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">model_fields</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">_BoundCallback</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="n">skip_burn</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skip_burn</span><span class="p">,</span> <span class="n">result_name</span><span class="o">=</span><span class="n">result_name</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">BaseModel</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_BoundCallback</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_callback</span><span class="p">[</span><span class="n">CallbackT</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">CallbackT</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">Hook</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CallbackT</span><span class="p">:</span> <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_callback</span><span class="p">[</span><span class="n">CallbackT</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]](</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">Hook</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackT</span><span class="p">],</span> <span class="n">CallbackT</span><span class="p">]:</span> <span class="o">...</span>
+
+
+<div class="viewcode-block" id="register_callback">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.register_callback.html#passengersim.callbacks.configured.register_callback">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_callback</span><span class="p">(</span>
+    <span class="n">func</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">Hook</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a callback function available to ``config.callbacks``, without attaching it.</span>
+
+<span class="sd">    Use it as a decorator, ``@register_callback(when=&quot;end_sample&quot;)``, or call</span>
+<span class="sd">    it directly, ``register_callback(func, when=&quot;end_sample&quot;)``. Either way the</span>
+<span class="sd">    function itself is returned unchanged, so it can still be called directly</span>
+<span class="sd">    or attached manually.</span>
+
+<span class="sd">    The function&#39;s leading positional parameters receive the hook&#39;s arguments:</span>
+<span class="sd">    ``(sim)``, or ``(sim, days_prior)`` for the daily hook. Every other</span>
+<span class="sd">    parameter must be keyword-only (declared after ``*``); these are its</span>
+<span class="sd">    configuration parameters, given in a declaration&#39;s ``parameters``::</span>
+
+<span class="sd">        @register_callback(when=&quot;end_sample&quot;, skip_burn=True)</span>
+<span class="sd">        def carrier_revenue(</span>
+<span class="sd">            sim: Simulation, *, carriers: list[str] | None = None</span>
+<span class="sd">        ) -&gt; dict:</span>
+<span class="sd">            return {</span>
+<span class="sd">                c.name: c.revenue</span>
+<span class="sd">                for c in sim.eng.carriers</span>
+<span class="sd">                if carriers is None or c.name in carriers</span>
+<span class="sd">            }</span>
+
+<span class="sd">    Returned dictionaries are stored under the declaration&#39;s ID, so the same</span>
+<span class="sd">    function can be declared several times with different parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    func : Callable, optional</span>
+<span class="sd">        The callback: a plain, synchronous function. Omit it to get a decorator.</span>
+<span class="sd">    when : {&quot;initialize_sample&quot;, &quot;begin_sample&quot;, &quot;daily&quot;, &quot;end_sample&quot;, &quot;finalize_sample&quot;}</span>
+<span class="sd">        Hook at which the callback runs. Required; it is never inferred.</span>
+<span class="sd">    name : str, optional</span>
+<span class="sd">        Registry name; defaults to the function&#39;s name. Required for a lambda.</span>
+<span class="sd">    parameters_model : type[pydantic.BaseModel], optional</span>
+<span class="sd">        Options model for the configuration parameters. By default one is</span>
+<span class="sd">        built from the keyword-only parameters, whose type annotations are</span>
+<span class="sd">        then required. An explicit model must declare ``extra=&quot;forbid&quot;`` and</span>
+<span class="sd">        exactly one field per keyword-only parameter. It decides the types,</span>
+<span class="sd">        defaults, and required fields of configured runs; the function&#39;s own</span>
+<span class="sd">        defaults apply only when it is called directly.</span>
+<span class="sd">    version : str, default &quot;1&quot;</span>
+<span class="sd">        Implementation version, checked when a configuration requires one.</span>
+<span class="sd">    priority : int, optional</span>
+<span class="sd">        Offset in seconds from the DCP trigger time, for a queued hook</span>
+<span class="sd">        (``begin_sample``, ``daily``, or ``end_sample``); see</span>
+<span class="sd">        :meth:`~passengersim.callbacks.CallbackMixin.daily_callback`. Defaults</span>
+<span class="sd">        to the function&#39;s own ``priority`` attribute, else 1. Not allowed for</span>
+<span class="sd">        a synchronous hook.</span>
+<span class="sd">    skip_burn : bool, optional</span>
+<span class="sd">        Whether burn-in samples are skipped. Defaults to the function&#39;s own</span>
+<span class="sd">        ``skip_burn`` attribute, else False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Callable</span>
+<span class="sd">        `func`, unchanged; or, without `func`, a decorator that registers the</span>
+<span class="sd">        function it decorates and returns it unchanged.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If `func` is not a plain synchronous function (a tracer class or</span>
+<span class="sd">        instance, another class, or a callable object), `when` is missing,</span>
+<span class="sd">        the signature does not fit the hook, or a configuration parameter&#39;s</span>
+<span class="sd">        annotation is missing or cannot be resolved.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the hook or name is invalid, the name is registered by something</span>
+<span class="sd">        else, or the priority is invalid.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``priority`` and ``skip_burn`` are read once, at registration; changing</span>
+<span class="sd">    the function&#39;s attributes afterwards has no effect until it is registered</span>
+<span class="sd">    again. They apply only to configured runs: attaching the function</span>
+<span class="sd">    manually follows the ordinary rules for manual callbacks, and calls it</span>
+<span class="sd">    with its own defaults.</span>
+
+<span class="sd">    Registering again under the same name replaces the earlier registration</span>
+<span class="sd">    if it came from the same module-level function (as when a notebook cell</span>
+<span class="sd">    is re-run); any other duplicate name is an error.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">_check_callback_kind</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">when</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;register_callback needs the hook at which </span><span class="si">{</span><span class="n">target</span><span class="o">.</span><span class="vm">__qualname__</span><span class="si">}</span><span class="s2"> runs; &quot;</span>
+                <span class="s1">&#39;use @register_callback(when=&quot;daily&quot;) or another hook&#39;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">when</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid callback hook: </span><span class="si">{</span><span class="n">when</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">registry_name</span> <span class="o">=</span> <span class="n">_registry_name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">_configuration_parameters</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parameters_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">_inferred_model</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">registry_name</span><span class="si">}</span><span class="s2">_options&quot;</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_check_explicit_model</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parameters_model</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">parameters_model</span>
+        <span class="n">resolved_priority</span><span class="p">,</span> <span class="n">resolved_skip</span> <span class="o">=</span> <span class="n">_registration_options</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">skip_burn</span><span class="p">)</span>
+        <span class="n">factory</span> <span class="o">=</span> <span class="n">_CallbackFactory</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">resolved_priority</span><span class="p">,</span> <span class="n">resolved_skip</span><span class="p">)</span>
+        <span class="n">_check_definition_fields</span><span class="p">(</span><span class="n">factory</span><span class="o">=</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">when</span><span class="p">,</span> <span class="n">parameters_model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">output_name</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">definition</span> <span class="o">=</span> <span class="n">CallbackDefinition</span><span class="p">(</span><span class="n">factory</span><span class="p">,</span> <span class="n">when</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;callback&quot;</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">_publish_new_style</span><span class="p">(</span><span class="n">registry_name</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">target</span>
+
+    <span class="k">if</span> <span class="n">func</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">register</span>
+    <span class="k">return</span> <span class="n">register</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></div>
+
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_tracer</span><span class="p">[</span><span class="n">TracerT</span><span class="p">:</span> <span class="n">GenericTracer</span><span class="p">](</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">TracerT</span><span class="p">],</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">TracerT</span><span class="p">]:</span> <span class="o">...</span>
+
+
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_tracer</span><span class="p">[</span><span class="n">TracerT</span><span class="p">:</span> <span class="n">GenericTracer</span><span class="p">](</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">type</span><span class="p">[</span><span class="n">TracerT</span><span class="p">]],</span> <span class="nb">type</span><span class="p">[</span><span class="n">TracerT</span><span class="p">]]:</span> <span class="o">...</span>
+
+
+<div class="viewcode-block" id="register_tracer">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.register_tracer.html#passengersim.callbacks.configured.register_tracer">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">register_tracer</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">/</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">parameters_model</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">version</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Make a tracer class available to ``config.callbacks``, without attaching it.</span>
+
+<span class="sd">    Use it as a class decorator, with or without arguments</span>
+<span class="sd">    (``@register_tracer`` or ``@register_tracer(version=&quot;2&quot;)``), or call it</span>
+<span class="sd">    directly, ``register_tracer(MyTracer)``. The class is returned unchanged.</span>
+
+<span class="sd">    The hooks, result name, options model, and version come from the class,</span>
+<span class="sd">    as for :func:`register_tracer_factory` (see</span>
+<span class="sd">    :class:`~passengersim.callbacks.tracer.GenericTracer`): the configured</span>
+<span class="sd">    tracer is built as ``cls(**validated_options)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cls : type[GenericTracer], optional</span>
+<span class="sd">        The tracer class. Omit it to get a decorator.</span>
+<span class="sd">    name : str, optional</span>
+<span class="sd">        Registry name or alias; defaults to ``cls.name``. Does not rename the</span>
+<span class="sd">        tracer&#39;s output.</span>
+<span class="sd">    parameters_model : type[pydantic.BaseModel], optional</span>
+<span class="sd">        Overrides ``cls.options_model``. If neither is given, a model is</span>
+<span class="sd">        derived from the constructor&#39;s signature (see</span>
+<span class="sd">        :func:`options_model_from_signature`).</span>
+<span class="sd">    version : str, optional</span>
+<span class="sd">        Overrides ``cls.options_version``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    type[GenericTracer]</span>
+<span class="sd">        `cls`, unchanged; or, without `cls`, a decorator that registers the</span>
+<span class="sd">        class it decorates and returns it unchanged.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        If `cls` is not a GenericTracer subclass (a function, a tracer</span>
+<span class="sd">        instance, or anything else), or no options model is declared or given</span>
+<span class="sd">        and none can be derived from the constructor.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the name is registered by something else, or the class declares no</span>
+<span class="sd">        hook or an invalid hook or output.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Registering again under the same name replaces the earlier registration</span>
+<span class="sd">    if it came from the same module-level class (as when a notebook cell is</span>
+<span class="sd">    re-run); any other duplicate name is an error.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">target</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="n">_check_tracer_kind</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">registry_name</span> <span class="o">=</span> <span class="n">_registry_name</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">target</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">definition</span> <span class="o">=</span> <span class="n">_tracer_definition</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">parameters_model</span><span class="o">=</span><span class="n">parameters_model</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="n">version</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;tracer&quot;</span><span class="p">)</span>
+        <span class="n">_publish_new_style</span><span class="p">(</span><span class="n">registry_name</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">target</span>
+
+    <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">register</span>
+    <span class="k">return</span> <span class="n">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># --------------------------------------------------------------------------</span>
+<span class="c1"># Validation and preparation of declarations</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_resolve</span><span class="p">(</span><span class="n">owner</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CallbackDefinition</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">]]:</span>
@@ -2151,10 +2915,20 @@
     <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks: parameters must be finite JSON values: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
     <span class="n">definitions</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;_configured_definitions&quot;</span><span class="p">,</span> <span class="n">_DEFINITIONS</span><span class="p">)</span>
+    <span class="c1"># Replacing a definition leaves the registry dictionary (and its identity)</span>
+    <span class="c1"># unchanged, so the cache also records which definition each declaration</span>
+    <span class="c1"># used, and is reused only while every one of them is still registered.</span>
+    <span class="c1"># Other registrations, which this owner does not use, do not invalidate it.</span>
     <span class="n">cached</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">owner</span><span class="p">,</span> <span class="s2">&quot;_configured_validation&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cached</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">signature</span> <span class="ow">and</span> <span class="n">cached</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">definitions</span><span class="p">:</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="n">cached</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">signature</span>
+        <span class="ow">and</span> <span class="n">cached</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="n">definitions</span>
+        <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">definitions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="n">definition</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">cached</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="p">):</span>
         <span class="k">return</span> <span class="n">cached</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">resolved</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">references</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CallbackDefinition</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">key</span>
         <span class="k">try</span><span class="p">:</span>
@@ -2167,11 +2941,21 @@
             <span class="n">definition</span> <span class="o">=</span> <span class="n">definitions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">declaration</span><span class="o">.</span><span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">declaration</span><span class="o">.</span><span class="n">version</span> <span class="o">!=</span> <span class="n">definition</span><span class="o">.</span><span class="n">version</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;version </span><span class="si">{</span><span class="n">declaration</span><span class="o">.</span><span class="n">version</span><span class="si">!r}</span><span class="s2"> does not match registered </span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">version</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Check a declared priority before the options model sees it:</span>
+            <span class="c1"># pydantic would quietly turn ``true`` into 1. Zero is a whole</span>
+            <span class="c1"># number and is left for preflight to reject with its own message.</span>
+            <span class="k">if</span> <span class="s2">&quot;priority&quot;</span> <span class="ow">in</span> <span class="n">definition</span><span class="o">.</span><span class="n">parameters_model</span><span class="o">.</span><span class="n">model_fields</span><span class="p">:</span>
+                <span class="n">raw_priority</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">declaration</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;priority&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">declaration</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">raw_priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">_as_whole_number</span><span class="p">(</span><span class="n">raw_priority</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;priority </span><span class="si">{</span><span class="n">raw_priority</span><span class="si">!r}</span><span class="s2"> is not a whole number of seconds&quot;</span><span class="p">)</span>
             <span class="n">options</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">parameters_model</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">declaration</span><span class="o">.</span><span class="n">parameters</span><span class="p">))</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">): parameters or declaration invalid: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">error</span>
         <span class="n">resolved</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">options</span><span class="p">))</span>
-    <span class="n">owner</span><span class="o">.</span><span class="n">_configured_validation</span> <span class="o">=</span> <span class="n">signature</span><span class="p">,</span> <span class="n">definitions</span><span class="p">,</span> <span class="n">resolved</span>
+        <span class="n">references</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">definition</span><span class="p">))</span>
+    <span class="n">owner</span><span class="o">.</span><span class="n">_configured_validation</span> <span class="o">=</span> <span class="n">signature</span><span class="p">,</span> <span class="n">definitions</span><span class="p">,</span> <span class="n">resolved</span><span class="p">,</span> <span class="n">references</span>
     <span class="k">return</span> <span class="n">resolved</span>
 
 
@@ -2189,35 +2973,52 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">preflight</span><span class="p">(</span><span class="n">owner</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">CallbackDefinition</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Check current declarations and manual tracer collisions without factories.</span>
 
-<span class="sd">    This runs before any worker starts, so it also rejects a daily callback</span>
-<span class="sd">    whose validated options carry a ``priority`` of zero.</span>
+<span class="sd">    This runs before any worker starts, so it also rejects a queued</span>
+<span class="sd">    (begin-sample, daily, or end-sample) callback whose validated options</span>
+<span class="sd">    carry a ``priority`` that is zero or not a whole number of seconds. Each</span>
+<span class="sd">    tracer claims its canonical output name, and each callback registered</span>
+<span class="sd">    with :func:`register_callback` claims its declaration ID as a result key;</span>
+<span class="sd">    no two may share one, nor share one with a manual tracer or a named</span>
+<span class="sd">    manual callback.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">resolved</span> <span class="o">=</span> <span class="n">_resolve</span><span class="p">(</span><span class="n">owner</span><span class="p">)</span>
-    <span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Result name -&gt; (declaration ID, description of what claims it).</span>
+    <span class="n">outputs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">options</span> <span class="ow">in</span> <span class="n">resolved</span><span class="p">:</span>
         <span class="n">hooks</span> <span class="o">=</span> <span class="n">_definition_hooks</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span>
-        <span class="c1"># A factory whose hooks are unknown until it runs is checked too: a</span>
-        <span class="c1"># zero priority is never valid, and prepare would reject it anyway.</span>
-        <span class="k">if</span> <span class="n">hooks</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="s2">&quot;daily&quot;</span> <span class="ow">in</span> <span class="n">hooks</span><span class="p">:</span>
-            <span class="n">check_daily_priority</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">output_name</span>
+        <span class="c1"># A factory whose hooks are unknown until it runs is checked too: such</span>
+        <span class="c1"># a priority is never valid, and prepare would reject it anyway.</span>
+        <span class="c1"># Options that declare no priority leave the callback&#39;s default. A</span>
+        <span class="c1"># callback from register_callback is skipped: its priority was fixed</span>
+        <span class="c1"># and checked at registration, and its options, which cannot include a</span>
+        <span class="c1"># priority field, may still expose an unrelated computed attribute.</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">kind</span> <span class="o">!=</span> <span class="s2">&quot;callback&quot;</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">hooks</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">hook</span> <span class="ow">in</span> <span class="n">QUEUED_HOOKS</span> <span class="k">for</span> <span class="n">hook</span> <span class="ow">in</span> <span class="n">hooks</span><span class="p">)):</span>
+            <span class="n">check_daily_priority</span><span class="p">(</span><span class="n">priority</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;callback&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">_HOOKS</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: the declaration ID </span><span class="si">{</span><span class="n">key</span><span class="si">!r}</span><span class="s2"> is reserved for the data of </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> callbacks; &quot;</span>
+                    <span class="s2">&quot;choose another declaration ID, and set name= to the registered callback&quot;</span>
+                <span class="p">)</span>
+            <span class="n">output</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">key</span><span class="p">,</span> <span class="s2">&quot;result key&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">output_name</span><span class="p">,</span> <span class="s2">&quot;tracer output&quot;</span>
         <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: duplicate tracer output </span><span class="si">{</span><span class="n">output</span><span class="si">!r}</span><span class="s2"> (also </span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">output</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-            <span class="n">outputs</span><span class="p">[</span><span class="n">output</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: duplicate </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">output</span><span class="si">!r}</span><span class="s2"> (also </span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">output</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="n">outputs</span><span class="p">[</span><span class="n">output</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">what</span><span class="p">)</span>
     <span class="c1"># Only manual tracers: those built by a prior prepare() are about to be replaced.</span>
     <span class="k">for</span> <span class="n">tracer</span> <span class="ow">in</span> <span class="n">owner</span><span class="o">.</span><span class="n">_distinct_tracers</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s2">&quot;manual&quot;</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">tracer</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">tracer</span><span class="o">.</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="s2">: tracer output </span><span class="si">{</span><span class="n">tracer</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> conflicts with manual tracer&quot;</span>
-            <span class="p">)</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">tracer</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">tracer</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> conflicts with manual tracer&quot;</span><span class="p">)</span>
     <span class="c1"># A manual callback registered with name= stores rows under that key too.</span>
     <span class="k">for</span> <span class="n">registration</span> <span class="ow">in</span> <span class="n">owner</span><span class="o">.</span><span class="n">_callback_registry</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s2">&quot;manual&quot;</span><span class="p">):</span>
         <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;result_name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">outputs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="s2">: tracer output </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> conflicts with a named manual callback&quot;</span>
-            <span class="p">)</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">what</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;callbacks.</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> conflicts with a named manual callback&quot;</span><span class="p">)</span>
     <span class="c1"># Copy only definitions referenced by this run, never the global registry.</span>
     <span class="n">declarations</span> <span class="o">=</span> <span class="n">owner</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">callbacks</span>
     <span class="k">return</span> <span class="p">{</span>
@@ -2238,7 +3039,10 @@
 
 <span class="sd">    Every factory runs, and every result is checked, before anything is</span>
 <span class="sd">    published. A tracer with several hooks is attached to all of them, and</span>
-<span class="sd">    its registrations are replaced together on the next prepare.</span>
+<span class="sd">    its registrations are replaced together on the next prepare. A callback</span>
+<span class="sd">    registered with :func:`register_callback` is bound to each declaration&#39;s</span>
+<span class="sd">    own copy of its validated parameters, and stores its results under that</span>
+<span class="sd">    declaration&#39;s ID.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackMixin</span>
 
@@ -2248,7 +3052,10 @@
     <span class="n">temporary</span> <span class="o">=</span> <span class="n">CallbackMixin</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">definition</span><span class="p">,</span> <span class="n">options</span> <span class="ow">in</span> <span class="n">_resolve</span><span class="p">(</span><span class="n">owner</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">callback</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;callback&quot;</span><span class="p">:</span>
+                <span class="n">callback</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">result_name</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">callback</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">model_copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
             <span class="c1"># A tracer written with hook methods need not be callable itself.</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">callable</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">)):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;factory must return a callable or a tracer&quot;</span><span class="p">)</span>

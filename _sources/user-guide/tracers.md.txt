@@ -361,8 +361,17 @@ summary.callback_data.leg_sales
 Hook methods take the same arguments as the corresponding callback functions: the simulation, plus
 the days prior to departure for `on_daily`. Like a callback function, a hook method may return a
 dictionary to store as ordinary callback data, though most tracers keep what they observe and report
-it from `finalize`. A tracer with an `on_daily` method can set a `priority` attribute, which works
-as it does for a daily callback.
+it from `finalize`. A tracer can set a `priority` attribute, which works as it does for a callback:
+it is the offset in seconds from each DCP's trigger time. A tracer has just one `priority`, which
+applies to all of its queued hook methods (`on_begin_sample`, `on_daily`, and `on_end_sample`), so
+the tracer observes every DCP from the same side of the RM systems and the simulation's bookkeeping.
+A `priority` given when attaching the tracer, as in
+`sim.begin_sample_callback(tracer, priority=-5)`, likewise applies to all of these methods,
+whichever registration method was used. When two of a tracer's methods fall at the same moment, they
+run in lifecycle order: `on_begin_sample` before the first `on_daily` call of a sample, and the last
+`on_daily` call before `on_end_sample`. The same order holds between different callbacks and tracers
+that share a moment (after any RM systems, which always run first). A tracer that needs different
+timing for different hooks can be split into two tracers.
 
 For each run, the simulation takes the tracer through these steps:
 

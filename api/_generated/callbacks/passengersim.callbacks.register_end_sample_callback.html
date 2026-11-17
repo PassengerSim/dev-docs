@@ -1872,6 +1872,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -1902,6 +1926,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2044,7 +2092,7 @@
       <span aria-label="Python function" class="objinfo-icon objinfo-icon__procedure" title="Python function">F</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.callbacks.register_end_sample_callback (Python function) — Register a function to be triggered at the end of each sample."><span>passengersim.<wbr>callbacks.<wbr>register_<wbr>end_<wbr>sample_<wbr>callback</span></span>
+      <span title="passengersim.callbacks.register_end_sample_callback (Python function) — Deprecated global registration for the end_sample hook."><span>passengersim.<wbr>callbacks.<wbr>register_<wbr>end_<wbr>sample_<wbr>callback</span></span>
     </span>
   </a>
   
@@ -2417,7 +2465,7 @@
       <span aria-label="Python function" class="objinfo-icon objinfo-icon__procedure" title="Python function">F</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.callbacks.register_end_sample_callback (Python function) — Register a function to be triggered at the end of each sample."><span>passengersim.<wbr>callbacks.<wbr>register_<wbr>end_<wbr>sample_<wbr>callback</span></span>
+      <span title="passengersim.callbacks.register_end_sample_callback (Python function) — Deprecated global registration for the end_sample hook."><span>passengersim.<wbr>callbacks.<wbr>register_<wbr>end_<wbr>sample_<wbr>callback</span></span>
     </span>
   </a>
   
@@ -2442,30 +2490,45 @@
 <h1 id="register-end-sample-callback">register_end_sample_callback<a class="headerlink" href="#register-end-sample-callback" title="Link to this heading">¶</a></h1>
 <dl class="py function objdesc">
 <dt class="sig sig-object highlight sig-wrap py" id="passengersim.callbacks.register_end_sample_callback">
-<span class="sig-prename descclassname"><span class="pre">passengersim.callbacks.</span></span><span class="sig-name descname"><span class="pre">register_end_sample_callback</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback.callback" title="passengersim.callbacks.register_end_sample_callback.callback (Python parameter) — The callback function to register."><span class="n"><span class="pre">callback</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.base.CallbackMixin" title="passengersim.callbacks.base.CallbackMixin (Python class) — Bases: object"><span class="pre">CallbackMixin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer" title="passengersim.callbacks.tracer.GenericTracer (Python class)"><span class="pre">GenericTracer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em>, </span><span class="sig-param-decl"><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback.skip_burn" title="passengersim.callbacks.register_end_sample_callback.skip_burn (Python parameter) — If True, the callback is not called during burn-in samples."><span class="n"><span class="pre">skip_burn</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback.name" title="passengersim.callbacks.register_end_sample_callback.name (Python parameter) — Store returned dictionaries under callback_data.&lt;name&gt; instead of the shared hook key; for a tracer, its result name."><span class="n"><span class="pre">name</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.base.CallbackMixin" title="passengersim.callbacks.base.CallbackMixin (Python class) — Bases: object"><span class="pre">CallbackMixin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer" title="passengersim.callbacks.tracer.GenericTracer (Python class)"><span class="pre">GenericTracer</span></a></span></span></span><a class="headerlink" href="#passengersim.callbacks.register_end_sample_callback" title="Link to this definition">¶</a></dt>
-<dd><p>Register a function to be triggered at the end of each sample.</p>
-<p>The callback function will be triggered before counters are reset or
+<span class="sig-prename descclassname"><span class="pre">passengersim.callbacks.</span></span><span class="sig-name descname"><span class="pre">register_end_sample_callback</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback.callback (Python parameter)"><span class="n"><span class="pre">callback</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.base.CallbackMixin" title="passengersim.callbacks.base.CallbackMixin (Python class) — Bases: object"><span class="pre">CallbackMixin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer" title="passengersim.callbacks.tracer.GenericTracer (Python class)"><span class="pre">GenericTracer</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em>, </span><span class="sig-param-decl"><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback.priority (Python parameter)"><span class="n"><span class="pre">priority</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback.skip_burn (Python parameter)"><span class="n"><span class="pre">skip_burn</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback.name (Python parameter)"><span class="n"><span class="pre">name</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.base.CallbackMixin" title="passengersim.callbacks.base.CallbackMixin (Python class) — Bases: object"><span class="pre">CallbackMixin</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer" title="passengersim.callbacks.tracer.GenericTracer (Python class)"><span class="pre">GenericTracer</span></a></span></span></span><a class="headerlink" href="#passengersim.callbacks.register_end_sample_callback" title="Link to this definition">¶</a></dt>
+<dd><p>Deprecated global registration for the end_sample hook.</p>
+<p>For a reusable callback, register it with <code class="docutils literal notranslate"><span class="pre">register_callback</span></code> (a
+function) or <code class="docutils literal notranslate"><span class="pre">register_tracer</span></code> (a tracer class) and select it in
+<code class="docutils literal notranslate"><span class="pre">config.callbacks</span></code>; those do not attach it to every simulation. For
+development and testing, use <code class="docutils literal notranslate"><span class="pre">sim.end_sample_callback(...)</span></code> or an explicit
+<code class="docutils literal notranslate"><span class="pre">CallbackMixin</span></code> bundle with <code class="docutils literal notranslate"><span class="pre">bundle.apply_callback_functions(sim)</span></code>.
+Calls emit <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code>.</p>
+<p>Register a function to be triggered at the end of each sample.</p>
+<blockquote>
+<div><p>The callback function will be triggered before counters are reset or
 history buffers are rolled over.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple api-field highlight">
-<dt id="passengersim.callbacks.register_end_sample_callback.callback"><span class="sig-name descname">callback</span><span class="p"> : </span><span class="desctype"><span class="desctype">Callable[[<a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose">Simulation</a>], dict | None] or <a class="reference internal" href="../tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer" title="passengersim.tracers.generic.GenericTracer (Python class) — Bases: ABC">GenericTracer</a>, optional</span></span><a class="headerlink" href="#passengersim.callbacks.register_end_sample_callback.callback" title="Permalink to this definition">¶</a></dt><dd><p>The callback function to register.  It should accept a single argument,
+<p>It runs at an offset, in seconds, from the trigger time of the final
+DCP (the day of departure). The offset is the <cite>priority</cite> option if
+given, else the callback’s own <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute if it has one,
+and otherwise one second, which is after the final DCP’s RM systems
+(-1) and bookkeeping (0). A negative <code class="docutils literal notranslate"><span class="pre">priority</span></code> runs it before that
+bookkeeping, or, below -1, before the RM systems as well. A
+<code class="docutils literal notranslate"><span class="pre">priority</span></code> of zero is not allowed, as for a daily callback.</p>
+<dl class="simple">
+<dt>callback<span class="classifier">Callable[[Simulation], dict | None] or GenericTracer, optional</span></dt><dd><p>The callback function to register.  It should accept a single argument,
 which will be the Simulation object, and return a dictionary of interesting
 things to store, or nothing. Omit it to use this method as a
 decorator with options.</p>
 </dd>
-<dt id="passengersim.callbacks.register_end_sample_callback.skip_burn"><span class="sig-name descname">skip_burn</span><span class="p"> : </span><span class="desctype"><span class="desctype">bool, optional</span></span><a class="headerlink" href="#passengersim.callbacks.register_end_sample_callback.skip_burn" title="Permalink to this definition">¶</a></dt><dd><p>If True, the callback is not called during burn-in samples.</p>
+<dt>priority<span class="classifier">int, optional</span></dt><dd><p>Offset in seconds from the final DCP’s trigger time; see above.</p>
 </dd>
-<dt id="passengersim.callbacks.register_end_sample_callback.name"><span class="sig-name descname">name</span><span class="p"> : </span><span class="desctype"><span class="desctype">str, optional</span></span><a class="headerlink" href="#passengersim.callbacks.register_end_sample_callback.name" title="Permalink to this definition">¶</a></dt><dd><p>Store returned dictionaries under <code class="docutils literal notranslate"><span class="pre">callback_data.&lt;name&gt;</span></code> instead
+<dt>skip_burn<span class="classifier">bool, optional</span></dt><dd><p>If True, the callback is not called during burn-in samples.</p>
+</dd>
+<dt>name<span class="classifier">str, optional</span></dt><dd><p>Store returned dictionaries under <code class="docutils literal notranslate"><span class="pre">callback_data.&lt;name&gt;</span></code> instead
 of the shared hook key; for a tracer, its result name.</p>
 </dd>
 </dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Callable or GenericTracer</em> – The callback, or the fresh copy of a tracer. Without <cite>callback</cite>, a
+<dl class="simple">
+<dt>Callable or GenericTracer</dt><dd><p>The callback, or the fresh copy of a tracer. Without <cite>callback</cite>, a
 decorator that registers the function it decorates.</p>
 </dd>
 </dl>
+</div></blockquote>
 </dd></dl>
 
 

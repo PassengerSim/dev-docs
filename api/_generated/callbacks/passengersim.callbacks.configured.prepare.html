@@ -14,7 +14,7 @@
         <link rel="prev" href="passengersim.callbacks.configured.preflight.html">
       
       
-        <link rel="next" href="passengersim.callbacks.configured.register_callback_factory.html">
+        <link rel="next" href="passengersim.callbacks.configured.register_callback.html">
       
       
       <link rel="icon" href="../../../_static/favicon.png">
@@ -1971,12 +1971,60 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.configured.register_callback_factory.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     <span>register_<wbr>callback_<wbr>factory</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2100,6 +2148,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -2130,6 +2202,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2623,7 +2719,10 @@
 <dd><p>Build fresh callbacks and replace only prior configured attachments.</p>
 <p>Every factory runs, and every result is checked, before anything is
 published. A tracer with several hooks is attached to all of them, and
-its registrations are replaced together on the next prepare.</p>
+its registrations are replaced together on the next prepare. A callback
+registered with <a class="reference internal" href="passengersim.callbacks.configured.register_callback.html#passengersim.callbacks.configured.register_callback" title="passengersim.callbacks.configured.register_callback (Python function) — Make a callback function available to config.callbacks, without attaching it."><code class="xref py py-func docutils literal notranslate"><span class="pre">register_callback()</span></code></a> is bound to each declaration’s
+own copy of its validated parameters, and stores its results under that
+declaration’s ID.</p>
 </dd></dl>
 
 

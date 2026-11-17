@@ -64,6 +64,11 @@ each run. Each trial's speed readout uses up to its last 50 completed samples, e
 work and is independent of the configured burn-in period. A dash appears until an eligible sample
 completes.
 
+A sample is reported as completed only after bookkeeping and all `finalize_sample` callbacks succeed
+and its duration is recorded. Finalizer execution is included in sample timing; a failed finalizer
+does not advance completion counts. Revenue observations are captured before bookkeeping and
+finalizers, so finalizer changes do not alter the recorded departure revenue.
+
 Revenue statistics use post-burn-in samples pooled across trials. Each carrier has a **Mean** column
 and a **95% CI** column showing the approximate confidence interval for its mean revenue. For
 example, `±1.58K` means the interval extends about 1,580 revenue units above and below the displayed

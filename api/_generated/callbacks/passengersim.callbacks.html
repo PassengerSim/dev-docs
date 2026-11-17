@@ -1868,6 +1868,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -1898,6 +1922,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2194,6 +2242,16 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>register_<wbr>callback</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
     
     <span class="md-ellipsis">
@@ -2208,6 +2266,16 @@
     
     <span class="md-ellipsis">
       <span>register_<wbr>combiner</span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>register_<wbr>tracer</span>
     </span>
   </a>
   
@@ -2590,7 +2658,7 @@
 <p>Callback hooks triggered at key points during a simulation.</p>
 <p>Queued callbacks run at the beginning of each booking horizon, daily, or at
 the end of the horizon. Synchronous initialize/finalize callbacks bracket
-sample event processing, before demand generation and before bookkeeping.</p>
+sample processing, before demand generation and after bookkeeping.</p>
 <p class="rubric">Modules</p>
 <table class="autosummary longtable docutils data align-default">
 <tbody>
@@ -2610,10 +2678,10 @@ sample event processing, before demand generation and before bookkeeping.</p>
 <td><p>Combination of tracer results from several trials, workers, or saved runs.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.configured.html#module-passengersim.callbacks.configured" title="passengersim.callbacks.configured (Python module)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">configured</span></code></a></p></td>
-<td><p>Named factories for config-selected callbacks, separate from global attachment.</p></td>
+<td><p>Registered implementations for config-selected callbacks, separate from global attachment.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.registration.html#module-passengersim.callbacks.registration" title="passengersim.callbacks.registration (Python module)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">registration</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Deprecated process-global callback attachment; prefer explicit attachments.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2631,29 +2699,35 @@ sample event processing, before demand generation and before bookkeeping.</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils data align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_callback_factory.html#passengersim.callbacks.register_callback_factory" title="passengersim.callbacks.register_callback_factory (Python function) — Make a factory available to YAML declarations without attaching it."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_callback_factory</span></code></a>(name, *, factory, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_callback.html#passengersim.callbacks.register_callback" title="passengersim.callbacks.register_callback (Python function) — Make a callback function available to config.callbacks, without attaching it."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_callback</span></code></a>()</p></td>
+<td><p>Make a callback function available to <code class="docutils literal notranslate"><span class="pre">config.callbacks</span></code>, without attaching it.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_callback_factory.html#passengersim.callbacks.register_callback_factory" title="passengersim.callbacks.register_callback_factory (Python function) — Make a factory available to YAML declarations without attaching it."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_callback_factory</span></code></a>(name, *, factory, ...)</p></td>
 <td><p>Make a factory available to YAML declarations without attaching it.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_combiner.html#passengersim.callbacks.register_combiner" title="passengersim.callbacks.register_combiner (Python function) — Register how tables declaring an aggregation process are combined."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_combiner</span></code></a>(process, combiner)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_combiner.html#passengersim.callbacks.register_combiner" title="passengersim.callbacks.register_combiner (Python function) — Register how tables declaring an aggregation process are combined."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_combiner</span></code></a>(process, combiner)</p></td>
 <td><p>Register how tables declaring an aggregation process are combined.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_tracer.html#passengersim.callbacks.register_tracer" title="passengersim.callbacks.register_tracer (Python function) — Make a tracer class available to config.callbacks, without attaching it."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_tracer</span></code></a>()</p></td>
+<td><p>Make a tracer class available to <code class="docutils literal notranslate"><span class="pre">config.callbacks</span></code>, without attaching it.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_tracer_factory.html#passengersim.callbacks.register_tracer_factory" title="passengersim.callbacks.register_tracer_factory (Python function) — Register a tracer using the configuration it declares on its class."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_tracer_factory</span></code></a>(cls, *[, ...])</p></td>
 <td><p>Register a tracer using the configuration it declares on its class.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_begin_sample_callback.html#passengersim.callbacks.register_begin_sample_callback" title="passengersim.callbacks.register_begin_sample_callback (Python function) — Register a function to be triggered at the beginning of each sample."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_begin_sample_callback</span></code></a>([callback, ...])</p></td>
-<td><p>Register a function to be triggered at the beginning of each sample.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_begin_sample_callback.html#passengersim.callbacks.register_begin_sample_callback" title="passengersim.callbacks.register_begin_sample_callback (Python function) — Deprecated global registration for the begin_sample hook."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_begin_sample_callback</span></code></a>([callback, ...])</p></td>
+<td><p>Deprecated global registration for the begin_sample hook.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_daily_callback.html#passengersim.callbacks.register_daily_callback" title="passengersim.callbacks.register_daily_callback (Python function) — Register a function to be triggered each day during a sample."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_daily_callback</span></code></a>([callback, ...])</p></td>
-<td><p>Register a function to be triggered each day during a sample.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_daily_callback.html#passengersim.callbacks.register_daily_callback" title="passengersim.callbacks.register_daily_callback (Python function) — Deprecated global registration for the daily hook."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_daily_callback</span></code></a>([callback, ...])</p></td>
+<td><p>Deprecated global registration for the daily hook.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_end_sample_callback.html#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback (Python function) — Register a function to be triggered at the end of each sample."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_end_sample_callback</span></code></a>([callback, ...])</p></td>
-<td><p>Register a function to be triggered at the end of each sample.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_end_sample_callback.html#passengersim.callbacks.register_end_sample_callback" title="passengersim.callbacks.register_end_sample_callback (Python function) — Deprecated global registration for the end_sample hook."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_end_sample_callback</span></code></a>([callback, ...])</p></td>
+<td><p>Deprecated global registration for the end_sample hook.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_finalize_sample_callback.html#passengersim.callbacks.register_finalize_sample_callback" title="passengersim.callbacks.register_finalize_sample_callback (Python function) — Register a synchronous callback after all sample events finish."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_finalize_sample_callback</span></code></a>([...])</p></td>
-<td><p>Register a synchronous callback after all sample events finish.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="passengersim.callbacks.register_finalize_sample_callback.html#passengersim.callbacks.register_finalize_sample_callback" title="passengersim.callbacks.register_finalize_sample_callback (Python function) — Deprecated global registration for the finalize_sample hook."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_finalize_sample_callback</span></code></a>([...])</p></td>
+<td><p>Deprecated global registration for the finalize_sample hook.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_initialize_sample_callback.html#passengersim.callbacks.register_initialize_sample_callback" title="passengersim.callbacks.register_initialize_sample_callback (Python function) — Register a synchronous callback before sample demand generation."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_initialize_sample_callback</span></code></a>([...])</p></td>
-<td><p>Register a synchronous callback before sample demand generation.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="passengersim.callbacks.register_initialize_sample_callback.html#passengersim.callbacks.register_initialize_sample_callback" title="passengersim.callbacks.register_initialize_sample_callback (Python function) — Deprecated global registration for the initialize_sample hook."><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_initialize_sample_callback</span></code></a>([...])</p></td>
+<td><p>Deprecated global registration for the initialize_sample hook.</p></td>
 </tr>
 </tbody>
 </table>

@@ -1971,12 +1971,60 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.configured.register_callback_factory.html" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     <span>register_<wbr>callback_<wbr>factory</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2100,6 +2148,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -2130,6 +2202,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2621,8 +2717,13 @@
 <dt class="sig sig-object highlight sig-wrap py" id="passengersim.callbacks.configured.preflight">
 <span class="sig-prename descclassname"><span class="pre">passengersim.callbacks.configured.</span></span><span class="sig-name descname"><span class="pre">preflight</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.preflight" title="passengersim.callbacks.configured.preflight.owner (Python parameter)"><span class="n"><span class="pre">owner</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">Any</span></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="passengersim.callbacks.configured.CallbackDefinition.html#passengersim.callbacks.configured.CallbackDefinition" title="passengersim.callbacks.configured.CallbackDefinition (Python class) — Bases: object"><span class="pre">CallbackDefinition</span></a><span class="p"><span class="pre">]</span></span></span></span></span><a class="reference internal" href="../../../_modules/passengersim/callbacks/configured.html#preflight"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#passengersim.callbacks.configured.preflight" title="Link to this definition">¶</a></dt>
 <dd><p>Check current declarations and manual tracer collisions without factories.</p>
-<p>This runs before any worker starts, so it also rejects a daily callback
-whose validated options carry a <code class="docutils literal notranslate"><span class="pre">priority</span></code> of zero.</p>
+<p>This runs before any worker starts, so it also rejects a queued
+(begin-sample, daily, or end-sample) callback whose validated options
+carry a <code class="docutils literal notranslate"><span class="pre">priority</span></code> that is zero or not a whole number of seconds. Each
+tracer claims its canonical output name, and each callback registered
+with <a class="reference internal" href="passengersim.callbacks.configured.register_callback.html#passengersim.callbacks.configured.register_callback" title="passengersim.callbacks.configured.register_callback (Python function) — Make a callback function available to config.callbacks, without attaching it."><code class="xref py py-func docutils literal notranslate"><span class="pre">register_callback()</span></code></a> claims its declaration ID as a result key;
+no two may share one, nor share one with a manual tracer or a named
+manual callback.</p>
 </dd></dl>
 
 

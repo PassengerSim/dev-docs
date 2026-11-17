@@ -719,10 +719,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#re-using-callback-functions" class="md-nav__link">
+  <a href="#trying-callback-functions-on-another-simulation" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Re-<wbr>using Callback Functions</span>
+      <span>Trying Callback Functions on Another Simulation</span>
     </span>
   </a>
   
@@ -775,12 +775,38 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-callback-factories" class="md-nav__link">
+  <a href="#registering-custom-callbacks" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Custom Callback Factories</span>
+      <span>Registering Custom Callbacks</span>
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Registering Custom Callbacks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registering-tracers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Registering Tracers</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback-factories" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Callback Factories</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -796,6 +822,16 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-global-callback-registration" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Migrating Global Callback Registration</span>
+    </span>
+  </a>
   
 </li>
       
@@ -2094,10 +2130,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#re-using-callback-functions" class="md-nav__link">
+  <a href="#trying-callback-functions-on-another-simulation" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Re-<wbr>using Callback Functions</span>
+      <span>Trying Callback Functions on Another Simulation</span>
     </span>
   </a>
   
@@ -2150,12 +2186,38 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#custom-callback-factories" class="md-nav__link">
+  <a href="#registering-custom-callbacks" class="md-nav__link">
     
     <span class="md-ellipsis">
-      <span>Custom Callback Factories</span>
+      <span>Registering Custom Callbacks</span>
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Registering Custom Callbacks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registering-tracers" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Registering Tracers</span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#callback-factories" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Callback Factories</span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -2171,6 +2233,16 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#migrating-global-callback-registration" class="md-nav__link">
+    
+    <span class="md-ellipsis">
+      <span>Migrating Global Callback Registration</span>
+    </span>
+  </a>
   
 </li>
       
@@ -2206,6 +2278,10 @@ a simulation, but these pre-selected data may not be sufficient for every analys
 this, users can choose to additionally collect any other data while running a simulation. This is
 done by writing a “callback” function. Such a function is invoked regularly while the simulation is
 running, and can inspect and store almost anything from the Simulation object.</p>
+<p>For callbacks or collections of callbacks that will be reused, prefer the
+<a class="reference internal" href="#configured-callbacks"><span class="xref myst">configured callback interface</span></a>. Manual attachment is primarily a convenience
+for development and testing. The examples below start with manual attachment to make it easy to try
+callback functions, then show how to configure them for reuse.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -2217,8 +2293,8 @@ running, and can inspect and store almost anything from the Simulation object.</
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>passengersim 0.95.dev13+g237281526
-passengersim.core 0.94
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>passengersim 0.95.dev53+gecdbe3df7.d20261113
+passengersim.core 0.95.dev53+gecdbe3df7.d20261113
 </code></pre></div>
 </div>
 </div>
@@ -2265,7 +2341,7 @@ we are looking for. There are five lifecycle hooks:</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">begin_sample</span></code></p></td>
 <td><p>Event queue</p></td>
-<td><p>One second after the first DCP, after its RM processing</p></td>
+<td><p>One second after the first DCP, after its RM processing, unless the callback sets a <code class="docutils literal notranslate"><span class="pre">priority</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">daily</span></code></p></td>
 <td><p>Event queue</p></td>
@@ -2273,11 +2349,11 @@ we are looking for. There are five lifecycle hooks:</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">end_sample</span></code></p></td>
 <td><p>Event queue</p></td>
-<td><p>One second after the final DCP</p></td>
+<td><p>One second after the final DCP, unless the callback sets a <code class="docutils literal notranslate"><span class="pre">priority</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code></p></td>
 <td><p>Synchronous</p></td>
-<td><p>After all queued events, before sample diagnostics, departure statistics, history rollover, and bookkeeping</p></td>
+<td><p>After all queued events and sample bookkeeping, before timing and diagnostics publication</p></td>
 </tr>
 </tbody>
 </table>
@@ -2286,14 +2362,19 @@ steps have not yet run for that sample; use <code class="docutils literal notran
 prices instead. With <code class="docutils literal notranslate"><span class="pre">simulation_controls.skip_demand_generation=True</span></code>, an initializer must set
 <code class="docutils literal notranslate"><span class="pre">scenario_demand</span></code> and add booking events (for example, with <code class="docutils literal notranslate"><span class="pre">sim.eng.add_booking_event</span></code>). RM and
 queued callback events are still generated normally.</p>
-<p><code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> sees the completed sample before history rollover. Its execution is included in
-sample timing, and changes it makes are visible to subsequent bookkeeping. It cannot change output
-already recorded during event processing. In <code class="docutils literal notranslate"><span class="pre">run_single_sample()</span></code>, it runs on normal context exit
-after the caller’s context body and before bookkeeping.</p>
+<p><code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> sees post-bookkeeping state: departure statistics have been recorded, histories
+have rolled forward, database writes have been committed, choice-set data has been cleared, and
+market shares have been updated. Some per-DCP counters are also cleared during history rollover; use
+<code class="docutils literal notranslate"><span class="pre">end_sample</span></code> to inspect or modify pre-bookkeeping state. Finalizers cannot change statistics or
+output already recorded. Their execution is included in sample timing, before diagnostics are
+published and progress reports the sample as completed. Progress reporting is separate from the user
+callback registry and includes burn-in samples. In <code class="docutils literal notranslate"><span class="pre">run_single_sample()</span></code>, finalization runs on
+normal context exit after both the caller’s context body and bookkeeping.</p>
 <p>Both synchronous hooks run in registration order, with configured callbacks before manual callbacks.
 Event <code class="docutils literal notranslate"><span class="pre">priority</span></code> does not apply to them. They run during burn-in too, and callback exceptions
 propagate. Finalization is a successful-completion hook, not exception cleanup; it does not run if
-sample processing or the single-sample context body raises an exception. Finalizers should not
+sample processing, bookkeeping, or the single-sample context body raises an exception. If a
+finalizer raises, bookkeeping has already completed and is not rolled back. Finalizers should not
 enqueue events: sample event processing has already finished.</p>
 <p>All hooks except <code class="docutils literal notranslate"><span class="pre">daily</span></code> accept one argument (the <code class="docutils literal notranslate"><span class="pre">Simulation</span></code> object), and either return nothing
 (to ignore that invocation) or return a dictionary of values to store, where the keys are all
@@ -2301,6 +2382,10 @@ strings naming what’s being stored and the values can be whatever is of intere
 simple numeric value (i.e., a scalar), or a tuple, an array, a nested dictionary, or any other
 <a class="reference external" href="https://docs.python.org/3/library/pickle.html#what-can-be-pickled-and-unpickled">pickle-able</a>
 Python object.</p>
+<p>Each stored row is automatically tagged with the <code class="docutils literal notranslate"><span class="pre">trial</span></code> and <code class="docutils literal notranslate"><span class="pre">sample</span></code> it came from, plus
+<code class="docutils literal notranslate"><span class="pre">days_prior</span></code> for a <code class="docutils literal notranslate"><span class="pre">daily</span></code> callback. Those three key names are therefore reserved: a callback that
+returns a dictionary using any of them raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, so give such a value a different name
+(for example, <code class="docutils literal notranslate"><span class="pre">my_days_prior</span></code>).</p>
 <p>We can attach each callback to the Simulation by using a Python decorator.</p>
 <h2 id="example-callback-functions">Example Callback Functions<a class="headerlink" href="#example-callback-functions" title="Link to this heading">¶</a></h2>
 <p>For example, here we create a callback to collect carrier revenue at the end of every sample. Note
@@ -2357,6 +2442,23 @@ callback sees the day before or after it. Attaching a daily callback with a zero
 <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, which says to use 1 to run after the bookkeeping or a negative value to run before it.
 Because <code class="docutils literal notranslate"><span class="pre">priority</span></code> is read from the callback each sample, a zero set after attaching is caught too,
 when the run starts. The same rule applies to tracers’ <code class="docutils literal notranslate"><span class="pre">priority</span></code> options and to RM systems.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">priority</span></code> must also be a whole number of seconds. A value that plainly names one, such as <code class="docutils literal notranslate"><span class="pre">1.0</span></code>
+or the text <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code>, is accepted and treated as that integer. Anything else, such as <code class="docutils literal notranslate"><span class="pre">0.5</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;1.5&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">True</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;high&quot;</span></code>, raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> rather than being rounded, because rounding could quietly
+move your callback to the other side of the simulation’s bookkeeping.</p>
+<p>The other two queued hooks accept a <code class="docutils literal notranslate"><span class="pre">priority</span></code> in the same way. A <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> callback is timed
+from the first DCP of the sample, and an <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> callback from the final DCP, on the day of
+departure. The default of one second runs them after that DCP’s RM processing and bookkeeping; a
+negative value runs them before the bookkeeping, and a value below -1 before the RM systems as well.
+For example, this callback runs before the RM systems process the first DCP of each sample:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="nd">@sim</span><span class="o">.</span><span class="n">begin_sample_callback</span><span class="p">(</span><span class="n">priority</span><span class="o">=-</span><span class="mi">5</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">before_first_dcp</span><span class="p">(</span><span class="n">sim</span><span class="p">:</span> <span class="n">pax</span><span class="o">.</span><span class="n">Simulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>
+</code></pre></div>
+</div>
+<p>No customer arrives within five seconds of a DCP, so a <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> callback with a <code class="docutils literal notranslate"><span class="pre">priority</span></code>
+from 1 to 4 still runs before the first customer of the sample; a larger value may not. Zero is
+rejected for these hooks too. The synchronous <code class="docutils literal notranslate"><span class="pre">initialize_sample</span></code> and <code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> hooks are
+not scheduled, so they take no <code class="docutils literal notranslate"><span class="pre">priority</span></code>.</p>
 <p>Callbacks are scheduled at the start of each sample. A callback attached while a sample is running
 (for example, by another callback) therefore takes effect from the next sample.</p>
 <p>When several callbacks are due at the same moment, they run in a fixed order: RM systems first, then
@@ -2381,10 +2483,9 @@ moment, such as a daily callback and an <code class="docutils literal notranslat
 </code></pre></div>
 </div>
 <p>Returned data is available under <code class="docutils literal notranslate"><span class="pre">callback_data.initialize_sample</span></code> and
-<code class="docutils literal notranslate"><span class="pre">callback_data.finalize_sample</span></code>, tagged with the current trial and sample. The corresponding global
-decorators are <code class="docutils literal notranslate"><span class="pre">register_initialize_sample_callback</span></code> and <code class="docutils literal notranslate"><span class="pre">register_finalize_sample_callback</span></code>.
-Configured callback factories can select either hook with <code class="docutils literal notranslate"><span class="pre">when=&quot;initialize_sample&quot;</span></code> or
-<code class="docutils literal notranslate"><span class="pre">when=&quot;finalize_sample&quot;</span></code>, including in multiprocessing runs.</p>
+<code class="docutils literal notranslate"><span class="pre">callback_data.finalize_sample</span></code>, tagged with the current trial and sample. Configured callback
+factories can select either hook with <code class="docutils literal notranslate"><span class="pre">when=&quot;initialize_sample&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">when=&quot;finalize_sample&quot;</span></code>,
+including in multiprocessing runs.</p>
 <p>Multiple callbacks of the same kind can be attached (i.e. there can be two end_sample callbacks). By
 default, the dictionaries they return are merged into one shared table per hook, so the named values
 in the return values of each callback function must be unique, or else they will overwrite one
@@ -2392,9 +2493,9 @@ another.</p>
 <p>To keep a callback’s data apart, give it a <code class="docutils literal notranslate"><span class="pre">name</span></code> when attaching it. Its returned dictionaries are
 then stored under <code class="docutils literal notranslate"><span class="pre">callback_data.&lt;name&gt;</span></code>, instead of the shared hook table, and cannot collide with
 other callbacks’ keys. The <code class="docutils literal notranslate"><span class="pre">skip_burn</span></code> option skips the callback during burn-in samples, so it does
-not need to check for them itself. Every registration method accepts <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">skip_burn</span></code>, and
-<code class="docutils literal notranslate"><span class="pre">daily_callback</span></code> also accepts <code class="docutils literal notranslate"><span class="pre">priority</span></code>; they can be given with the function, or with the method
-used as a decorator:</p>
+not need to check for them itself. Every registration method accepts <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">skip_burn</span></code>, and the
+queued hooks (<code class="docutils literal notranslate"><span class="pre">begin_sample_callback</span></code>, <code class="docutils literal notranslate"><span class="pre">daily_callback</span></code>, and <code class="docutils literal notranslate"><span class="pre">end_sample_callback</span></code>) also accept
+<code class="docutils literal notranslate"><span class="pre">priority</span></code>; they can be given with the function, or with the method used as a decorator:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="nd">@sim</span><span class="o">.</span><span class="n">end_sample_callback</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;carrier_sales&quot;</span><span class="p">,</span> <span class="n">skip_burn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">carrier_sales</span><span class="p">(</span><span class="n">sim</span><span class="p">:</span> <span class="n">pax</span><span class="o">.</span><span class="n">Simulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
     <span class="k">return</span> <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">sold</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">carriers</span><span class="p">}</span>
@@ -2462,12 +2563,11 @@ any airlines (i.e. the “no-go” customers).</p>
 </div>
 </div>
 </div>
-<h3 id="re-using-callback-functions">Re-using Callback Functions<a class="headerlink" href="#re-using-callback-functions" title="Link to this heading">¶</a></h3>
-<p>Attaching via the decorators is a convenient way to add callbacks to a single simulation. The
-decorators connect the callback function to the simulation, but do not otherwise modify the function
-itself. It is easy to define callback functions in a seperate module or to re-use callback functions
-for multiple simulations, by using the decorator as a regular function. For example, we can create a
-second simulation object, and attach the same callback functions like this:</p>
+<h3 id="trying-callback-functions-on-another-simulation">Trying Callback Functions on Another Simulation<a class="headerlink" href="#trying-callback-functions-on-another-simulation" title="Link to this heading">¶</a></h3>
+<p>During development and testing, you can attach the same function to another simulation by calling
+its hook method directly. The decorator attaches the function without otherwise modifying it. For
+callbacks or collections intended for reuse, prefer <a class="reference internal" href="#configured-callbacks"><span class="xref myst">configured callbacks</span></a>
+rather than repeating manual attachments.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">duplicate_sim</span> <span class="o">=</span> <span class="n">pax</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
@@ -2493,8 +2593,8 @@ normal.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5844065eb49a49b986324876241cf22d", "version_major": 2, "version_minor": 0}</script><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Task Completed after <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0.70</span> seconds
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "cbb23e61ee9a48909b1941f754d12722", "version_major": 2, "version_minor": 0}</script><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">Task Completed after <span style="color: #008080; text-decoration-color: #008080; font-weight: bold">0.57</span> seconds
 </pre>
 </div></div>
 </div>
@@ -2508,23 +2608,23 @@ normal.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-1f6a5441796e4b20b70a36dadaa02f97.vega-embed {
+  #altair-viz-0270912cf66d42b7bea7fb1166273e33.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-1f6a5441796e4b20b70a36dadaa02f97.vega-embed details,
-  #altair-viz-1f6a5441796e4b20b70a36dadaa02f97.vega-embed details summary {
+  #altair-viz-0270912cf66d42b7bea7fb1166273e33.vega-embed details,
+  #altair-viz-0270912cf66d42b7bea7fb1166273e33.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-1f6a5441796e4b20b70a36dadaa02f97"></div>
+<div id="altair-viz-0270912cf66d42b7bea7fb1166273e33"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-1f6a5441796e4b20b70a36dadaa02f97") {
-      outputDiv = document.getElementById("altair-viz-1f6a5441796e4b20b70a36dadaa02f97");
+    if (outputDiv.id !== "altair-viz-0270912cf66d42b7bea7fb1166273e33") {
+      outputDiv = document.getElementById("altair-viz-0270912cf66d42b7bea7fb1166273e33");
     }
 
     const paths = {
@@ -3491,23 +3591,23 @@ analyze, visualize, interpret, etc.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-d0a1ea4c47824c71af18717cf574c42a.vega-embed {
+  #altair-viz-6026008ccfac47bdb150432cd5c7aa6e.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-d0a1ea4c47824c71af18717cf574c42a.vega-embed details,
-  #altair-viz-d0a1ea4c47824c71af18717cf574c42a.vega-embed details summary {
+  #altair-viz-6026008ccfac47bdb150432cd5c7aa6e.vega-embed details,
+  #altair-viz-6026008ccfac47bdb150432cd5c7aa6e.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-d0a1ea4c47824c71af18717cf574c42a"></div>
+<div id="altair-viz-6026008ccfac47bdb150432cd5c7aa6e"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-d0a1ea4c47824c71af18717cf574c42a") {
-      outputDiv = document.getElementById("altair-viz-d0a1ea4c47824c71af18717cf574c42a");
+    if (outputDiv.id !== "altair-viz-6026008ccfac47bdb150432cd5c7aa6e") {
+      outputDiv = document.getElementById("altair-viz-6026008ccfac47bdb150432cd5c7aa6e");
     }
 
     const paths = {
@@ -3591,23 +3691,23 @@ analyze, visualize, interpret, etc.</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-d93246f83a3a447da77c20d87b531764.vega-embed {
+  #altair-viz-603330698e214a96aed1d8fda6e2584c.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-d93246f83a3a447da77c20d87b531764.vega-embed details,
-  #altair-viz-d93246f83a3a447da77c20d87b531764.vega-embed details summary {
+  #altair-viz-603330698e214a96aed1d8fda6e2584c.vega-embed details,
+  #altair-viz-603330698e214a96aed1d8fda6e2584c.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-d93246f83a3a447da77c20d87b531764"></div>
+<div id="altair-viz-603330698e214a96aed1d8fda6e2584c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-d93246f83a3a447da77c20d87b531764") {
-      outputDiv = document.getElementById("altair-viz-d93246f83a3a447da77c20d87b531764");
+    if (outputDiv.id !== "altair-viz-603330698e214a96aed1d8fda6e2584c") {
+      outputDiv = document.getElementById("altair-viz-603330698e214a96aed1d8fda6e2584c");
     }
 
     const paths = {
@@ -3717,10 +3817,12 @@ segmentation and changes the selected leg IDs without restating the other declar
 </div>
 <p>Existing keys retain their positions; new keys append in overlay order. Saving and reloading a
 config preserves declaration order. At the same event time, configured callbacks execute in
-declaration order. Daily <code class="docutils literal notranslate"><span class="pre">priority</span></code> remains an offset in seconds relative to the overnight event, so
+declaration order. A <code class="docutils literal notranslate"><span class="pre">priority</span></code> remains an offset in seconds relative to the overnight event, so
 different priorities can change execution order. At exactly the same timestamp, RM systems run
-before configured callbacks, and configured callbacks run before manually attached ones. A declared
-<code class="docutils literal notranslate"><span class="pre">priority</span></code> of zero is rejected when the run starts, before any worker process is launched.</p>
+first. Then the hooks run in lifecycle order: at the first DCP of a sample, every <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>
+callback runs before any <code class="docutils literal notranslate"><span class="pre">daily</span></code> one, and at the final DCP every <code class="docutils literal notranslate"><span class="pre">daily</span></code> callback runs before any
+<code class="docutils literal notranslate"><span class="pre">end_sample</span></code> one. Within each hook, configured callbacks run before manually attached ones. A
+declared <code class="docutils literal notranslate"><span class="pre">priority</span></code> of zero is rejected when the run starts, before any worker process is launched.</p>
 <h3 id="built-in-catalog">Built-in Catalog<a class="headerlink" href="#built-in-catalog" title="Link to this heading">¶</a></h3>
 <p>Built-ins callbacks and tracers (those that are part of the PassengerSim library) are per-registered
 for use, and do not require the user to register them:</p>
@@ -3750,7 +3852,7 @@ for use, and do not require the user to register them:</p>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">leg_bid_price_arrays</span></code></p></td>
 <td><p>begin sample</p></td>
-<td><p>Required <code class="docutils literal notranslate"><span class="pre">leg_ids</span></code></p></td>
+<td><p>Required <code class="docutils literal notranslate"><span class="pre">leg_ids</span></code>; optional <code class="docutils literal notranslate"><span class="pre">priority</span></code> (default 1)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">leg_bid_price_arrays</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">leg_bid_price_vectors</span></code></p></td>
@@ -3790,20 +3892,168 @@ shared <code class="docutils literal notranslate"><span class="pre">daily</span>
 <p>These adapters retain the tracers’ existing burn-period filtering, aggregation, and prerequisites.
 For the daily tracers, <code class="docutils literal notranslate"><span class="pre">priority</span></code> is the offset in seconds from the overnight trigger, as for any
 daily callback: the defaults of 1 and 2 record each day after the RM systems and the simulation’s
-own bookkeeping, a negative value records it before the bookkeeping, and zero is an error.
-Begin-sample adapters do not expose <code class="docutils literal notranslate"><span class="pre">priority</span></code>, which has no effect for that hook. Two configured
-tracers cannot write the same result key, even under different declaration IDs or registry aliases.
-A configured tracer also cannot share an output name with a manually or globally attached tracer;
-give the manual tracer a different <code class="docutils literal notranslate"><span class="pre">name=</span></code> to use both (see <a class="reference internal" href="tracers.html"><span class="std std-doc">Tracing</span></a>). Configured
-tracers always use their canonical result key. The names <code class="docutils literal notranslate"><span class="pre">initialize_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>,
-<code class="docutils literal notranslate"><span class="pre">daily</span></code>, <code class="docutils literal notranslate"><span class="pre">end_sample</span></code>, and <code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> are reserved for ordinary callback data.</p>
-<h3 id="custom-callback-factories">Custom Callback Factories<a class="headerlink" href="#custom-callback-factories" title="Link to this heading">¶</a></h3>
-<p>Use <code class="docutils literal notranslate"><span class="pre">register_callback_factory</span></code> or <code class="docutils literal notranslate"><span class="pre">register_tracer_factory</span></code> to register a custom callback or tracer
-implementation. Registration makes it available by name in the configurations; it does not attach it
-to simulations unless called for. Every name is unique, and repeated registration raises an error,
-even for the same implementation. There is no replacement operation.</p>
-<p>Factories receive one validated Pydantic model and return a fresh callable. Use <code class="docutils literal notranslate"><span class="pre">extra=&quot;forbid&quot;</span></code> on
-the parameter model to catch misspelled options. For example:</p>
+own bookkeeping, a negative value records it before the bookkeeping, and zero is an error. For
+<code class="docutils literal notranslate"><span class="pre">leg_bid_price_arrays</span></code>, <code class="docutils literal notranslate"><span class="pre">priority</span></code> is the offset from the first DCP of each sample, as for any
+begin-sample callback; the forecast adapters do not expose it. Two configured tracers cannot write
+the same result key, even under different declaration IDs or registry aliases. A configured tracer
+also cannot share an output name with a manually or globally attached tracer; give the manual tracer
+a different <code class="docutils literal notranslate"><span class="pre">name=</span></code> to use both (see <a class="reference internal" href="tracers.html"><span class="std std-doc">Tracing</span></a>). Configured tracers always use their
+canonical result key. The names <code class="docutils literal notranslate"><span class="pre">initialize_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, <code class="docutils literal notranslate"><span class="pre">end_sample</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> are reserved for ordinary callback data.</p>
+<h3 id="registering-custom-callbacks">Registering Custom Callbacks<a class="headerlink" href="#registering-custom-callbacks" title="Link to this heading">¶</a></h3>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">register_callback</span></code> decorator to make your own callback function available by name in
+configurations, and <code class="docutils literal notranslate"><span class="pre">register_tracer</span></code> for a tracer class. Registration does not attach anything to a
+simulation: a callback runs only when a configuration declares it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">passengersim</span><span class="w"> </span><span class="kn">import</span> <span class="n">Simulation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_callback</span>
+
+
+<span class="nd">@register_callback</span><span class="p">(</span><span class="n">when</span><span class="o">=</span><span class="s2">&quot;end_sample&quot;</span><span class="p">,</span> <span class="n">skip_burn</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">carrier_revenue</span><span class="p">(</span><span class="n">sim</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">carriers</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">c</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">revenue</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">carriers</span> <span class="k">if</span> <span class="n">carriers</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">carriers</span><span class="p">}</span>
+</code></pre></div>
+</div>
+<p>Then select it in YAML:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">carrier_revenue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">carriers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AL1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">AL2</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+</div>
+<p>The function is registered under its own name, here <code class="docutils literal notranslate"><span class="pre">carrier_revenue</span></code>, and is returned unchanged, so
+you can still call it or attach it by hand. Instead of decorating, you can also register an existing
+function directly with <code class="docutils literal notranslate"><span class="pre">register_callback(carrier_revenue,</span> <span class="pre">when=&quot;end_sample&quot;)</span></code>.</p>
+<p><strong>Arguments.</strong> The first positional parameters receive the hook’s arguments: <code class="docutils literal notranslate"><span class="pre">(sim)</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">(sim,</span> <span class="pre">days_prior)</span></code> for the <code class="docutils literal notranslate"><span class="pre">daily</span></code> hook. Every other parameter must be keyword-only, declared after
+<code class="docutils literal notranslate"><span class="pre">*</span></code>. These are the callback’s configuration parameters, given under <code class="docutils literal notranslate"><span class="pre">parameters</span></code> in a declaration.
+Each needs a type annotation, which is used to validate the configured value, and keeps its default.
+One without a default must be given in the configuration. Unknown parameters are rejected, so a
+misspelled option is caught when the run starts. The annotations of the hook arguments and the
+return value are not used, so they may name types imported only for type checking.</p>
+<p><strong>Options.</strong> <code class="docutils literal notranslate"><span class="pre">when</span></code> is required: the hook is never guessed. The other keyword options are:</p>
+<table class="nowrap-first-column docutils data align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Option</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>Registry name; defaults to the function’s name (required for a lambda)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">priority</span></code></p></td>
+<td><p>Offset in seconds for a <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, or <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> callback; defaults to 1</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">skip_burn</span></code></p></td>
+<td><p>Whether burn-in samples are skipped; defaults to false</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
+<td><p>Implementation version, checked when a configuration requires one; defaults to <code class="docutils literal notranslate"><span class="pre">&quot;1&quot;</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">parameters_model</span></code></p></td>
+<td><p>A Pydantic model for the configuration parameters, used instead of the one built from the function itself</p></td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal notranslate"><span class="pre">priority</span></code> and <code class="docutils literal notranslate"><span class="pre">skip_burn</span></code> are fixed when the callback is registered; a configuration cannot change
+them, and a configuration parameter cannot use either name. A <code class="docutils literal notranslate"><span class="pre">priority</span></code> follows the usual rules for
+queued callbacks: a whole number of seconds other than zero. The synchronous <code class="docutils literal notranslate"><span class="pre">initialize_sample</span></code> and
+<code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> hooks have no priority, so giving one is an error.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">parameters_model</span></code> must declare <code class="docutils literal notranslate"><span class="pre">extra=&quot;forbid&quot;</span></code> and have exactly one field for each keyword-only
+parameter. It then decides the types, defaults, and required parameters of configured runs, even
+where these differ from the function’s own: every field’s value, including its default, is passed to
+the function. Use one to document the options, or to validate them in ways an annotation cannot.</p>
+<p><strong>Results.</strong> Dictionaries returned by a registered callback are stored under the declaration’s ID,
+not the shared hook key. In the example above, they are in <code class="docutils literal notranslate"><span class="pre">callback_data.carrier_revenue</span></code>. This
+lets one function be declared several times with different parameters:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span class="nt">callbacks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">al1_revenue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">carrier_revenue</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">carriers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AL1</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">al2_revenue</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">carrier_revenue</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">carriers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">AL2</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+</div>
+<p>These produce <code class="docutils literal notranslate"><span class="pre">callback_data.al1_revenue</span></code> and <code class="docutils literal notranslate"><span class="pre">callback_data.al2_revenue</span></code>. A declaration ID cannot
+be one of the hook names, and cannot be the same as a tracer’s result name or a named manual
+callback’s.</p>
+<div class="important tip admonition">
+<p class="admonition-title">Important</p>
+<p>The registration options apply only when the callback runs from a configuration. Attaching the same
+function by hand, as with <code class="docutils literal notranslate"><span class="pre">sim.end_sample_callback(carrier_revenue)</span></code>, follows the ordinary rules for
+manual callbacks: it runs at the default priority, during burn-in samples too, with its own default
+parameter values, and stores its results under the hook’s name (here <code class="docutils literal notranslate"><span class="pre">end_sample</span></code>). Give those
+options to the attaching method if you need them there.</p>
+</div>
+<p><strong>What can be registered.</strong> <code class="docutils literal notranslate"><span class="pre">register_callback</span></code> accepts plain functions only. A tracer class or
+instance, any other class, a callable object, a <code class="docutils literal notranslate"><span class="pre">functools.partial</span></code>, a method, and a coroutine or
+generator function are all refused with an error explaining what to use instead. Callable objects
+are refused because they can carry state from one simulation into another. A callback that needs to
+accumulate state across a run should be a tracer, which is copied fresh for every run.</p>
+<p><strong>Registering again.</strong> Re-running a notebook cell, or reloading a module, registers the same
+function again. This replaces the earlier registration, as long as it is the same module-level
+function. Any other use of a registered name is an error, so two different callbacks can never
+silently share a name. A replacement takes effect the next time a simulation prepares to run, even
+for a simulation object that has run before.</p>
+<h4 id="registering-tracers">Registering Tracers<a class="headerlink" href="#registering-tracers" title="Link to this heading">¶</a></h4>
+<p>For a <code class="docutils literal notranslate"><span class="pre">GenericTracer</span></code> subclass, declare its configuration on the class, beside the constructor it
+describes, and register the class with <code class="docutils literal notranslate"><span class="pre">register_tracer</span></code>, which also works as a class decorator:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Literal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_tracer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.tracers.generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericTracer</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyTracerOptions</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">):</span>
+    <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Same default as the constructor.</span>
+
+
+<span class="nd">@register_tracer</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyTracer</span><span class="p">(</span><span class="n">GenericTracer</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;my_tracer&quot;</span>  <span class="c1"># Canonical result key in callback_data.</span>
+    <span class="n">hook</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;begin_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="s2">&quot;end_sample&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;daily&quot;</span>
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># The simulation skips burn-in samples for you.</span>
+    <span class="n">options_model</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]]</span> <span class="o">=</span> <span class="n">MyTracerOptions</span>
+    <span class="n">options_version</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leg_ids</span> <span class="o">=</span> <span class="n">leg_ids</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># Optional instance-level result key.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="c1"># reset(), __call__(), and finalize() as for any tracer.</span>
+</code></pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">register_tracer</span></code> accepts only <code class="docutils literal notranslate"><span class="pre">GenericTracer</span></code> subclasses; a function, or a tracer instance, is
+refused with an error naming the right decorator. A tracer written with hook methods (see
+<a class="reference internal" href="tracers.html#writing-a-tracer"><span class="std std-ref">Writing a Tracer</span></a>) leaves out <code class="docutils literal notranslate"><span class="pre">hook</span></code>, and is attached to every hook
+whose method it defines. A configured tracer is built as <code class="docutils literal notranslate"><span class="pre">MyTracer(**validated_options)</span></code> and uses
+the declared hooks, result name, options model, and version. If the class declares no
+<code class="docutils literal notranslate"><span class="pre">options_model</span></code>, one is built from the constructor’s signature: each keyword parameter becomes an
+option, with its annotation as the type and its default, except <code class="docutils literal notranslate"><span class="pre">name</span></code> (a configured tracer always
+uses its class’s result name). Declare the model yourself to document the options, or when the
+constructor takes <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>. Keep the options model’s fields and defaults identical to
+the constructor’s, and bump <code class="docutils literal notranslate"><span class="pre">options_version</span></code> when the tracer’s results change meaning.
+<code class="docutils literal notranslate"><span class="pre">&#64;register_tracer(parameters_model=...,</span> <span class="pre">version=...)</span></code> overrides the class attributes, and <code class="docutils literal notranslate"><span class="pre">name=</span></code>
+registers an alias without renaming the output. <code class="docutils literal notranslate"><span class="pre">GenericTracer</span></code> provides <code class="docutils literal notranslate"><span class="pre">attach()</span></code>, which uses the
+declared hook, and <code class="docutils literal notranslate"><span class="pre">fresh()</span></code>, which returns a reset deep copy. A tracer that overrides <code class="docutils literal notranslate"><span class="pre">fresh()</span></code>
+must preserve its parameters; its instance name is re-applied by the simulation when it is attached.
+Registering the same module-level class again replaces the earlier registration, as for callbacks.</p>
+<p>The built-in catalog follows the same pattern: each tracer declares its options on its class, and
+<code class="docutils literal notranslate"><span class="pre">passengersim.callbacks.builtins</span></code> only lists what is registered and under which names.</p>
+<h4 id="callback-factories">Callback Factories<a class="headerlink" href="#callback-factories" title="Link to this heading">¶</a></h4>
+<p><code class="docutils literal notranslate"><span class="pre">register_callback_factory</span></code> and <code class="docutils literal notranslate"><span class="pre">register_tracer_factory</span></code> register a <em>factory</em>: a function that
+receives one validated Pydantic model and returns a fresh callback for each run. They remain
+available, and are useful when a callback needs per-run setup kept in closure state. Unlike the
+decorators, every factory name is unique, and registering one again is an error, even for the same
+implementation; there is no replacement. For example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
@@ -3836,70 +4086,17 @@ the parameter model to catch misspelled options. For example:</p>
 <span class="p">)</span>
 </code></pre></div>
 </div>
-<p>Then select it in YAML:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><code><span class="nt">callbacks</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">my_carrier_revenue</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">skip_burn</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</code></pre></div>
-</div>
 <p>Daily callbacks accept <code class="docutils literal notranslate"><span class="pre">(sim,</span> <span class="pre">days_prior)</span></code>; begin/end-sample callbacks accept <code class="docutils literal notranslate"><span class="pre">(sim)</span></code>. Return a
-dictionary to collect ordinary callback data, or <code class="docutils literal notranslate"><span class="pre">None</span></code>. Stateful factories must construct
-independent instances. Custom definitions are transported to multi-sim workers with the existing
-dill-based mechanism; they must be serializable, and their dependencies must be available to
-workers. YAML contains only names and options, not Python code or arbitrary import expressions.</p>
-<p>For a <code class="docutils literal notranslate"><span class="pre">GenericTracer</span></code> subclass, declare its configuration on the class, beside the constructor it
-describes, and register the class with the helper:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Literal</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_tracer_factory</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.tracers.generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericTracer</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyTracerOptions</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">):</span>
-    <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Same default as the constructor.</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">MyTracer</span><span class="p">(</span><span class="n">GenericTracer</span><span class="p">):</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;my_tracer&quot;</span>  <span class="c1"># Canonical result key in callback_data.</span>
-    <span class="n">hook</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;begin_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="s2">&quot;end_sample&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;daily&quot;</span>
-    <span class="n">skip_burn</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># The simulation skips burn-in samples for you.</span>
-    <span class="n">options_model</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]]</span> <span class="o">=</span> <span class="n">MyTracerOptions</span>
-    <span class="n">options_version</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">leg_ids</span> <span class="o">=</span> <span class="n">leg_ids</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># Optional instance-level result key.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-
-    <span class="c1"># reset(), __call__(), and finalize() as for any tracer.</span>
-
-
-<span class="n">register_tracer_factory</span><span class="p">(</span><span class="n">MyTracer</span><span class="p">)</span>
-</code></pre></div>
-</div>
-<p>A tracer written with hook methods (see <a class="reference internal" href="tracers.html#writing-a-tracer"><span class="std std-ref">Writing a Tracer</span></a>) leaves out
-<code class="docutils literal notranslate"><span class="pre">hook</span></code>, and is attached to every hook whose method it defines. The helper calls
-<code class="docutils literal notranslate"><span class="pre">MyTracer(**validated_options)</span></code> and uses the declared hooks, result name, options model, and
-version. If the class declares no <code class="docutils literal notranslate"><span class="pre">options_model</span></code>, one is built from the constructor’s signature:
-each keyword parameter becomes an option, with its annotation as the type and its default, except
-<code class="docutils literal notranslate"><span class="pre">name</span></code> (a configured tracer always uses its class’s result name). Declare the model yourself to
-document the options, or when the constructor takes <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>. Keep the options model’s
-fields and defaults identical to the constructor’s, and bump <code class="docutils literal notranslate"><span class="pre">options_version</span></code> when the tracer’s
-results change meaning. <code class="docutils literal notranslate"><span class="pre">parameters_model=</span></code> and <code class="docutils literal notranslate"><span class="pre">version=</span></code> arguments override the class attributes,
-and <code class="docutils literal notranslate"><span class="pre">name=</span></code> registers an alias without renaming the output. <code class="docutils literal notranslate"><span class="pre">GenericTracer</span></code> provides <code class="docutils literal notranslate"><span class="pre">attach()</span></code>,
-which uses the declared hook, and <code class="docutils literal notranslate"><span class="pre">fresh()</span></code>, which returns a reset deep copy. A tracer that
-overrides <code class="docutils literal notranslate"><span class="pre">fresh()</span></code> must preserve its parameters; its instance name is re-applied by the simulation
-when it is attached.</p>
+dictionary to collect ordinary callback data, or <code class="docutils literal notranslate"><span class="pre">None</span></code>. A factory-built callback stores its results
+under the shared hook key (here <code class="docutils literal notranslate"><span class="pre">end_sample</span></code>), not the declaration ID. Stateful factories must
+construct independent instances. <code class="docutils literal notranslate"><span class="pre">register_tracer_factory(MyTracer)</span></code> registers a tracer class
+exactly as <code class="docutils literal notranslate"><span class="pre">register_tracer</span></code> does, except for the rule on registering again.</p>
 <p>For a general factory returning a tracer, supply <code class="docutils literal notranslate"><span class="pre">output_name</span></code> equal to the tracer’s canonical name;
 this allows collision checks before workers start. Such a factory may pass <code class="docutils literal notranslate"><span class="pre">when=None</span></code>, so that the
 tracer it returns is attached to the hooks it declares itself.</p>
-<p>The built-in catalog follows the same pattern: each tracer declares its options on its class, and
-<code class="docutils literal notranslate"><span class="pre">passengersim.callbacks.builtins</span></code> only lists what is registered and under which names.</p>
+<p>Registered callbacks, tracers, and factories are transported to multi-sim workers with the existing
+dill-based mechanism; they must be serializable, and their dependencies must be available to
+workers. YAML contains only names and options, not Python code or arbitrary import expressions.</p>
 <h3 id="caching-and-saved-configurations">Caching and Saved Configurations<a class="headerlink" href="#caching-and-saved-configurations" title="Link to this heading">¶</a></h3>
 <p>Configured callbacks participate in cache identity and experiment reuse through <strong>explicit
 configuration only</strong>, including declaration order and disabled entries. Omitted options remain
@@ -3918,41 +4115,76 @@ prepared. Existing explicit cache-key and experiment reuse overrides still apply
 <p>Callback declarations and collected data survive saved-result round trips. Older PassengerSim
 versions can read configs without callback declarations, but cannot load configs containing the new
 <code class="docutils literal notranslate"><span class="pre">callbacks</span></code> field.</p>
+<h2 id="migrating-global-callback-registration">Migrating Global Callback Registration<a class="headerlink" href="#migrating-global-callback-registration" title="Link to this heading">¶</a></h2>
+<p>The process-global callback attachment APIs are deprecated and emit <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">use_registered_callbacks()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_initialize_sample_callback</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_begin_sample_callback</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_daily_callback</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_end_sample_callback</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">register_finalize_sample_callback</span></code></p></li>
+</ul>
+<p>They continue to work during deprecation, including decorator options and tracer attachment.
+Importing these APIs does not warn; calling them does.</p>
+<p><strong>The preferred replacement for reusable callbacks and collections of callbacks is the configured
+callback interface.</strong> Register a callback function with <code class="docutils literal notranslate"><span class="pre">register_callback</span></code>, or a tracer class with
+<code class="docutils literal notranslate"><span class="pre">register_tracer</span></code>, and select it through <code class="docutils literal notranslate"><span class="pre">config.callbacks</span></code>. Despite the similar names, these differ
+from the deprecated <code class="docutils literal notranslate"><span class="pre">register_*_callback</span></code> functions: they make a callback available to
+configurations, and attach nothing to any simulation by themselves. Keep a collection’s declarations
+together in configuration so it can be reused and adjusted across runs and experiments. See
+<a class="reference internal" href="#configured-callbacks"><span class="xref myst">Configured Callbacks</span></a> and
+<a class="reference internal" href="#registering-custom-callbacks"><span class="xref myst">Registering Custom Callbacks</span></a> for examples.</p>
+<p>The registration functions, including <code class="docutils literal notranslate"><span class="pre">register_callback_factory</span></code> and <code class="docutils literal notranslate"><span class="pre">register_tracer_factory</span></code>, are
+not deprecated: they make definitions available, while configuration explicitly selects which
+callbacks execute. After migrating your global registrations to configured callbacks, remove
+<code class="docutils literal notranslate"><span class="pre">sim.use_registered_callbacks()</span></code>.</p>
+<p>Manual attachment is primarily for development and testing. For that workflow, replace a global
+decorator with the corresponding simulation method, such as <code class="docutils literal notranslate"><span class="pre">&#64;sim.end_sample_callback</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&#64;sim.daily_callback(skip_burn=True)</span></code>, and remove <code class="docutils literal notranslate"><span class="pre">sim.use_registered_callbacks()</span></code>. If a development
+or test setup needs several manual callbacks, an explicit <code class="docutils literal notranslate"><span class="pre">CallbackMixin</span></code> bundle with
+<code class="docutils literal notranslate"><span class="pre">bundle.apply_callback_functions(sim)</span></code> is also supported. Use configured callbacks when turning that
+setup into a reusable collection.</p>
 <h2 id="choosing-an-approach">Choosing an Approach<a class="headerlink" href="#choosing-an-approach" title="Link to this heading">¶</a></h2>
 <table class="docutils data align-default">
 <thead>
 <tr class="row-odd"><th class="head"><p></p></th>
-<th class="head"><p>Manual attachment</p></th>
 <th class="head"><p>Configured callbacks</p></th>
+<th class="head"><p>Manual attachment</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Definition</p></td>
+<tr class="row-even"><td><p>Recommended use</p></td>
+<td><p>Reusable callbacks and callback collections</p></td>
+<td><p>Development and testing convenience</p></td>
+</tr>
+<tr class="row-odd"><td><p>Definition</p></td>
+<td><p>Registered function or tracer class</p></td>
 <td><p>Callable or tracer in Python</p></td>
-<td><p>Named factory and parameter model</p></td>
 </tr>
-<tr class="row-odd"><td><p>Activation</p></td>
-<td><p>Attach to an individual object</p></td>
+<tr class="row-even"><td><p>Activation</p></td>
 <td><p>Enable via configuration</p></td>
+<td><p>Attach to an individual object</p></td>
 </tr>
-<tr class="row-even"><td><p>Parameters</p></td>
-<td><p>Python code</p></td>
+<tr class="row-odd"><td><p>Parameters</p></td>
 <td><p>Per-config options</p></td>
+<td><p>Python code</p></td>
 </tr>
-<tr class="row-odd"><td><p>Experiments and overlays</p></td>
-<td><p>Python attachment</p></td>
+<tr class="row-even"><td><p>Experiments and overlays</p></td>
 <td><p>Adjust declarations by key</p></td>
+<td><p>Python attachment</p></td>
 </tr>
-<tr class="row-even"><td><p>Included in cache identity</p></td>
-<td><p>No</p></td>
+<tr class="row-odd"><td><p>Included in cache identity</p></td>
 <td><p>Yes (explicit config only)</p></td>
+<td><p>No</p></td>
 </tr>
 </tbody>
 </table>
-<p>Use configured callbacks for collection reused across runs, experiments, or caches. Manual
-attachment is convenient for one-off notebook work. You can also mix these approaches.
-Configured/manual tracer output collisions raise an error before execution, so you’ll be warned
-promptly if you’ve made a mistake.</p>
+<p>Prefer configured callbacks whenever a callback or collection will be reused. Manual attachment
+makes it convenient to develop and test callback implementations before registering them for
+configuration. You can mix these approaches while developing or testing. Configured/manual tracer
+output collisions raise an error before execution, so you’ll be warned promptly if you’ve made a
+mistake.</p>
 
 
 
@@ -4020,7 +4252,7 @@ promptly if you’ve made a mistake.</p>
     
       
         <script src="../_static/sphinx_immaterial_theme.32136f45f91ae6956.min.js?v=a7a9472a"></script>
-        <script type="application/vnd.jupyter.widget-state+json">{"state": {"5844065eb49a49b986324876241cf22d": {"model_module": "@jupyter-widgets/output", "model_module_version": "1.0.0", "model_name": "OutputModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/output", "_model_module_version": "1.0.0", "_model_name": "OutputModel", "_view_count": null, "_view_module": "@jupyter-widgets/output", "_view_module_version": "1.0.0", "_view_name": "OutputView", "layout": "IPY_MODEL_889e3f1944404a53a8e3348e6547b195", "msg_id": "", "outputs": [{"data": {"text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">samples <span style=\"color: #f92672; text-decoration-color: #f92672\">\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2578</span> <span style=\"color: #800080; text-decoration-color: #800080\"> 99%</span> <span style=\"color: #008080; text-decoration-color: #008080\">0:00:01</span>\n</pre>\n", "text/plain": "samples \u001b[38;2;249;38;114m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u001b[0m\u001b[38;2;249;38;114m\u2578\u001b[0m \u001b[35m 99%\u001b[0m \u001b[36m0:00:01\u001b[0m\n"}, "metadata": {}, "output_type": "display_data"}], "tabbable": null, "tooltip": null}}, "889e3f1944404a53a8e3348e6547b195": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}}, "version_major": 2, "version_minor": 0}</script>
+        <script type="application/vnd.jupyter.widget-state+json">{"state": {"080e838a0a454b44afca4f39b5779387": {"model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "cbb23e61ee9a48909b1941f754d12722": {"model_module": "@jupyter-widgets/output", "model_module_version": "1.0.0", "model_name": "OutputModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/output", "_model_module_version": "1.0.0", "_model_name": "OutputModel", "_view_count": null, "_view_module": "@jupyter-widgets/output", "_view_module_version": "1.0.0", "_view_name": "OutputView", "layout": "IPY_MODEL_080e838a0a454b44afca4f39b5779387", "msg_id": "", "outputs": [{"data": {"text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">samples <span style=\"color: #f92672; text-decoration-color: #f92672\">\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2578</span><span style=\"color: #3a3a3a; text-decoration-color: #3a3a3a\">\u2501\u2501\u2501</span> <span style=\"color: #800080; text-decoration-color: #800080\"> 92%</span> <span style=\"color: #008080; text-decoration-color: #008080\">0:00:01</span>\n</pre>\n", "text/plain": "samples \u001b[38;2;249;38;114m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u001b[0m\u001b[38;2;249;38;114m\u2578\u001b[0m\u001b[38;5;237m\u2501\u2501\u2501\u001b[0m \u001b[35m 92%\u001b[0m \u001b[36m0:00:01\u001b[0m\n"}, "metadata": {}, "output_type": "display_data"}], "tabbable": null, "tooltip": null}}}, "version_major": 2, "version_minor": 0}</script>
         <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed.js"></script>
     
   </body>

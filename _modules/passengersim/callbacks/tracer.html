@@ -2019,6 +2019,13 @@
 <span class="sd">    - **Legacy.** Set the class attribute :attr:`hook` and define</span>
 <span class="sd">      ``__call__``, which runs on that one hook.</span>
 
+<span class="sd">    The time at which a queued hook (``begin_sample``, ``daily``, or</span>
+<span class="sd">    ``end_sample``) runs can be shifted with an offset in seconds, as for a</span>
+<span class="sd">    plain callback, by setting a ``priority`` attribute. A hook-method</span>
+<span class="sd">    tracer has just one ``priority``, which applies to all of its queued</span>
+<span class="sd">    hooks, so it observes every DCP from the same side of the RM systems</span>
+<span class="sd">    and the simulation&#39;s bookkeeping.</span>
+
 <span class="sd">    Subclasses must implement :meth:`reset` and :meth:`finalize`. The</span>
 <span class="sd">    :meth:`fresh`, :meth:`attach`, and :meth:`setup` methods have working</span>
 <span class="sd">    defaults.</span>
@@ -2030,9 +2037,9 @@
 <span class="sd">    Subclasses that can be enabled from a configuration declare, beside their</span>
 <span class="sd">    constructor, everything a configured-callback registration needs:</span>
 <span class="sd">    :attr:`name`, :attr:`options_model`, :attr:`options_version`, and, for</span>
-<span class="sd">    the legacy form, :attr:`hook`. Then</span>
-<span class="sd">    :func:`passengersim.callbacks.register_tracer_factory` registers the class</span>
-<span class="sd">    without restating any of them.</span>
+<span class="sd">    the legacy form, :attr:`hook`. Then :func:`passengersim.callbacks.register_tracer`</span>
+<span class="sd">    (usable as a class decorator) registers the class without restating any</span>
+<span class="sd">    of them.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;generic_tracer&quot;</span>
@@ -2173,7 +2180,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">on_begin_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: B027</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Observe a sample after its first DCP, before any customer arrives.</span>
 
-<span class="sd">        Override this to attach the tracer to the ``begin_sample`` hook.</span>
+<span class="sd">        Override this to attach the tracer to the ``begin_sample`` hook. Its</span>
+<span class="sd">        time is set by the tracer&#39;s ``priority`` attribute, if it has one,</span>
+<span class="sd">        as for a plain begin-sample callback.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2205,7 +2214,9 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">on_end_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: B027</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Observe the end of a sample, before counters are reset.</span>
 
-<span class="sd">        Override this to attach the tracer to the ``end_sample`` hook.</span>
+<span class="sd">        Override this to attach the tracer to the ``end_sample`` hook. Its</span>
+<span class="sd">        time is set by the tracer&#39;s ``priority`` attribute, if it has one,</span>
+<span class="sd">        as for a plain end-sample callback.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2217,7 +2228,7 @@
 <div class="viewcode-block" id="GenericTracer.on_finalize_sample">
 <a class="viewcode-back" href="../../../api/_generated/tracers/passengersim.tracers.generic.GenericTracer.html#passengersim.tracers.generic.GenericTracer.on_finalize_sample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">on_finalize_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Simulation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: B027</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Observe a sample after all its events have finished.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Observe a sample after its events and bookkeeping have finished.</span>
 
 <span class="sd">        Override this to attach the tracer to the ``finalize_sample`` hook.</span>
 

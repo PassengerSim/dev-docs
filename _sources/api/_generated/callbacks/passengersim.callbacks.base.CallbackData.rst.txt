@@ -24,6 +24,7 @@ CallbackData
       ~CallbackData.to_dataframe
       ~CallbackData.update
       ~CallbackData.update_data
+      ~CallbackData.update_data_from_mapping
       ~CallbackData.values
    
    

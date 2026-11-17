@@ -2136,7 +2136,7 @@
             <span class="c1"># Ordered (hook, callback) pairs, so that callbacks sharing a</span>
             <span class="c1"># timestamp run in the same order as in a single-process run.</span>
             <span class="n">sim</span><span class="o">.</span><span class="n">_adopt_callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="p">)</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">sample_done_callback</span> <span class="o">=</span> <span class="n">ThrottledUpdater</span><span class="p">(</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">_progress_callback</span> <span class="o">=</span> <span class="n">ThrottledUpdater</span><span class="p">(</span>
             <span class="n">progress_queue</span><span class="p">,</span>
             <span class="n">trial_id</span><span class="p">,</span>
             <span class="n">handles_diagnostic_logging</span><span class="o">=</span><span class="n">parent_logging</span><span class="p">,</span>
@@ -2145,7 +2145,7 @@
         <span class="n">summary</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">single_trial</span><span class="o">=</span><span class="n">trial_id</span><span class="p">,</span> <span class="n">summarizer</span><span class="o">=</span><span class="n">summarizer</span><span class="p">)</span>
         <span class="n">final_diagnostics</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">_diagnostics</span><span class="o">.</span><span class="n">snapshot</span><span class="p">()</span> <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">_diagnostics</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">simulation_finished</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
-        <span class="n">sim</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">sim</span><span class="o">.</span><span class="n">_progress_callback</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
         <span class="n">_offer_progress</span><span class="p">(</span><span class="n">progress_queue</span><span class="p">,</span> <span class="p">(</span><span class="n">trial_id</span><span class="p">,</span> <span class="s2">&quot;finalizing&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
         <span class="c1"># Passing a database connection between processes is not allowed,</span>
         <span class="c1"># so we need to delete it before returning the summary. But first</span>

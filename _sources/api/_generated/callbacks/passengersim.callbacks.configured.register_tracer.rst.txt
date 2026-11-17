@@ -1,0 +1,6 @@
+register\_tracer
+================
+
+.. currentmodule:: passengersim.callbacks.configured
+
+.. autofunction:: register_tracer

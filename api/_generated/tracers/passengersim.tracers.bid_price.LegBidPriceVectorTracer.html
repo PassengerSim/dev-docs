@@ -2165,7 +2165,7 @@
       <span aria-label="Python method" class="objinfo-icon objinfo-icon__procedure" title="Python method">M</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
+      <span title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
     </span>
   </a>
   
@@ -2733,7 +2733,7 @@
       <span aria-label="Python method" class="objinfo-icon objinfo-icon__procedure" title="Python method">M</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
+      <span title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
     </span>
   </a>
   
@@ -2942,8 +2942,8 @@ tracers to one simulation.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample (Python method) — Observe the end of a sample, before counters are reset."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_end_sample</span></code></a>(sim)</p></td>
 <td><p>Observe the end of a sample, before counters are reset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_finalize_sample</span></code></a>(sim)</p></td>
-<td><p>Observe a sample after all its events have finished.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_finalize_sample</span></code></a>(sim)</p></td>
+<td><p>Observe a sample after its events and bookkeeping have finished.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_initialize_sample" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_initialize_sample (Python method) — Observe the start of a sample, before its demand is generated."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_initialize_sample</span></code></a>(sim)</p></td>
 <td><p>Observe the start of a sample, before its demand is generated.</p></td>
@@ -3014,7 +3014,9 @@ accumulated data.</p>
 <dt class="sig sig-object highlight py" id="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_begin_sample">
 <span class="sig-name descname"><span class="pre">on_begin_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_begin_sample.sim" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_begin_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="headerlink" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_begin_sample" title="Link to this definition">¶</a></dt>
 <dd><p>Observe a sample after its first DCP, before any customer arrives.</p>
-<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> hook.</p>
+<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> hook. Its
+time is set by the tracer’s <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute, if it has one,
+as for a plain begin-sample callback.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple api-field highlight">
@@ -3048,7 +3050,9 @@ for a plain daily callback.</p>
 <dt class="sig sig-object highlight py" id="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample">
 <span class="sig-name descname"><span class="pre">on_end_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample.sim" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="headerlink" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_end_sample" title="Link to this definition">¶</a></dt>
 <dd><p>Observe the end of a sample, before counters are reset.</p>
-<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> hook.</p>
+<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> hook. Its
+time is set by the tracer’s <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute, if it has one,
+as for a plain end-sample callback.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple api-field highlight">
@@ -3062,7 +3066,7 @@ for a plain daily callback.</p>
 <dl class="py method objdesc">
 <dt class="sig sig-object highlight py" id="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample">
 <span class="sig-name descname"><span class="pre">on_finalize_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample.sim" title="passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="headerlink" href="#passengersim.tracers.bid_price.LegBidPriceVectorTracer.on_finalize_sample" title="Link to this definition">¶</a></dt>
-<dd><p>Observe a sample after all its events have finished.</p>
+<dd><p>Observe a sample after its events and bookkeeping have finished.</p>
 <p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> hook.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

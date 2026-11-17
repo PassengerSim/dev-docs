@@ -11,10 +11,10 @@
       
       
       
-        <link rel="prev" href="passengersim.callbacks.configured.prepare.html">
+        <link rel="prev" href="passengersim.callbacks.configured.register_callback.html">
       
       
-        <link rel="next" href="passengersim.callbacks.configured.register_tracer_factory.html">
+        <link rel="next" href="passengersim.callbacks.configured.register_tracer.html">
       
       
       <link rel="icon" href="../../../_static/favicon.png">
@@ -1916,6 +1916,30 @@
                 
   
   
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
     
@@ -1982,6 +2006,30 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.configured.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -2100,6 +2148,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -2130,6 +2202,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2621,6 +2717,8 @@
 <dt class="sig sig-object highlight sig-wrap py" id="passengersim.callbacks.configured.register_callback_factory">
 <span class="sig-prename descclassname"><span class="pre">passengersim.callbacks.configured.</span></span><span class="sig-name descname"><span class="pre">register_callback_factory</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.name" title="passengersim.callbacks.configured.register_callback_factory.name (Python parameter) — Unique registry name."><span class="n"><span class="pre">name</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">str</span></span></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.factory" title="passengersim.callbacks.configured.register_callback_factory.factory (Python parameter) — Receives one validated parameter-model instance and returns a fresh callback."><span class="n"><span class="pre">factory</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pydantic.dev/docs/validation/latest/api/pydantic/base_model/#pydantic.BaseModel" title="(in Pydantic v0.0.0)"><span class="pre">BaseModel</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.when" title="passengersim.callbacks.configured.register_callback_factory.when (Python parameter) — Lifecycle hook at which the returned callback runs."><span class="n"><span class="pre">when</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="s"><span class="pre">'initialize_sample'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'begin_sample'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'daily'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'end_sample'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="s"><span class="pre">'finalize_sample'</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.parameters_model" title="passengersim.callbacks.configured.register_callback_factory.parameters_model (Python parameter) — Schema for factory options; preferably configured with extra=&quot;forbid&quot;."><span class="n"><span class="pre">parameters_model</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pydantic.dev/docs/validation/latest/api/pydantic/base_model/#pydantic.BaseModel" title="(in Pydantic v0.0.0)"><span class="pre">BaseModel</span></a><span class="p"><span class="pre">]</span></span></span></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.version" title="passengersim.callbacks.configured.register_callback_factory.version (Python parameter) — Implementation version checked only when explicitly required in YAML."><span class="n"><span class="pre">version</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">str</span></span></span></em>, </span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.callbacks.configured.register_callback_factory.output_name" title="passengersim.callbacks.configured.register_callback_factory.output_name (Python parameter) — Required canonical result name for a factory returning a GenericTracer."><span class="n"><span class="pre">output_name</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><code class="code python default_value docutils literal highlight highlight-python"><span class="kc">None</span></code></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">None</span></span></span></span><a class="reference internal" href="../../../_modules/passengersim/callbacks/configured.html#register_callback_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#passengersim.callbacks.configured.register_callback_factory" title="Link to this definition">¶</a></dt>
 <dd><p>Make a factory available to YAML declarations without attaching it.</p>
+<p>For a plain callback, <a class="reference internal" href="passengersim.callbacks.configured.register_callback.html#passengersim.callbacks.configured.register_callback" title="passengersim.callbacks.configured.register_callback (Python function) — Make a callback function available to config.callbacks, without attaching it."><code class="xref py py-func docutils literal notranslate"><span class="pre">register_callback()</span></code></a> is usually simpler: it
+registers the callback function itself, with no factory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple api-field highlight">

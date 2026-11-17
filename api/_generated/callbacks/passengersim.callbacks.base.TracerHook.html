@@ -1865,7 +1865,7 @@
       <span aria-label="Python property" class="objinfo-icon objinfo-icon__alias" title="Python property">P</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer&#39;s daily offset in seconds, read when events are scheduled."><span>priority</span></span>
+      <span title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer&#39;s offset in seconds, read when events are scheduled."><span>priority</span></span>
     </span>
   </a>
   
@@ -2106,6 +2106,30 @@
   
   
     <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_callback.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>callback</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
         
   
@@ -2136,6 +2160,30 @@
   
   <span class="md-ellipsis">
     <span>register_<wbr>combiner</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="passengersim.callbacks.register_tracer.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    <span>register_<wbr>tracer</span>
     
   </span>
   
@@ -2637,7 +2685,7 @@
       <span aria-label="Python property" class="objinfo-icon objinfo-icon__alias" title="Python property">P</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer&#39;s daily offset in seconds, read when events are scheduled."><span>priority</span></span>
+      <span title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer&#39;s offset in seconds, read when events are scheduled."><span>priority</span></span>
     </span>
   </a>
   
@@ -2687,6 +2735,13 @@ each registration holding one of these. All of them call the same tracer
 object, so the tracer’s state is never split across copies. The
 <code class="docutils literal notranslate"><span class="pre">priority</span></code> and <code class="docutils literal notranslate"><span class="pre">skip_burn</span></code> settings are read from the tracer, so the
 scheduler and dispatcher treat this exactly like a legacy tracer.</p>
+<p>A tracer has one <code class="docutils literal notranslate"><span class="pre">priority</span></code>, which times all of its queued hooks
+(<code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, and <code class="docutils literal notranslate"><span class="pre">end_sample</span></code>) alike, so it observes
+every DCP from the same side of the RM systems and bookkeeping. Where
+two of its hooks share a timestamp (the first DCP’s begin-sample and
+daily calls, or the final DCP’s daily and end-sample calls), they run in
+lifecycle order, as all callbacks sharing a timestamp do (see
+<a class="reference internal" href="passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.base.CallbackMixin.add_callback_events" title="passengersim.callbacks.base.CallbackMixin.add_callback_events (Python method) — Add callback events to the simulation event queue."><code class="xref py py-meth docutils literal notranslate"><span class="pre">CallbackMixin.add_callback_events()</span></code></a>).</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils data align-default">
 <tbody>
@@ -2704,8 +2759,8 @@ scheduler and dispatcher treat this exactly like a legacy tracer.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#passengersim.callbacks.base.TracerHook.tracer" title="passengersim.callbacks.base.TracerHook.tracer (Python attribute) — The tracer whose method is called."><code class="xref py py-obj docutils literal notranslate"><span class="pre">tracer</span></code></a></p></td>
 <td><p>The tracer whose method is called.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.callbacks.base.TracerHook.priority" title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer's daily offset in seconds, read when events are scheduled."><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
-<td><p>The tracer's daily offset in seconds, read when events are scheduled.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.callbacks.base.TracerHook.priority" title="passengersim.callbacks.base.TracerHook.priority (Python property) — The tracer's offset in seconds, read when events are scheduled."><code class="xref py py-obj docutils literal notranslate"><span class="pre">priority</span></code></a></p></td>
+<td><p>The tracer's offset in seconds, read when events are scheduled.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#passengersim.callbacks.base.TracerHook.skip_burn" title="passengersim.callbacks.base.TracerHook.skip_burn (Python property) — Whether the tracer is skipped during burn-in samples."><code class="xref py py-obj docutils literal notranslate"><span class="pre">skip_burn</span></code></a></p></td>
 <td><p>Whether the tracer is skipped during burn-in samples.</p></td>
@@ -2727,7 +2782,7 @@ scheduler and dispatcher treat this exactly like a legacy tracer.</p>
 <dl class="py property objdesc">
 <dt class="sig sig-object highlight py" id="passengersim.callbacks.base.TracerHook.priority">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><span class="p"> <span class="pre">:</span> </span><span class="desctype"><span class="pre">Any</span></span><a class="headerlink" href="#passengersim.callbacks.base.TracerHook.priority" title="Link to this definition">¶</a></dt>
-<dd><p>The tracer’s daily offset in seconds, read when events are scheduled.</p>
+<dd><p>The tracer’s offset in seconds, read when events are scheduled.</p>
 </dd></dl>
 
 <dl class="py property objdesc">

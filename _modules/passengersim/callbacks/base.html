@@ -1915,7 +1915,7 @@
 <span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">MutableMapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">MutableMapping</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">passengersim_core</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -1967,6 +1967,14 @@
 <span class="sd">    object, so the tracer&#39;s state is never split across copies. The</span>
 <span class="sd">    ``priority`` and ``skip_burn`` settings are read from the tracer, so the</span>
 <span class="sd">    scheduler and dispatcher treat this exactly like a legacy tracer.</span>
+
+<span class="sd">    A tracer has one ``priority``, which times all of its queued hooks</span>
+<span class="sd">    (``begin_sample``, ``daily``, and ``end_sample``) alike, so it observes</span>
+<span class="sd">    every DCP from the same side of the RM systems and bookkeeping. Where</span>
+<span class="sd">    two of its hooks share a timestamp (the first DCP&#39;s begin-sample and</span>
+<span class="sd">    daily calls, or the final DCP&#39;s daily and end-sample calls), they run in</span>
+<span class="sd">    lifecycle order, as all callbacks sharing a timestamp do (see</span>
+<span class="sd">    :meth:`CallbackMixin.add_callback_events`).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;__wrapped__&quot;</span><span class="p">,</span> <span class="s2">&quot;hook&quot;</span><span class="p">,</span> <span class="s2">&quot;tracer&quot;</span><span class="p">)</span>
@@ -1985,7 +1993,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The tracer&#39;s daily offset in seconds, read when events are scheduled.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The tracer&#39;s offset in seconds, read when events are scheduled.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tracer</span><span class="p">,</span> <span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="n">DEFAULT_DAILY_PRIORITY</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -2041,7 +2049,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The daily offset in seconds, read when events are scheduled.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The offset in seconds for a queued hook, read when events are scheduled.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_priority</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_priority</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__wrapped__</span><span class="p">,</span> <span class="s2">&quot;priority&quot;</span><span class="p">,</span> <span class="n">DEFAULT_DAILY_PRIORITY</span><span class="p">)</span>
@@ -2064,6 +2072,25 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The ``callback_data`` key a plain callback was given with ``name=``, if any.&quot;&quot;&quot;</span>
     <span class="n">name</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;result_name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_same_callable</span><span class="p">(</span><span class="n">attached</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether an attached callable is the given callback.</span>
+
+<span class="sd">    Equality, not identity, is what identifies a bound method: every access to</span>
+<span class="sd">    ``obj.method`` creates a new method object, but two of them compare equal</span>
+<span class="sd">    when they bind the same function to the same object. An ``__eq__`` that</span>
+<span class="sd">    raises or returns something other than a bool counts as no match.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">attached</span> <span class="ow">is</span> <span class="n">callback</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">attached</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">attached</span> <span class="o">==</span> <span class="n">callback</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">result</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_owning_tracer</span><span class="p">(</span><span class="n">registration</span><span class="p">:</span> <span class="n">Registration</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GenericTracer</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -2137,7 +2164,9 @@
 <span class="sd">            Keyword options given at registration (``priority``,</span>
 <span class="sd">            ``skip_burn``, ``name``); None values are ignored. A plain</span>
 <span class="sd">            callback is wrapped in a :class:`CallbackWithOptions`; a tracer&#39;s</span>
-<span class="sd">            fresh copy has the options set as attributes.</span>
+<span class="sd">            fresh copy has the options set as attributes. A ``priority``</span>
+<span class="sd">            given for a tracer with hook methods applies to all its queued</span>
+<span class="sd">            hooks, whichever registration method it was given to.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -2148,7 +2177,7 @@
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
 <span class="sd">            If a tracer does not run on `hook`, a tracer&#39;s name is empty or</span>
-<span class="sd">            reserved, or a daily callback has a ``priority`` of zero.</span>
+<span class="sd">            reserved, or a queued callback has a ``priority`` of zero.</span>
 <span class="sd">        TypeError</span>
 <span class="sd">            If a tracer both declares a ``hook`` and overrides hook methods.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -2240,6 +2269,8 @@
 
 <span class="sd">            - a function (or other callable) previously attached, with or</span>
 <span class="sd">              without options, is removed from every hook it is attached to;</span>
+<span class="sd">              a bound method matches when it binds the same function to the</span>
+<span class="sd">              same object, even if it is a new ``obj.method`` expression;</span>
 <span class="sd">            - a tracer, or a tracer&#39;s result name, removes the attached tracer</span>
 <span class="sd">              of that name from all its hooks;</span>
 <span class="sd">            - a name given to callbacks with ``name=`` removes those callbacks.</span>
@@ -2271,7 +2302,13 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="n">GenericTracer</span><span class="p">):</span>
                 <span class="c1"># The attached tracer is a fresh copy, which keeps the name.</span>
                 <span class="k">return</span> <span class="n">tracer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tracer</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">callback</span><span class="o">.</span><span class="n">name</span>
-            <span class="k">return</span> <span class="n">registration</span><span class="o">.</span><span class="n">func</span> <span class="ow">is</span> <span class="n">callback</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="n">callback</span>
+            <span class="k">if</span> <span class="n">tracer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># A tracer is removed only as a whole (by object or name), so</span>
+                <span class="c1"># passing one of its hook methods never splits it across hooks.</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">return</span> <span class="n">_same_callable</span><span class="p">(</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span> <span class="ow">or</span> <span class="n">_same_callable</span><span class="p">(</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="s2">&quot;__wrapped__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">callback</span>
+            <span class="p">)</span>
 
         <span class="n">registry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_registry</span>
         <span class="n">found</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">registry</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s2">&quot;manual&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">matches</span><span class="p">(</span><span class="n">r</span><span class="p">)]</span>
@@ -2407,13 +2444,31 @@
 <span class="sd">        *args</span>
 <span class="sd">            Hook arguments after the simulation: the days prior for a daily</span>
 <span class="sd">            callback, nothing for the other hooks.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the callback returns a dictionary with a ``trial``, ``sample``</span>
+<span class="sd">            or ``days_prior`` key, which are reserved for the stored row&#39;s</span>
+<span class="sd">            index (see :meth:`CallbackData.update_data_from_mapping`).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">burn_samples</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_invoke_callback</span><span class="p">(</span><span class="n">callback</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">key</span> <span class="o">=</span> <span class="n">_result_name</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span> <span class="ow">or</span> <span class="n">hook</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">callback_data</span><span class="o">.</span><span class="n">update_data</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">trial</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">result</span><span class="p">)</span>
+            <span class="c1"># Checked here as well as in update_data, so the error can name the</span>
+            <span class="c1"># hook and the callback rather than only the storage key.</span>
+            <span class="n">reserved</span> <span class="o">=</span> <span class="n">_reserved_keys_in</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">reserved</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback </span><span class="si">{</span><span class="n">callback</span><span class="si">!r}</span><span class="s2"> returned the reserved key(s) &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="w"> </span><span class="n">reserved</span><span class="p">))</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">_RESERVED_KEYS_HINT</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="n">days_prior</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">args</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="c1"># The returned dictionary is passed as one mapping, not as keyword</span>
+            <span class="c1"># arguments, so keys such as &quot;label&quot; cannot collide with parameters.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callback_data</span><span class="o">.</span><span class="n">update_data_from_mapping</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">trial</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_synchronous_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hook</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dispatch a synchronous lifecycle hook without creating events.&quot;&quot;&quot;</span>
@@ -2486,13 +2541,17 @@
         <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="n">GenericTracer</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a synchronous callback after all sample events finish.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a synchronous callback after sample bookkeeping finishes.</span>
 
-<span class="sd">        Callbacks run before sample diagnostics, departure statistics, history</span>
-<span class="sd">        rollover, and other bookkeeping, and are included in sample timing.</span>
-<span class="sd">        They run only on successful completion, not as exception cleanup.</span>
-<span class="sd">        Configured callbacks run first, followed by manual callbacks, each in</span>
-<span class="sd">        registration order. Event priority does not apply. Exceptions propagate.</span>
+<span class="sd">        Callbacks run after departure statistics, history rollover, database</span>
+<span class="sd">        commit, and other bookkeeping updates. They observe post-bookkeeping</span>
+<span class="sd">        state and cannot change statistics already recorded. Use ``end_sample``</span>
+<span class="sd">        to access pre-bookkeeping state. Their execution is included in sample</span>
+<span class="sd">        timing, before diagnostics are published. They run only on successful</span>
+<span class="sd">        completion, not as exception cleanup; callback failures propagate after</span>
+<span class="sd">        bookkeeping has completed. Configured callbacks run first, followed by</span>
+<span class="sd">        manual callbacks, each in registration order. Event priority does not</span>
+<span class="sd">        apply. Exceptions propagate.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -2521,6 +2580,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="n">GenericTracer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
+        <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="n">GenericTracer</span><span class="p">:</span>
@@ -2529,6 +2589,14 @@
 <span class="sd">        The callback function will be triggered before counters are reset or</span>
 <span class="sd">        history buffers are rolled over.</span>
 
+<span class="sd">        It runs at an offset, in seconds, from the trigger time of the final</span>
+<span class="sd">        DCP (the day of departure). The offset is the `priority` option if</span>
+<span class="sd">        given, else the callback&#39;s own ``priority`` attribute if it has one,</span>
+<span class="sd">        and otherwise one second, which is after the final DCP&#39;s RM systems</span>
+<span class="sd">        (-1) and bookkeeping (0). A negative ``priority`` runs it before that</span>
+<span class="sd">        bookkeeping, or, below -1, before the RM systems as well. A</span>
+<span class="sd">        ``priority`` of zero is not allowed, as for a daily callback.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        callback : Callable[[Simulation], dict | None] or GenericTracer, optional</span>
@@ -2536,6 +2604,8 @@
 <span class="sd">            which will be the Simulation object, and return a dictionary of interesting</span>
 <span class="sd">            things to store, or nothing. Omit it to use this method as a</span>
 <span class="sd">            decorator with options.</span>
+<span class="sd">        priority : int, optional</span>
+<span class="sd">            Offset in seconds from the final DCP&#39;s trigger time; see above.</span>
 <span class="sd">        skip_burn : bool, optional</span>
 <span class="sd">            If True, the callback is not called during burn-in samples.</span>
 <span class="sd">        name : str, optional</span>
@@ -2548,7 +2618,7 @@
 <span class="sd">            The callback, or the fresh copy of a tracer. Without `callback`, a</span>
 <span class="sd">            decorator that registers the function it decorates.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="s2">&quot;end_sample&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;skip_burn&quot;</span><span class="p">:</span> <span class="n">skip_burn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="s2">&quot;end_sample&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="n">priority</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">:</span> <span class="n">skip_burn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="CallbackMixin.begin_sample_callback">
@@ -2557,6 +2627,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="n">GenericTracer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">*</span><span class="p">,</span>
+        <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">skip_burn</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="n">GenericTracer</span><span class="p">:</span>
@@ -2565,6 +2636,16 @@
 <span class="sd">        The callback function will be triggered after initial setup including</span>
 <span class="sd">        all RM steps for the initial DCP, but before any customers can arrive.</span>
 
+<span class="sd">        It runs at an offset, in seconds, from the trigger time of the first</span>
+<span class="sd">        DCP. The offset is the `priority` option if given, else the</span>
+<span class="sd">        callback&#39;s own ``priority`` attribute if it has one, and otherwise one</span>
+<span class="sd">        second, which is after the first DCP&#39;s RM systems (-1) and bookkeeping</span>
+<span class="sd">        (0). A negative ``priority`` runs it before that bookkeeping, or,</span>
+<span class="sd">        below -1, before the first DCP&#39;s RM steps as well. No customer arrives</span>
+<span class="sd">        within five seconds of a DCP, so a ``priority`` from 1 to 4 always</span>
+<span class="sd">        runs before the first arrival; a larger one may not. A ``priority`` of</span>
+<span class="sd">        zero is not allowed, as for a daily callback.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        callback : Callable[[Simulation], dict | None] or GenericTracer, optional</span>
@@ -2572,6 +2653,8 @@
 <span class="sd">            which will be the Simulation object, and return a dictionary of interesting</span>
 <span class="sd">            things to store, or nothing. Omit it to use this method as a</span>
 <span class="sd">            decorator with options.</span>
+<span class="sd">        priority : int, optional</span>
+<span class="sd">            Offset in seconds from the first DCP&#39;s trigger time; see above.</span>
 <span class="sd">        skip_burn : bool, optional</span>
 <span class="sd">            If True, the callback is not called during burn-in samples.</span>
 <span class="sd">        name : str, optional</span>
@@ -2584,7 +2667,7 @@
 <span class="sd">            The callback, or the fresh copy of a tracer. Without `callback`, a</span>
 <span class="sd">            decorator that registers the function it decorates.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="s2">&quot;begin_sample&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;skip_burn&quot;</span><span class="p">:</span> <span class="n">skip_burn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="s2">&quot;begin_sample&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="n">priority</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">:</span> <span class="n">skip_burn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span></div>
 
 
 <div class="viewcode-block" id="CallbackMixin.daily_callback">
@@ -2611,8 +2694,11 @@
 <span class="sd">        A ``priority`` of zero is not allowed, because it would tie with the</span>
 <span class="sd">        simulation&#39;s own bookkeeping in an arbitrary order. It is rejected</span>
 <span class="sd">        here, and again when a run starts if it was set after registration.</span>
-<span class="sd">        A callback attached while a sample is running takes effect from the</span>
-<span class="sd">        next sample.</span>
+<span class="sd">        The ``priority`` must also be a whole number of seconds: a value that</span>
+<span class="sd">        clearly names one, such as ``1.0`` or ``&quot;1&quot;``, is used as that integer,</span>
+<span class="sd">        and anything else (``0.5``, ``&quot;1.5&quot;``, ``True``, ``&quot;high&quot;``) is</span>
+<span class="sd">        rejected rather than rounded. A callback attached while a sample is</span>
+<span class="sd">        running takes effect from the next sample.</span>
 
 <span class="sd">        The options can be given with the callback, or to use this method as</span>
 <span class="sd">        a decorator::</span>
@@ -2645,7 +2731,8 @@
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
-<span class="sd">            If the priority is zero, the name is reserved or used by a tracer,</span>
+<span class="sd">            If the priority is zero or not a whole number of seconds, the name</span>
+<span class="sd">            is reserved or used by a tracer,</span>
 <span class="sd">            or the callback is a tracer declaring a hook other than ``daily``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="n">priority</span><span class="p">,</span> <span class="s2">&quot;skip_burn&quot;</span><span class="p">:</span> <span class="n">skip_burn</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span></div>
@@ -2727,10 +2814,32 @@
 
 <div class="viewcode-block" id="CallbackMixin.use_registered_callbacks">
 <a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.base.CallbackMixin.html#passengersim.callbacks.CallbackMixin.use_registered_callbacks">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">use_registered_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adopt all globally registered callbacks.&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">use_registered_callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adopt all globally registered callbacks (deprecated).</span>
+
+<span class="sd">        Warnings</span>
+<span class="sd">        --------</span>
+<span class="sd">        This method emits a DeprecationWarning. For reusable callbacks,</span>
+<span class="sd">        register them with ``register_callback`` (functions) or</span>
+<span class="sd">        ``register_tracer`` (tracer classes) and select them in</span>
+<span class="sd">        ``config.callbacks``; those register for configuration rather than</span>
+<span class="sd">        attaching to every simulation. For development and testing, attach</span>
+<span class="sd">        callbacks directly with the simulation&#39;s hook methods, or use an</span>
+<span class="sd">        explicit ``CallbackMixin`` bundle and</span>
+<span class="sd">        ``bundle.apply_callback_functions(sim)``. Registration APIs, including</span>
+<span class="sd">        the factory ones, are not deprecated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">.registration</span><span class="w"> </span><span class="kn">import</span> <span class="n">_REGISTERED_CALLBACKS</span>
 
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;use_registered_callbacks is deprecated. For reusable callbacks, register them with &quot;</span>
+            <span class="s2">&quot;register_callback (functions) or register_tracer (tracer classes) and select them in &quot;</span>
+            <span class="s2">&quot;config.callbacks; those do not attach them to every simulation. For development and &quot;</span>
+            <span class="s2">&quot;testing, attach callbacks directly to the simulation, or use an explicit CallbackMixin &quot;</span>
+            <span class="s2">&quot;bundle with bundle.apply_callback_functions(sim).&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="n">_REGISTERED_CALLBACKS</span><span class="o">.</span><span class="n">apply_callback_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
@@ -2749,42 +2858,71 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">add_callback_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add callback events to the simulation event queue.</span>
 
-<span class="sd">        All callbacks due at the same timestamp are placed in one event, in</span>
-<span class="sd">        dispatch order: RM systems, then configured callbacks, then manual</span>
-<span class="sd">        callbacks, each in registration order. The native event queue orders</span>
-<span class="sd">        events by time alone, so separate events at one timestamp would run in</span>
-<span class="sd">        an arbitrary order.</span>
+<span class="sd">        All callbacks due at the same timestamp are placed in one event. The</span>
+<span class="sd">        native event queue orders events by time alone, so separate events at</span>
+<span class="sd">        one timestamp would run in an arbitrary order. Within one event, they</span>
+<span class="sd">        run in this order:</span>
+
+<span class="sd">        1. RM systems;</span>
+<span class="sd">        2. then the hooks in lifecycle order, so that at the first DCP every</span>
+<span class="sd">           ``begin_sample`` callback runs before any ``daily`` one, and at the</span>
+<span class="sd">           final DCP every ``daily`` callback runs before any ``end_sample``</span>
+<span class="sd">           one;</span>
+<span class="sd">        3. within each hook, configured callbacks before manual ones, each in</span>
+<span class="sd">           registration (or declaration) order.</span>
+
+<span class="sd">        RM systems stay first so that a priority of -1, the RM systems&#39; own,</span>
+<span class="sd">        still runs a callback after them, as documented for each hook.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">dcp_hour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_controls</span><span class="o">.</span><span class="n">dcp_hour</span>
         <span class="n">first_day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dcp_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">batches</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># Each entry is (sort key, event info). select() already orders by</span>
+        <span class="c1"># origin and registration, and the stable sort below keeps that order</span>
+        <span class="c1"># within each hook.</span>
+        <span class="n">batches</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">registration</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_callback_registry</span><span class="o">.</span><span class="n">select</span><span class="p">():</span>
             <span class="n">hook</span> <span class="o">=</span> <span class="n">registration</span><span class="o">.</span><span class="n">hook</span>
             <span class="k">if</span> <span class="n">hook</span> <span class="ow">in</span> <span class="n">SYNCHRONOUS_HOOKS</span><span class="p">:</span>
                 <span class="k">continue</span>
+            <span class="c1"># The priority is a number of seconds before or after the overnight</span>
+            <span class="c1"># trigger time.  If priority is negative, the callback will be run</span>
+            <span class="c1"># before any RM system daily or same-time DCP events. If priority is</span>
+            <span class="c1"># positive it will be run after other RM events.  The default of one</span>
+            <span class="c1"># second places begin-sample callbacks after the first DCP but before</span>
+            <span class="c1"># any customers can arrive (none arrive within 5 seconds of a DCP),</span>
+            <span class="c1"># and end-sample callbacks after the last DCP.</span>
+            <span class="c1"># Checked again here, because the priority is read from the</span>
+            <span class="c1"># callable and may have been changed after registration. The</span>
+            <span class="c1"># checked value is an int, so a priority given as &quot;1&quot; or 1.0 is</span>
+            <span class="c1"># scheduled at exactly one second.</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">check_daily_priority</span><span class="p">(</span><span class="n">registration</span><span class="o">.</span><span class="n">priority</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hook</span><span class="si">}</span><span class="s2"> callback </span><span class="si">{</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span><span class="p">:</span>
-                <span class="c1"># The priority is a number of seconds before or after the overnight</span>
-                <span class="c1"># trigger time.  If priority is negative, the daily callback will be</span>
-                <span class="c1"># run before any RM system daily or same-time DCP events. If priority</span>
-                <span class="c1"># is positive it will be run after other RM events.</span>
-                <span class="n">days</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_day</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">registration</span><span class="o">.</span><span class="n">priority</span>
-                <span class="c1"># Checked again here, because the priority is read from the</span>
-                <span class="c1"># callable and may have been changed after registration.</span>
-                <span class="n">check_daily_priority</span><span class="p">(</span><span class="n">offset</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;daily callback </span><span class="si">{</span><span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">days</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">first_day</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># no customers can arrive within 5 seconds of a DCP.</span>
-                <span class="c1"># we want begin-sample callbacks to be triggered after the first DCP</span>
-                <span class="c1"># but before any customers can arrive, and end-sample callbacks to be</span>
-                <span class="c1"># triggered after the last DCP, so we add one second.</span>
-                <span class="n">days</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_day</span> <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;begin_sample&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span>
+                <span class="n">days</span> <span class="o">=</span> <span class="p">[</span><span class="n">first_day</span> <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;begin_sample&quot;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">registration</span><span class="o">.</span><span class="n">origin</span> <span class="o">==</span> <span class="s2">&quot;rm&quot;</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span> <span class="n">HOOKS</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">hook</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
                 <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">base_time</span> <span class="o">-</span> <span class="n">day</span> <span class="o">*</span> <span class="mi">86400</span> <span class="o">+</span> <span class="mi">3600</span> <span class="o">*</span> <span class="n">dcp_hour</span> <span class="o">+</span> <span class="n">offset</span><span class="p">)</span>
                 <span class="n">info</span> <span class="o">=</span> <span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span> <span class="k">if</span> <span class="n">hook</span> <span class="o">==</span> <span class="s2">&quot;daily&quot;</span> <span class="k">else</span> <span class="p">(</span><span class="n">hook</span><span class="p">,</span> <span class="n">registration</span><span class="o">.</span><span class="n">func</span><span class="p">)</span>
-                <span class="n">batches</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">infos</span> <span class="ow">in</span> <span class="n">batches</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">Event</span><span class="p">((</span><span class="s2">&quot;callback_batch&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">infos</span><span class="p">)),</span> <span class="n">timestamp</span><span class="p">))</span></div>
+                <span class="n">batches</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">timestamp</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">entries</span> <span class="ow">in</span> <span class="n">batches</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">entries</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">entry</span><span class="p">:</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">Event</span><span class="p">((</span><span class="s2">&quot;callback_batch&quot;</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">info</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">)),</span> <span class="n">timestamp</span><span class="p">))</span></div>
 </div>
 
+
+
+<span class="n">_RESERVED_ROW_KEYS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;days_prior&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;trial&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Keys every :class:`CallbackData` row uses as its index; callbacks cannot store values under them.&quot;&quot;&quot;</span>
+
+<span class="n">_RESERVED_KEYS_HINT</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;trial, sample and days_prior are recorded automatically as each row&#39;s index; rename the value to store it&quot;</span>
+<span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reserved_keys_in</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The reserved row index keys present in a mapping of values, sorted.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">_RESERVED_ROW_KEYS</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_detached</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
@@ -2825,7 +2963,27 @@
 
 <div class="viewcode-block" id="CallbackData.get_data">
 <a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.base.CallbackData.html#passengersim.callbacks.CallbackData.get_data">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">trial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">trial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the row dictionary for one trial, sample and day, creating it if needed.</span>
+
+<span class="sd">        Rows under a label are appended in order, and only the most recent row</span>
+<span class="sd">        is reused: a row is matched on its ``trial``, ``sample`` and (when given)</span>
+<span class="sd">        ``days_prior`` index keys, and a new row is started when they differ.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The ``callback_data`` key: a hook name, or a callback&#39;s result name.</span>
+<span class="sd">        trial, sample : int</span>
+<span class="sd">            The trial and sample the row belongs to.</span>
+<span class="sd">        days_prior : int, optional</span>
+<span class="sd">            The days prior to departure, for a daily callback&#39;s row.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            The stored row, which holds the index keys and any values added to it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">key_match</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;trial&quot;</span><span class="p">:</span> <span class="n">trial</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">:</span> <span class="n">sample</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">days_prior</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">key_match</span><span class="p">[</span><span class="s2">&quot;days_prior&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">days_prior</span>
@@ -2846,9 +3004,76 @@
         <span class="n">trial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">sample</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">):</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add keyword values to a callback row.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Callback result key.</span>
+<span class="sd">        trial, sample : int</span>
+<span class="sd">            Trial and sample identifying the row.</span>
+<span class="sd">        days_prior : int, optional</span>
+<span class="sd">            Days before departure for a daily observation.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            Values to add. Use `update_data_from_mapping` for a value named</span>
+<span class="sd">            ``label`, which is also an argument to this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_data_from_mapping</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">trial</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CallbackData.update_data_from_mapping">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.base.CallbackData.html#passengersim.callbacks.CallbackData.update_data_from_mapping">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_data_from_mapping</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">trial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">sample</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">/</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add values to the row for one trial, sample and day.</span>
+
+<span class="sd">        All the bookkeeping parameters are positional-only, so a value may be</span>
+<span class="sd">        given as a keyword of any name, including ``label`` or ``values``.</span>
+<span class="sd">        Values may also be given as a ``values`` mapping, which is how the</span>
+<span class="sd">        dictionary returned by a callback is stored; keyword values are applied</span>
+<span class="sd">        after it.</span>
+
+<span class="sd">        The keys ``trial``, ``sample`` and ``days_prior`` are reserved for the</span>
+<span class="sd">        row&#39;s own index, which :meth:`get_data` matches rows on, so a value</span>
+<span class="sd">        under one of those keys is refused rather than stored. This applies to</span>
+<span class="sd">        every row, daily or not.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            The ``callback_data`` key: a hook name, or a callback&#39;s result name.</span>
+<span class="sd">        trial, sample : int</span>
+<span class="sd">            The trial and sample the row belongs to.</span>
+<span class="sd">        days_prior : int, optional</span>
+<span class="sd">            The days prior to departure, for a daily callback&#39;s row.</span>
+<span class="sd">        values : Mapping, optional</span>
+<span class="sd">            Values to store in the row.</span>
+<span class="sd">        **kwargs</span>
+<span class="sd">            More values to store in the row.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If a value is given under ``trial``, ``sample`` or ``days_prior``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reserved</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">_reserved_keys_in</span><span class="p">(</span><span class="n">values</span> <span class="ow">or</span> <span class="p">{}))</span> <span class="o">|</span> <span class="nb">set</span><span class="p">(</span><span class="n">_reserved_keys_in</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">reserved</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;values for </span><span class="si">{</span><span class="n">label</span><span class="si">!r}</span><span class="s2"> use the reserved key(s) </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="w"> </span><span class="n">reserved</span><span class="p">))</span><span class="si">}</span><span class="s2">; </span><span class="si">{</span><span class="n">_RESERVED_KEYS_HINT</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="n">store</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">trial</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">store</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
         <span class="n">store</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cached_dataframes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 

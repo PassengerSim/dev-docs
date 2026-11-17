@@ -51,5 +51,6 @@ LegBidPriceArrayTracerOptions
       ~LegBidPriceArrayTracerOptions.model_fields
       ~LegBidPriceArrayTracerOptions.model_fields_set
       ~LegBidPriceArrayTracerOptions.leg_ids
+      ~LegBidPriceArrayTracerOptions.priority
    
    

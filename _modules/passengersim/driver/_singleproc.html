@@ -2104,7 +2104,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">todd_curves</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_frequency</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">n_total</span><span class="p">:</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">,</span> <span class="n">n_total</span><span class="p">:</span> <span class="kc">None</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Infrastructure progress sink: initial zero, then successfully completed samples.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="p">:</span> <span class="n">RunDiagnostics</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">choice_set_file</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">choice_set_obs</span> <span class="o">=</span> <span class="mi">0</span>
@@ -2156,6 +2157,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_firehose_buffers</span> <span class="o">=</span> <span class="p">{}</span></div>
 
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Progress sink called with completed and total samples, starting at zero.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span>
+
+    <span class="nd">@sample_done_callback</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample_done_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span> <span class="o">=</span> <span class="n">callback</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">db</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -3471,8 +3481,9 @@
 <span class="sd">        On entry, the sample number is run through to departure, so all</span>
 <span class="sd">        sales have happened, but per-sample wrap up (e.g. rolling history</span>
 <span class="sd">        forward, resetting counters) is deferred until exit. Synchronous</span>
-<span class="sd">        finalize-sample callbacks run on normal exit before that wrap up.  This is useful</span>
-<span class="sd">        for running a single sample in a testing framework.</span>
+<span class="sd">        finalize-sample callbacks run on normal exit after that wrap up, observing</span>
+<span class="sd">        post-bookkeeping state. This is useful for running a single sample in</span>
+<span class="sd">        a testing framework.</span>
 
 <span class="sd">        Yields</span>
 <span class="sd">        ------</span>
@@ -3494,8 +3505,8 @@
                 <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_events</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Event queue still has </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_events</span><span class="p">()</span><span class="si">}</span><span class="s2"> events&quot;</span>
                 <span class="k">break</span>
         <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_run_synchronous_callbacks</span><span class="p">(</span><span class="s2">&quot;finalize_sample&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">end_sample</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_sample</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_run_synchronous_callbacks</span><span class="p">(</span><span class="s2">&quot;finalize_sample&quot;</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_single_trial</span><span class="p">(</span>
@@ -3553,19 +3564,21 @@
                     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_events</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Event queue still has </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_events</span><span class="p">()</span><span class="si">}</span><span class="s2"> events&quot;</span>
                     <span class="k">break</span>
 
-            <span class="c1"># Finish user sample work before diagnostics and history rollover;</span>
-            <span class="c1"># its elapsed time is included in the sample duration below.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_run_synchronous_callbacks</span><span class="p">(</span><span class="s2">&quot;finalize_sample&quot;</span><span class="p">)</span>
-            <span class="n">n_samples_done</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
-                    <span class="p">((</span><span class="n">carrier</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">revenue</span><span class="p">)</span> <span class="k">for</span> <span class="n">carrier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">carriers</span><span class="p">),</span>
-                    <span class="n">burning</span><span class="o">=</span><span class="n">sample</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">burn_samples</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
+            <span class="c1"># Preserve departure revenues before bookkeeping or user finalizers</span>
+            <span class="c1"># can change them, but count completion only after both succeed.</span>
+            <span class="n">revenues</span> <span class="o">=</span> <span class="p">[(</span><span class="n">carrier</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">carrier</span><span class="o">.</span><span class="n">revenue</span><span class="p">)</span> <span class="k">for</span> <span class="n">carrier</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">carriers</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span> <span class="k">else</span> <span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">end_sample</span><span class="p">()</span>
+            <span class="c1"># Finalizers observe completed bookkeeping; their elapsed time is</span>
+            <span class="c1"># included in the sample duration before diagnostics are published.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_run_synchronous_callbacks</span><span class="p">(</span><span class="s2">&quot;finalize_sample&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="o">.</span><span class="n">record_sample_duration</span><span class="p">(</span><span class="n">sample</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">sample_start_time</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">revenues</span><span class="p">,</span> <span class="n">burning</span><span class="o">=</span><span class="n">sample</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">burn_samples</span><span class="p">)</span>
+            <span class="n">n_samples_done</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># The worker sink may publish immediately, so duration and diagnostic</span>
+            <span class="c1"># completion counters must already include this sample.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">progress</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">progress</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">refresh</span><span class="o">=</span><span class="p">(</span><span class="n">sample</span> <span class="o">==</span> <span class="mi">0</span><span class="p">))</span>
@@ -3581,7 +3594,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">db_writer</span><span class="o">.</span><span class="n">update_db_write_flags</span><span class="p">()</span>
         <span class="n">n_samples_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_trials</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_samples</span>
         <span class="n">n_samples_done</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">rich_progress</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_controls</span><span class="o">.</span><span class="n">show_progress_bar</span><span class="p">:</span>
                 <span class="n">progress</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">n_samples_total</span><span class="p">)</span>
@@ -3605,13 +3618,14 @@
                     <span class="n">progress</span><span class="p">,</span>
                     <span class="n">update_freq</span><span class="p">,</span>
                 <span class="p">)</span>
+                <span class="n">n_samples_done</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_samples</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_run_sim_single_trial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trial</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rich_progress</span><span class="p">:</span> <span class="n">Progress</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">update_freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_frequency</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">db_writer</span><span class="o">.</span><span class="n">update_db_write_flags</span><span class="p">()</span>
         <span class="n">n_samples_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_samples</span>
         <span class="n">n_samples_done</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">rich_progress</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">progress</span> <span class="o">=</span> <span class="n">DummyProgressBar</span><span class="p">()</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rich_progress</span><span class="p">,</span> <span class="n">Progress</span><span class="p">):</span>
@@ -3972,12 +3986,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">_diagnostics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span>
         <span class="c1"># Worker updaters can publish at coarse stage boundaries as well as</span>
         <span class="c1"># sample boundaries. User callbacks do not need to implement this hook.</span>
-        <span class="n">attach</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">,</span> <span class="s2">&quot;attach_diagnostics&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">attach</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">,</span> <span class="s2">&quot;attach_diagnostics&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">attach</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">attach</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">,</span> <span class="s2">&quot;handles_diagnostic_logging&quot;</span><span class="p">,</span> <span class="kc">False</span>
-        <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostics</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">,</span> <span class="s2">&quot;handles_diagnostic_logging&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
             <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database_path</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_diagnostic_log</span> <span class="o">=</span> <span class="n">create_diagnostic_log</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_controls</span><span class="o">.</span><span class="n">diagnostics</span><span class="p">,</span>
@@ -4160,7 +4172,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">db_writer</span><span class="o">.</span><span class="n">update_db_write_flags</span><span class="p">()</span>
             <span class="n">n_samples_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">num_samples</span>
             <span class="n">n_samples_done</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sample_done_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_progress_callback</span><span class="p">(</span><span class="n">n_samples_done</span><span class="p">,</span> <span class="n">n_samples_total</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">simulation_controls</span><span class="o">.</span><span class="n">show_progress_bar</span><span class="p">:</span>
                 <span class="n">progress</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">n_samples_total</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>

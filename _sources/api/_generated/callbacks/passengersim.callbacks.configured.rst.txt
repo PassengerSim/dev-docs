@@ -34,7 +34,9 @@ configured
    options_model_from_signature
    preflight
    prepare
+   register_callback
    register_callback_factory
+   register_tracer
    register_tracer_factory
 
 

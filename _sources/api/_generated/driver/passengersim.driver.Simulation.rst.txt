@@ -83,6 +83,7 @@ Simulation
       ~Simulation.pathclasses
       ~Simulation.paths
       ~Simulation.random_generator
+      ~Simulation.sample_done_callback
       ~Simulation.snapshot_filters
       ~Simulation.segmentation_data_by_timeframe
       ~Simulation.bid_price_traces

@@ -21,6 +21,11 @@ this, users can choose to additionally collect any other data while running a si
 done by writing a "callback" function. Such a function is invoked regularly while the simulation is
 running, and can inspect and store almost anything from the Simulation object.
 
+For callbacks or collections of callbacks that will be reused, prefer the
+[configured callback interface](#configured-callbacks). Manual attachment is primarily a convenience
+for development and testing. The examples below start with manual attachment to make it easy to try
+callback functions, then show how to configure them for reuse.
+
 ```{code-cell} ipython3
 import pandas as pd
 
@@ -54,13 +59,13 @@ we are looking for. There are five lifecycle hooks:
 ```{rst-class} nowrap-first-column
 ```
 
-| Hook                | Execution   | Timing                                                                                                      |
-| ------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
-| `initialize_sample` | Synchronous | After the sample number, random seed, and counters are initialized, before demand generation                |
-| `begin_sample`      | Event queue | One second after the first DCP, after its RM processing                                                     |
-| `daily`             | Event queue | Each day, one second after the overnight trigger unless the callback sets a `priority`                      |
-| `end_sample`        | Event queue | One second after the final DCP                                                                              |
-| `finalize_sample`   | Synchronous | After all queued events, before sample diagnostics, departure statistics, history rollover, and bookkeeping |
+| Hook                | Execution   | Timing                                                                                         |
+| ------------------- | ----------- | ---------------------------------------------------------------------------------------------- |
+| `initialize_sample` | Synchronous | After the sample number, random seed, and counters are initialized, before demand generation   |
+| `begin_sample`      | Event queue | One second after the first DCP, after its RM processing, unless the callback sets a `priority` |
+| `daily`             | Event queue | Each day, one second after the overnight trigger unless the callback sets a `priority`         |
+| `end_sample`        | Event queue | One second after the final DCP, unless the callback sets a `priority`                          |
+| `finalize_sample`   | Synchronous | After all queued events and sample bookkeeping, before timing and diagnostics publication      |
 
 Use `initialize_sample` to modify demand inputs such as `base_demand` for the current sample. RM
 steps have not yet run for that sample; use `begin_sample` to inspect its initial forecasts and bid
@@ -68,15 +73,20 @@ prices instead. With `simulation_controls.skip_demand_generation=True`, an initi
 `scenario_demand` and add booking events (for example, with `sim.eng.add_booking_event`). RM and
 queued callback events are still generated normally.
 
-`finalize_sample` sees the completed sample before history rollover. Its execution is included in
-sample timing, and changes it makes are visible to subsequent bookkeeping. It cannot change output
-already recorded during event processing. In `run_single_sample()`, it runs on normal context exit
-after the caller's context body and before bookkeeping.
+`finalize_sample` sees post-bookkeeping state: departure statistics have been recorded, histories
+have rolled forward, database writes have been committed, choice-set data has been cleared, and
+market shares have been updated. Some per-DCP counters are also cleared during history rollover; use
+`end_sample` to inspect or modify pre-bookkeeping state. Finalizers cannot change statistics or
+output already recorded. Their execution is included in sample timing, before diagnostics are
+published and progress reports the sample as completed. Progress reporting is separate from the user
+callback registry and includes burn-in samples. In `run_single_sample()`, finalization runs on
+normal context exit after both the caller's context body and bookkeeping.
 
 Both synchronous hooks run in registration order, with configured callbacks before manual callbacks.
 Event `priority` does not apply to them. They run during burn-in too, and callback exceptions
 propagate. Finalization is a successful-completion hook, not exception cleanup; it does not run if
-sample processing or the single-sample context body raises an exception. Finalizers should not
+sample processing, bookkeeping, or the single-sample context body raises an exception. If a
+finalizer raises, bookkeeping has already completed and is not rolled back. Finalizers should not
 enqueue events: sample event processing has already finished.
 
 All hooks except `daily` accept one argument (the `Simulation` object), and either return nothing
@@ -85,6 +95,11 @@ strings naming what's being stored and the values can be whatever is of interest
 simple numeric value (i.e., a scalar), or a tuple, an array, a nested dictionary, or any other
 [pickle-able](https://docs.python.org/3/library/pickle.html#what-can-be-pickled-and-unpickled)
 Python object.
+
+Each stored row is automatically tagged with the `trial` and `sample` it came from, plus
+`days_prior` for a `daily` callback. Those three key names are therefore reserved: a callback that
+returns a dictionary using any of them raises a `ValueError`, so give such a value a different name
+(for example, `my_days_prior`).
 
 We can attach each callback to the Simulation by using a Python decorator.
 
@@ -144,6 +159,27 @@ callback sees the day before or after it. Attaching a daily callback with a zero
 Because `priority` is read from the callback each sample, a zero set after attaching is caught too,
 when the run starts. The same rule applies to tracers' `priority` options and to RM systems.
 
+A `priority` must also be a whole number of seconds. A value that plainly names one, such as `1.0`
+or the text `"1"`, is accepted and treated as that integer. Anything else, such as `0.5`, `"1.5"`,
+`True`, or `"high"`, raises a `ValueError` rather than being rounded, because rounding could quietly
+move your callback to the other side of the simulation's bookkeeping.
+
+The other two queued hooks accept a `priority` in the same way. A `begin_sample` callback is timed
+from the first DCP of the sample, and an `end_sample` callback from the final DCP, on the day of
+departure. The default of one second runs them after that DCP's RM processing and bookkeeping; a
+negative value runs them before the bookkeeping, and a value below -1 before the RM systems as well.
+For example, this callback runs before the RM systems process the first DCP of each sample:
+
+```python
+@sim.begin_sample_callback(priority=-5)
+def before_first_dcp(sim: pax.Simulation) -> dict | None: ...
+```
+
+No customer arrives within five seconds of a DCP, so a `begin_sample` callback with a `priority`
+from 1 to 4 still runs before the first customer of the sample; a larger value may not. Zero is
+rejected for these hooks too. The synchronous `initialize_sample` and `finalize_sample` hooks are
+not scheduled, so they take no `priority`.
+
 Callbacks are scheduled at the start of each sample. A callback attached while a sample is running
 (for example, by another callback) therefore takes effect from the next sample.
 
@@ -174,10 +210,9 @@ def collect_completed_sample(sim: pax.Simulation) -> dict:
 ```
 
 Returned data is available under `callback_data.initialize_sample` and
-`callback_data.finalize_sample`, tagged with the current trial and sample. The corresponding global
-decorators are `register_initialize_sample_callback` and `register_finalize_sample_callback`.
-Configured callback factories can select either hook with `when="initialize_sample"` or
-`when="finalize_sample"`, including in multiprocessing runs.
+`callback_data.finalize_sample`, tagged with the current trial and sample. Configured callback
+factories can select either hook with `when="initialize_sample"` or `when="finalize_sample"`,
+including in multiprocessing runs.
 
 Multiple callbacks of the same kind can be attached (i.e. there can be two end_sample callbacks). By
 default, the dictionaries they return are merged into one shared table per hook, so the named values
@@ -187,9 +222,9 @@ another.
 To keep a callback's data apart, give it a `name` when attaching it. Its returned dictionaries are
 then stored under `callback_data.<name>`, instead of the shared hook table, and cannot collide with
 other callbacks' keys. The `skip_burn` option skips the callback during burn-in samples, so it does
-not need to check for them itself. Every registration method accepts `name` and `skip_burn`, and
-`daily_callback` also accepts `priority`; they can be given with the function, or with the method
-used as a decorator:
+not need to check for them itself. Every registration method accepts `name` and `skip_burn`, and the
+queued hooks (`begin_sample_callback`, `daily_callback`, and `end_sample_callback`) also accept
+`priority`; they can be given with the function, or with the method used as a decorator:
 
 ```python
 @sim.end_sample_callback(name="carrier_sales", skip_burn=True)
@@ -257,13 +292,12 @@ def count_nogo(sim: pax.Simulation, days_prior: int) -> dict | None:
     return {"nogo": nogo_count}
 ```
 
-### Re-using Callback Functions
+### Trying Callback Functions on Another Simulation
 
-Attaching via the decorators is a convenient way to add callbacks to a single simulation. The
-decorators connect the callback function to the simulation, but do not otherwise modify the function
-itself. It is easy to define callback functions in a seperate module or to re-use callback functions
-for multiple simulations, by using the decorator as a regular function. For example, we can create a
-second simulation object, and attach the same callback functions like this:
+During development and testing, you can attach the same function to another simulation by calling
+its hook method directly. The decorator attaches the function without otherwise modifying it. For
+callbacks or collections intended for reuse, prefer [configured callbacks](#configured-callbacks)
+rather than repeating manual attachments.
 
 ```{code-cell} ipython3
 duplicate_sim = pax.Simulation(cfg)
@@ -441,10 +475,12 @@ callbacks:
 
 Existing keys retain their positions; new keys append in overlay order. Saving and reloading a
 config preserves declaration order. At the same event time, configured callbacks execute in
-declaration order. Daily `priority` remains an offset in seconds relative to the overnight event, so
+declaration order. A `priority` remains an offset in seconds relative to the overnight event, so
 different priorities can change execution order. At exactly the same timestamp, RM systems run
-before configured callbacks, and configured callbacks run before manually attached ones. A declared
-`priority` of zero is rejected when the run starts, before any worker process is launched.
+first. Then the hooks run in lifecycle order: at the first DCP of a sample, every `begin_sample`
+callback runs before any `daily` one, and at the final DCP every `daily` callback runs before any
+`end_sample` one. Within each hook, configured callbacks run before manually attached ones. A
+declared `priority` of zero is rejected when the run starts, before any worker process is launched.
 
 ### Built-in Catalog
 
@@ -459,7 +495,7 @@ for use, and do not require the user to register them:
 | `segmentation_detail`     | daily        | Optional `markets`, `carriers`, `segments`, `priority` (default 1) | `segmentation_detail`     |
 | `leg_bid_prices`          | daily        | Required `leg_ids`; optional `priority` (default 1)                | `leg_bid_prices`          |
 | `path_bid_prices`         | daily        | Required `path_ids`; optional `priority` (default 1)               | `path_bid_prices`         |
-| `leg_bid_price_arrays`    | begin sample | Required `leg_ids`                                                 | `leg_bid_price_arrays`    |
+| `leg_bid_price_arrays`    | begin sample | Required `leg_ids`; optional `priority` (default 1)                | `leg_bid_price_arrays`    |
 | `leg_bid_price_vectors`   | daily        | Required `leg_ids`; optional `priority` (default 2)                | `leg_bid_price_vectors`   |
 | `selected_leg_forecasts`  | begin sample | Required `leg_ids`                                                 | `selected_leg_forecasts`  |
 | `selected_path_forecasts` | begin sample | Required `path_ids`                                                | `selected_path_forecasts` |
@@ -477,23 +513,177 @@ shared `daily` callback data, are read by the same summary members.
 These adapters retain the tracers' existing burn-period filtering, aggregation, and prerequisites.
 For the daily tracers, `priority` is the offset in seconds from the overnight trigger, as for any
 daily callback: the defaults of 1 and 2 record each day after the RM systems and the simulation's
-own bookkeeping, a negative value records it before the bookkeeping, and zero is an error.
-Begin-sample adapters do not expose `priority`, which has no effect for that hook. Two configured
-tracers cannot write the same result key, even under different declaration IDs or registry aliases.
-A configured tracer also cannot share an output name with a manually or globally attached tracer;
-give the manual tracer a different `name=` to use both (see [Tracing](tracers.md)). Configured
-tracers always use their canonical result key. The names `initialize_sample`, `begin_sample`,
-`daily`, `end_sample`, and `finalize_sample` are reserved for ordinary callback data.
+own bookkeeping, a negative value records it before the bookkeeping, and zero is an error. For
+`leg_bid_price_arrays`, `priority` is the offset from the first DCP of each sample, as for any
+begin-sample callback; the forecast adapters do not expose it. Two configured tracers cannot write
+the same result key, even under different declaration IDs or registry aliases. A configured tracer
+also cannot share an output name with a manually or globally attached tracer; give the manual tracer
+a different `name=` to use both (see [Tracing](tracers.md)). Configured tracers always use their
+canonical result key. The names `initialize_sample`, `begin_sample`, `daily`, `end_sample`, and
+`finalize_sample` are reserved for ordinary callback data.
 
-### Custom Callback Factories
+### Registering Custom Callbacks
 
-Use `register_callback_factory` or `register_tracer_factory` to register a custom callback or tracer
-implementation. Registration makes it available by name in the configurations; it does not attach it
-to simulations unless called for. Every name is unique, and repeated registration raises an error,
-even for the same implementation. There is no replacement operation.
+Use the `register_callback` decorator to make your own callback function available by name in
+configurations, and `register_tracer` for a tracer class. Registration does not attach anything to a
+simulation: a callback runs only when a configuration declares it.
 
-Factories receive one validated Pydantic model and return a fresh callable. Use `extra="forbid"` on
-the parameter model to catch misspelled options. For example:
+```python
+from passengersim import Simulation
+from passengersim.callbacks import register_callback
+
+
+@register_callback(when="end_sample", skip_burn=True)
+def carrier_revenue(sim: Simulation, *, carriers: list[str] | None = None) -> dict:
+    return {c.name: c.revenue for c in sim.eng.carriers if carriers is None or c.name in carriers}
+```
+
+Then select it in YAML:
+
+```yaml
+callbacks:
+  carrier_revenue:
+    parameters:
+      carriers: [AL1, AL2]
+```
+
+The function is registered under its own name, here `carrier_revenue`, and is returned unchanged, so
+you can still call it or attach it by hand. Instead of decorating, you can also register an existing
+function directly with `register_callback(carrier_revenue, when="end_sample")`.
+
+**Arguments.** The first positional parameters receive the hook's arguments: `(sim)`, or
+`(sim, days_prior)` for the `daily` hook. Every other parameter must be keyword-only, declared after
+`*`. These are the callback's configuration parameters, given under `parameters` in a declaration.
+Each needs a type annotation, which is used to validate the configured value, and keeps its default.
+One without a default must be given in the configuration. Unknown parameters are rejected, so a
+misspelled option is caught when the run starts. The annotations of the hook arguments and the
+return value are not used, so they may name types imported only for type checking.
+
+**Options.** `when` is required: the hook is never guessed. The other keyword options are:
+
+```{rst-class} nowrap-first-column
+```
+
+| Option             | Meaning                                                                                                   |
+| ------------------ | --------------------------------------------------------------------------------------------------------- |
+| `name`             | Registry name; defaults to the function's name (required for a lambda)                                    |
+| `priority`         | Offset in seconds for a `begin_sample`, `daily`, or `end_sample` callback; defaults to 1                  |
+| `skip_burn`        | Whether burn-in samples are skipped; defaults to false                                                    |
+| `version`          | Implementation version, checked when a configuration requires one; defaults to `"1"`                      |
+| `parameters_model` | A Pydantic model for the configuration parameters, used instead of the one built from the function itself |
+
+`priority` and `skip_burn` are fixed when the callback is registered; a configuration cannot change
+them, and a configuration parameter cannot use either name. A `priority` follows the usual rules for
+queued callbacks: a whole number of seconds other than zero. The synchronous `initialize_sample` and
+`finalize_sample` hooks have no priority, so giving one is an error.
+
+A `parameters_model` must declare `extra="forbid"` and have exactly one field for each keyword-only
+parameter. It then decides the types, defaults, and required parameters of configured runs, even
+where these differ from the function's own: every field's value, including its default, is passed to
+the function. Use one to document the options, or to validate them in ways an annotation cannot.
+
+**Results.** Dictionaries returned by a registered callback are stored under the declaration's ID,
+not the shared hook key. In the example above, they are in `callback_data.carrier_revenue`. This
+lets one function be declared several times with different parameters:
+
+```yaml
+callbacks:
+  al1_revenue:
+    name: carrier_revenue
+    parameters:
+      carriers: [AL1]
+  al2_revenue:
+    name: carrier_revenue
+    parameters:
+      carriers: [AL2]
+```
+
+These produce `callback_data.al1_revenue` and `callback_data.al2_revenue`. A declaration ID cannot
+be one of the hook names, and cannot be the same as a tracer's result name or a named manual
+callback's.
+
+```{important}
+The registration options apply only when the callback runs from a configuration. Attaching the same
+function by hand, as with `sim.end_sample_callback(carrier_revenue)`, follows the ordinary rules for
+manual callbacks: it runs at the default priority, during burn-in samples too, with its own default
+parameter values, and stores its results under the hook's name (here `end_sample`). Give those
+options to the attaching method if you need them there.
+```
+
+**What can be registered.** `register_callback` accepts plain functions only. A tracer class or
+instance, any other class, a callable object, a `functools.partial`, a method, and a coroutine or
+generator function are all refused with an error explaining what to use instead. Callable objects
+are refused because they can carry state from one simulation into another. A callback that needs to
+accumulate state across a run should be a tracer, which is copied fresh for every run.
+
+**Registering again.** Re-running a notebook cell, or reloading a module, registers the same
+function again. This replaces the earlier registration, as long as it is the same module-level
+function. Any other use of a registered name is an error, so two different callbacks can never
+silently share a name. A replacement takes effect the next time a simulation prepares to run, even
+for a simulation object that has run before.
+
+#### Registering Tracers
+
+For a `GenericTracer` subclass, declare its configuration on the class, beside the constructor it
+describes, and register the class with `register_tracer`, which also works as a class decorator:
+
+```python
+from typing import ClassVar, Literal
+
+from pydantic import BaseModel
+
+from passengersim.callbacks import register_tracer
+from passengersim.tracers.generic import GenericTracer
+
+
+class MyTracerOptions(BaseModel, extra="forbid"):
+    leg_ids: list[int]
+    priority: int = 1  # Same default as the constructor.
+
+
+@register_tracer
+class MyTracer(GenericTracer):
+    name = "my_tracer"  # Canonical result key in callback_data.
+    hook: ClassVar[Literal["begin_sample", "daily", "end_sample"]] = "daily"
+    skip_burn: ClassVar[bool] = True  # The simulation skips burn-in samples for you.
+    options_model: ClassVar[type[BaseModel]] = MyTracerOptions
+    options_version: ClassVar[str] = "1"
+
+    def __init__(self, leg_ids: list[int], *, priority: int = 1, name: str | None = None) -> None:
+        self.leg_ids = leg_ids
+        self.priority = priority
+        self._set_name(name)  # Optional instance-level result key.
+        self.reset()
+
+    # reset(), __call__(), and finalize() as for any tracer.
+```
+
+`register_tracer` accepts only `GenericTracer` subclasses; a function, or a tracer instance, is
+refused with an error naming the right decorator. A tracer written with hook methods (see
+[Writing a Tracer](tracers.md#writing-a-tracer)) leaves out `hook`, and is attached to every hook
+whose method it defines. A configured tracer is built as `MyTracer(**validated_options)` and uses
+the declared hooks, result name, options model, and version. If the class declares no
+`options_model`, one is built from the constructor's signature: each keyword parameter becomes an
+option, with its annotation as the type and its default, except `name` (a configured tracer always
+uses its class's result name). Declare the model yourself to document the options, or when the
+constructor takes `*args` or `**kwargs`. Keep the options model's fields and defaults identical to
+the constructor's, and bump `options_version` when the tracer's results change meaning.
+`@register_tracer(parameters_model=..., version=...)` overrides the class attributes, and `name=`
+registers an alias without renaming the output. `GenericTracer` provides `attach()`, which uses the
+declared hook, and `fresh()`, which returns a reset deep copy. A tracer that overrides `fresh()`
+must preserve its parameters; its instance name is re-applied by the simulation when it is attached.
+Registering the same module-level class again replaces the earlier registration, as for callbacks.
+
+The built-in catalog follows the same pattern: each tracer declares its options on its class, and
+`passengersim.callbacks.builtins` only lists what is registered and under which names.
+
+#### Callback Factories
+
+`register_callback_factory` and `register_tracer_factory` register a *factory*: a function that
+receives one validated Pydantic model and returns a fresh callback for each run. They remain
+available, and are useful when a callback needs per-run setup kept in closure state. Unlike the
+decorators, every factory name is unique, and registering one again is an error, even for the same
+implementation; there is no replacement. For example:
 
 ```python
 from collections.abc import Callable
@@ -528,77 +718,19 @@ register_callback_factory(
 )
 ```
 
-Then select it in YAML:
-
-```yaml
-callbacks:
-  my_carrier_revenue:
-    parameters:
-      skip_burn: true
-```
-
 Daily callbacks accept `(sim, days_prior)`; begin/end-sample callbacks accept `(sim)`. Return a
-dictionary to collect ordinary callback data, or `None`. Stateful factories must construct
-independent instances. Custom definitions are transported to multi-sim workers with the existing
-dill-based mechanism; they must be serializable, and their dependencies must be available to
-workers. YAML contains only names and options, not Python code or arbitrary import expressions.
-
-For a `GenericTracer` subclass, declare its configuration on the class, beside the constructor it
-describes, and register the class with the helper:
-
-```python
-from typing import ClassVar, Literal
-
-from pydantic import BaseModel
-
-from passengersim.callbacks import register_tracer_factory
-from passengersim.tracers.generic import GenericTracer
-
-
-class MyTracerOptions(BaseModel, extra="forbid"):
-    leg_ids: list[int]
-    priority: int = 1  # Same default as the constructor.
-
-
-class MyTracer(GenericTracer):
-    name = "my_tracer"  # Canonical result key in callback_data.
-    hook: ClassVar[Literal["begin_sample", "daily", "end_sample"]] = "daily"
-    skip_burn: ClassVar[bool] = True  # The simulation skips burn-in samples for you.
-    options_model: ClassVar[type[BaseModel]] = MyTracerOptions
-    options_version: ClassVar[str] = "1"
-
-    def __init__(self, leg_ids: list[int], *, priority: int = 1, name: str | None = None) -> None:
-        self.leg_ids = leg_ids
-        self.priority = priority
-        self._set_name(name)  # Optional instance-level result key.
-        self.reset()
-
-    # reset(), __call__(), and finalize() as for any tracer.
-
-
-register_tracer_factory(MyTracer)
-```
-
-A tracer written with hook methods (see [Writing a Tracer](tracers.md#writing-a-tracer)) leaves out
-`hook`, and is attached to every hook whose method it defines. The helper calls
-`MyTracer(**validated_options)` and uses the declared hooks, result name, options model, and
-version. If the class declares no `options_model`, one is built from the constructor's signature:
-each keyword parameter becomes an option, with its annotation as the type and its default, except
-`name` (a configured tracer always uses its class's result name). Declare the model yourself to
-document the options, or when the constructor takes `*args` or `**kwargs`. Keep the options model's
-fields and defaults identical to the constructor's, and bump `options_version` when the tracer's
-results change meaning. `parameters_model=` and `version=` arguments override the class attributes,
-and `name=` registers an alias without renaming the output. `GenericTracer` provides `attach()`,
-which uses the declared hook, and `fresh()`, which returns a reset deep copy. A tracer that
-overrides `fresh()` must preserve its parameters; its instance name is re-applied by the simulation
-when it is attached.
+dictionary to collect ordinary callback data, or `None`. A factory-built callback stores its results
+under the shared hook key (here `end_sample`), not the declaration ID. Stateful factories must
+construct independent instances. `register_tracer_factory(MyTracer)` registers a tracer class
+exactly as `register_tracer` does, except for the rule on registering again.
 
 For a general factory returning a tracer, supply `output_name` equal to the tracer's canonical name;
 this allows collision checks before workers start. Such a factory may pass `when=None`, so that the
 tracer it returns is attached to the hooks it declares itself.
 
-The built-in catalog follows the same pattern: each tracer declares its options on its class, and
-`passengersim.callbacks.builtins` only lists what is registered and under which names.
+Registered callbacks, tracers, and factories are transported to multi-sim workers with the existing
+dill-based mechanism; they must be serializable, and their dependencies must be available to
+workers. YAML contains only names and options, not Python code or arbitrary import expressions.
 
 ### Caching and Saved Configurations
 
@@ -622,17 +754,54 @@ Callback declarations and collected data survive saved-result round trips. Older
 versions can read configs without callback declarations, but cannot load configs containing the new
 `callbacks` field.
 
+## Migrating Global Callback Registration
+
+The process-global callback attachment APIs are deprecated and emit `DeprecationWarning`:
+
+- `use_registered_callbacks()`
+- `register_initialize_sample_callback`
+- `register_begin_sample_callback`
+- `register_daily_callback`
+- `register_end_sample_callback`
+- `register_finalize_sample_callback`
+
+They continue to work during deprecation, including decorator options and tracer attachment.
+Importing these APIs does not warn; calling them does.
+
+**The preferred replacement for reusable callbacks and collections of callbacks is the configured
+callback interface.** Register a callback function with `register_callback`, or a tracer class with
+`register_tracer`, and select it through `config.callbacks`. Despite the similar names, these differ
+from the deprecated `register_*_callback` functions: they make a callback available to
+configurations, and attach nothing to any simulation by themselves. Keep a collection's declarations
+together in configuration so it can be reused and adjusted across runs and experiments. See
+[Configured Callbacks](#configured-callbacks) and
+[Registering Custom Callbacks](#registering-custom-callbacks) for examples.
+
+The registration functions, including `register_callback_factory` and `register_tracer_factory`, are
+not deprecated: they make definitions available, while configuration explicitly selects which
+callbacks execute. After migrating your global registrations to configured callbacks, remove
+`sim.use_registered_callbacks()`.
+
+Manual attachment is primarily for development and testing. For that workflow, replace a global
+decorator with the corresponding simulation method, such as `@sim.end_sample_callback` or
+`@sim.daily_callback(skip_burn=True)`, and remove `sim.use_registered_callbacks()`. If a development
+or test setup needs several manual callbacks, an explicit `CallbackMixin` bundle with
+`bundle.apply_callback_functions(sim)` is also supported. Use configured callbacks when turning that
+setup into a reusable collection.
+
 ## Choosing an Approach
 
-|                            | Manual attachment              | Configured callbacks              |
-| -------------------------- | ------------------------------ | --------------------------------- |
-| Definition                 | Callable or tracer in Python   | Named factory and parameter model |
-| Activation                 | Attach to an individual object | Enable via configuration          |
-| Parameters                 | Python code                    | Per-config options                |
-| Experiments and overlays   | Python attachment              | Adjust declarations by key        |
-| Included in cache identity | No                             | Yes (explicit config only)        |
+|                            | Configured callbacks                        | Manual attachment                   |
+| -------------------------- | ------------------------------------------- | ----------------------------------- |
+| Recommended use            | Reusable callbacks and callback collections | Development and testing convenience |
+| Definition                 | Registered function or tracer class         | Callable or tracer in Python        |
+| Activation                 | Enable via configuration                    | Attach to an individual object      |
+| Parameters                 | Per-config options                          | Python code                         |
+| Experiments and overlays   | Adjust declarations by key                  | Python attachment                   |
+| Included in cache identity | Yes (explicit config only)                  | No                                  |
 
-Use configured callbacks for collection reused across runs, experiments, or caches. Manual
-attachment is convenient for one-off notebook work. You can also mix these approaches.
-Configured/manual tracer output collisions raise an error before execution, so you'll be warned
-promptly if you've made a mistake.
+Prefer configured callbacks whenever a callback or collection will be reused. Manual attachment
+makes it convenient to develop and test callback implementations before registering them for
+configuration. You can mix these approaches while developing or testing. Configured/manual tracer
+output collisions raise an error before execution, so you'll be warned promptly if you've made a
+mistake.

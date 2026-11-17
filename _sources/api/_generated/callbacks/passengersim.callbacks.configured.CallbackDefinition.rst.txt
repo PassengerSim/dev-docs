@@ -22,7 +22,9 @@ CallbackDefinition
 
    .. autosummary::
    
+      ~CallbackDefinition.kind
       ~CallbackDefinition.output_name
+      ~CallbackDefinition.source
       ~CallbackDefinition.factory
       ~CallbackDefinition.when
       ~CallbackDefinition.parameters_model

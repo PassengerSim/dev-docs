@@ -1958,13 +1958,12 @@
 <div class="viewcode-block" id="LegBidPriceArrayTracerOptions">
 <a class="viewcode-back" href="../../../api/_generated/tracers/passengersim.tracers.bid_price.LegBidPriceArrayTracerOptions.html#passengersim.tracers.bid_price.LegBidPriceArrayTracerOptions">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LegBidPriceArrayTracerOptions</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configured-callback options for :class:`LegBidPriceArrayTracer`.</span>
-
-<span class="sd">    ``priority`` is not exposed: it has no effect for a begin-sample tracer.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configured-callback options for :class:`LegBidPriceArrayTracer`.&quot;&quot;&quot;</span>
 
     <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Leg IDs to collect.&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Leg IDs to collect.&quot;&quot;&quot;</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Seconds after the first DCP&#39;s trigger time to capture the arrays.&quot;&quot;&quot;</span></div>
 
 
 
@@ -2388,7 +2387,10 @@
 <span class="sd">        leg_ids : list[int]</span>
 <span class="sd">            IDs of the legs whose bid-price arrays should be tracked.</span>
 <span class="sd">        priority : int, optional</span>
-<span class="sd">            Kept for compatibility; it has no effect on a begin-sample tracer.</span>
+<span class="sd">            Offset in seconds from the first DCP&#39;s trigger time at which the</span>
+<span class="sd">            arrays are captured; see</span>
+<span class="sd">            :meth:`~passengersim.callbacks.CallbackMixin.begin_sample_callback`.</span>
+<span class="sd">            The default of 1 captures them after the first DCP&#39;s RM steps.</span>
 <span class="sd">        name : str, optional</span>
 <span class="sd">            Key for the results in ``callback_data``. Defaults to the class</span>
 <span class="sd">            name, &#39;leg_bid_price_arrays&#39;; give a different name to attach two of these</span>

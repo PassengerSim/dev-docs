@@ -1949,8 +1949,8 @@ example model, firehose outputs can easily output over a gigabyte of data.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>passengersim 0.95.dev13+g237281526
-passengersim.core 0.94
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>passengersim 0.95.dev53+gecdbe3df7.d20261113
+passengersim.core 0.95.dev53+gecdbe3df7.d20261113
 </code></pre></div>
 </div>
 </div>
@@ -1989,7 +1989,7 @@ here in our Python interpreter.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>trial, sample, time, event_num, num_pax, booking_class, chosen_as_priceable, price, wtp, orig, dest, segment, path_id, legs_with_remaining_capacity
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>trial, sample, time, event_num, num_pax, booking_class, offered_as_priceable, chosen_as_priceable, price, wtp, orig, dest, segment, path_id, legs_with_remaining_capacity
 </code></pre></div>
 </div>
 </div>
@@ -2051,35 +2051,35 @@ writable file-like object. Let’s hook up to the 50th sample to collect all the
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>0,0,2019-12-29 10:17:42 UTC,6,1,Y4,0,175,350.148,ORD,LAX,leisure,6,AL1:112 ORD-LAX /120
-0,0,2019-12-29 10:54:36 UTC,7,1,Y3,0,150,176.142,BOS,ORD,leisure,4,AL2:202 BOS-ORD /100
-0,0,2019-12-29 14:51:05 UTC,8,1,Y4,0,250,485.673,BOS,LAX,leisure,12,AL2:202 BOS-ORD /99 | AL2:212 ORD-LAX /120
-0,0,2019-12-29 16:22:50 UTC,9,1,Y4,0,175,188.368,ORD,LAX,leisure,5,AL1:111 ORD-LAX /120
-0,0,2019-12-29 19:23:13 UTC,10,1,Y4,0,175,468.663,ORD,LAX,leisure,5,AL1:111 ORD-LAX /119
-0,0,2019-12-29 19:49:09 UTC,11,1,Y4,0,175,267.108,ORD,LAX,leisure,8,AL2:212 ORD-LAX /119
-0,0,2019-12-29 20:06:29 UTC,12,1,Y5,1,100,118.05,BOS,ORD,leisure,2,AL1:102 BOS-ORD /100
-0,0,2019-12-30 03:56:09 UTC,13,1,Y4,0,250,462.75,BOS,LAX,leisure,10,AL1:102 BOS-ORD /99 | AL1:112 ORD-LAX /119
-0,0,2019-12-30 04:24:36 UTC,14,1,Y4,0,125,270.7,BOS,ORD,leisure,1,AL1:101 BOS-ORD /100
-0,0,2019-12-30 08:04:40 UTC,19,1,Y5,1,200,263.529,BOS,LAX,leisure,12,AL2:202 BOS-ORD /98 | AL2:212 ORD-LAX /118
-0,0,2019-12-30 11:34:11 UTC,20,1,Y4,0,175,244.473,ORD,LAX,leisure,6,AL1:112 ORD-LAX /118
-0,0,2019-12-30 11:35:28 UTC,21,1,Y4,0,125,176.7,BOS,ORD,leisure,4,AL2:202 BOS-ORD /97
-0,0,2019-12-30 13:07:07 UTC,22,1,Y4,0,175,229.638,ORD,LAX,leisure,5,AL1:111 ORD-LAX /118
-0,0,2019-12-30 16:19:04 UTC,23,1,Y5,1,200,244.303,BOS,LAX,leisure,9,AL1:101 BOS-ORD /99 | AL1:111 ORD-LAX /117
-0,0,2019-12-30 21:15:08 UTC,24,1,Y4,0,175,182.403,ORD,LAX,leisure,7,AL2:211 ORD-LAX /120
-0,0,2019-12-30 21:40:02 UTC,25,1,Y4,0,175,406.6,ORD,LAX,leisure,6,AL1:112 ORD-LAX /117
-0,0,2019-12-30 22:54:10 UTC,26,1,Y4,0,250,504.26,BOS,LAX,leisure,11,AL2:201 BOS-ORD /100 | AL2:211 ORD-LAX /119
-0,0,2019-12-30 23:20:05 UTC,27,1,Y5,1,150,154.796,ORD,LAX,leisure,6,AL1:112 ORD-LAX /116
-0,0,2019-12-31 00:02:25 UTC,28,1,Y4,0,175,200.877,ORD,LAX,leisure,5,AL1:111 ORD-LAX /116
-0,0,2019-12-31 06:52:32 UTC,33,1,Y0,0,500,2081.91,ORD,LAX,business,5,AL1:111 ORD-LAX /115
-0,0,2019-12-31 09:52:12 UTC,34,1,Y4,0,125,327.626,BOS,ORD,leisure,1,AL1:101 BOS-ORD /98
-0,0,2019-12-31 10:38:30 UTC,35,1,Y4,0,125,223.988,BOS,ORD,leisure,2,AL1:102 BOS-ORD /98
-0,0,2019-12-31 10:57:44 UTC,36,1,Y4,0,125,193.047,BOS,ORD,leisure,2,AL1:102 BOS-ORD /97
-0,0,2019-12-31 11:29:56 UTC,37,1,Y4,0,125,461.513,BOS,ORD,leisure,4,AL2:202 BOS-ORD /96
-0,0,2019-12-31 12:40:15 UTC,38,1,Y0,0,500,2764.46,ORD,LAX,business,7,AL2:211 ORD-LAX /118
-0,0,2019-12-31 15:44:52 UTC,39,1,Y4,0,250,268.391,BOS,LAX,leisure,12,AL2:202 BOS-ORD /95 | AL2:212 ORD-LAX /117
-0,0,2019-12-31 21:52:58 UTC,40,1,Y4,0,250,320.524,BOS,LAX,leisure,9,AL1:101 BOS-ORD /97 | AL1:111 ORD-LAX /114
-0,0,2020-01-01 03:13:06 UTC,41,1,Y4,0,175,216.342,ORD,LAX,leisure,6,AL1:112 ORD-LAX /115
-0,0,2020-01-01 05:01:34 UTC,42,1,Y4,0,125,196.99,BOS,ORD,leisure,2,AL1:102 BOS-ORD /96
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>0,0,2019-12-29 10:17:42 UTC,4,1,Y4,0,0,175,350.148,ORD,LAX,leisure,6,AL1:112 ORD-LAX /120
+0,0,2019-12-29 10:54:36 UTC,5,1,Y3,0,0,150,176.142,BOS,ORD,leisure,4,AL2:202 BOS-ORD /100
+0,0,2019-12-29 14:51:05 UTC,6,1,Y4,0,0,250,485.673,BOS,LAX,leisure,12,AL2:202 BOS-ORD /99 | AL2:212 ORD-LAX /120
+0,0,2019-12-29 16:22:50 UTC,7,1,Y4,0,0,175,188.368,ORD,LAX,leisure,5,AL1:111 ORD-LAX /120
+0,0,2019-12-29 19:23:13 UTC,8,1,Y4,0,0,175,468.663,ORD,LAX,leisure,5,AL1:111 ORD-LAX /119
+0,0,2019-12-29 19:49:09 UTC,9,1,Y4,0,0,175,267.108,ORD,LAX,leisure,8,AL2:212 ORD-LAX /119
+0,0,2019-12-29 20:06:29 UTC,10,1,Y5,1,1,100,118.05,BOS,ORD,leisure,2,AL1:102 BOS-ORD /100
+0,0,2019-12-30 03:56:09 UTC,11,1,Y4,0,0,250,462.75,BOS,LAX,leisure,10,AL1:102 BOS-ORD /99 | AL1:112 ORD-LAX /119
+0,0,2019-12-30 04:24:36 UTC,12,1,Y4,0,0,125,270.7,BOS,ORD,leisure,1,AL1:101 BOS-ORD /100
+0,0,2019-12-30 08:04:40 UTC,16,1,Y5,1,1,200,263.529,BOS,LAX,leisure,12,AL2:202 BOS-ORD /98 | AL2:212 ORD-LAX /118
+0,0,2019-12-30 11:34:11 UTC,17,1,Y4,0,0,175,244.473,ORD,LAX,leisure,6,AL1:112 ORD-LAX /118
+0,0,2019-12-30 11:35:28 UTC,18,1,Y4,0,0,125,176.7,BOS,ORD,leisure,4,AL2:202 BOS-ORD /97
+0,0,2019-12-30 13:07:07 UTC,19,1,Y4,0,0,175,229.638,ORD,LAX,leisure,5,AL1:111 ORD-LAX /118
+0,0,2019-12-30 16:19:04 UTC,20,1,Y5,1,1,200,244.303,BOS,LAX,leisure,9,AL1:101 BOS-ORD /99 | AL1:111 ORD-LAX /117
+0,0,2019-12-30 21:15:08 UTC,21,1,Y4,0,0,175,182.403,ORD,LAX,leisure,7,AL2:211 ORD-LAX /120
+0,0,2019-12-30 21:40:02 UTC,22,1,Y4,0,0,175,406.6,ORD,LAX,leisure,6,AL1:112 ORD-LAX /117
+0,0,2019-12-30 22:54:10 UTC,23,1,Y4,0,0,250,504.26,BOS,LAX,leisure,11,AL2:201 BOS-ORD /100 | AL2:211 ORD-LAX /119
+0,0,2019-12-30 23:20:05 UTC,24,1,Y5,1,1,150,154.796,ORD,LAX,leisure,6,AL1:112 ORD-LAX /116
+0,0,2019-12-31 00:02:25 UTC,25,1,Y4,0,0,175,200.877,ORD,LAX,leisure,5,AL1:111 ORD-LAX /116
+0,0,2019-12-31 06:52:32 UTC,29,1,Y0,0,0,500,2081.91,ORD,LAX,business,5,AL1:111 ORD-LAX /115
+0,0,2019-12-31 09:52:12 UTC,30,1,Y4,0,0,125,327.626,BOS,ORD,leisure,1,AL1:101 BOS-ORD /98
+0,0,2019-12-31 10:38:30 UTC,31,1,Y4,0,0,125,223.988,BOS,ORD,leisure,2,AL1:102 BOS-ORD /98
+0,0,2019-12-31 10:57:44 UTC,32,1,Y4,0,0,125,193.047,BOS,ORD,leisure,2,AL1:102 BOS-ORD /97
+0,0,2019-12-31 11:29:56 UTC,33,1,Y4,0,0,125,461.513,BOS,ORD,leisure,4,AL2:202 BOS-ORD /96
+0,0,2019-12-31 12:40:15 UTC,34,1,Y0,0,0,500,2764.46,ORD,LAX,business,7,AL2:211 ORD-LAX /118
+0,0,2019-12-31 15:44:52 UTC,35,1,Y4,0,0,250,268.391,BOS,LAX,leisure,12,AL2:202 BOS-ORD /95 | AL2:212 ORD-LAX /117
+0,0,2019-12-31 21:52:58 UTC,36,1,Y4,0,0,250,320.524,BOS,LAX,leisure,9,AL1:101 BOS-ORD /97 | AL1:111 ORD-LAX /114
+0,0,2020-01-01 03:13:06 UTC,37,1,Y4,0,0,175,216.342,ORD,LAX,leisure,6,AL1:112 ORD-LAX /115
+0,0,2020-01-01 05:01:34 UTC,38,1,Y4,0,0,125,196.99,BOS,ORD,leisure,2,AL1:102 BOS-ORD /96
 </code></pre></div>
 </div>
 </div>
@@ -2094,7 +2094,7 @@ they are available in our pseudo-file.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>68258
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>69694
 </code></pre></div>
 </div>
 </div>
@@ -2109,35 +2109,35 @@ they are available in our pseudo-file.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>trial, sample, time, event_num, num_pax, booking_class, chosen_as_priceable, price, wtp, orig, dest, segment, path_id, legs_with_remaining_capacity
-0,50,2019-12-29 07:53:28 UTC,45838,1,Y4,0,175,210.838,ORD,LAX,leisure,6,AL1:112 ORD-LAX /120
-0,50,2019-12-29 12:08:28 UTC,45839,1,Y5,1,100,111.864,BOS,ORD,leisure,3,AL2:201 BOS-ORD /100
-0,50,2019-12-29 12:11:06 UTC,45840,1,Y5,1,200,223.583,BOS,LAX,leisure,12,AL2:202 BOS-ORD /100 | AL2:212 ORD-LAX /120
-0,50,2019-12-29 12:17:58 UTC,45841,1,Y4,0,175,190.735,ORD,LAX,leisure,5,AL1:111 ORD-LAX /120
-0,50,2019-12-29 12:33:31 UTC,45842,1,Y2,0,300,465.261,ORD,LAX,business,8,AL2:212 ORD-LAX /119
-0,50,2019-12-29 15:28:40 UTC,45843,1,Y4,0,175,175.848,ORD,LAX,leisure,8,AL2:212 ORD-LAX /118
-0,50,2019-12-29 17:49:37 UTC,45844,1,Y4,0,175,247.363,ORD,LAX,leisure,7,AL2:211 ORD-LAX /120
-0,50,2019-12-29 18:41:54 UTC,45845,1,Y1,0,625,939.322,BOS,LAX,business,9,AL1:101 BOS-ORD /100 | AL1:111 ORD-LAX /119
-0,50,2019-12-30 00:42:22 UTC,45846,1,Y4,0,250,1280.88,BOS,LAX,leisure,12,AL2:202 BOS-ORD /99 | AL2:212 ORD-LAX /117
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>trial, sample, time, event_num, num_pax, booking_class, offered_as_priceable, chosen_as_priceable, price, wtp, orig, dest, segment, path_id, legs_with_remaining_capacity
+0,50,2019-12-29 07:53:28 UTC,42536,1,Y4,1,0,175,210.838,ORD,LAX,leisure,6,AL1:112 ORD-LAX /120
+0,50,2019-12-29 12:08:28 UTC,42537,1,Y5,1,1,100,111.864,BOS,ORD,leisure,3,AL2:201 BOS-ORD /100
+0,50,2019-12-29 12:11:06 UTC,42538,1,Y5,1,1,200,223.583,BOS,LAX,leisure,12,AL2:202 BOS-ORD /100 | AL2:212 ORD-LAX /120
+0,50,2019-12-29 12:17:58 UTC,42539,1,Y4,0,0,175,190.735,ORD,LAX,leisure,5,AL1:111 ORD-LAX /120
+0,50,2019-12-29 12:33:31 UTC,42540,1,Y2,0,0,300,465.261,ORD,LAX,business,8,AL2:212 ORD-LAX /119
+0,50,2019-12-29 15:28:40 UTC,42541,1,Y4,0,0,175,175.848,ORD,LAX,leisure,8,AL2:212 ORD-LAX /118
+0,50,2019-12-29 17:49:37 UTC,42542,1,Y4,0,0,175,247.363,ORD,LAX,leisure,7,AL2:211 ORD-LAX /120
+0,50,2019-12-29 18:41:54 UTC,42543,1,Y1,0,0,625,939.322,BOS,LAX,business,9,AL1:101 BOS-ORD /100 | AL1:111 ORD-LAX /119
+0,50,2019-12-30 00:42:22 UTC,42544,1,Y4,0,0,250,1280.88,BOS,LAX,leisure,12,AL2:202 BOS-ORD /99 | AL2:212 ORD-LAX /117
 ...
-0,50,2020-02-29 17:47:28 UTC,46775,1,XX,0,0,379.912,ORD,LAX,business,-1,
-0,50,2020-02-29 17:47:31 UTC,46776,1,XX,0,0,167.78,ORD,LAX,leisure,-1,
-0,50,2020-02-29 21:12:49 UTC,46777,1,Y1,1,300,595.483,BOS,ORD,business,4,AL2:202 BOS-ORD /24
-0,50,2020-02-29 21:24:18 UTC,46778,1,XX,0,0,533.805,BOS,LAX,business,-1,
-0,50,2020-02-29 22:34:29 UTC,46779,1,Y1,1,400,499.186,ORD,LAX,business,8,AL2:212 ORD-LAX /3
-0,50,2020-02-29 22:56:12 UTC,46780,1,Y0,0,750,1209.57,BOS,LAX,business,12,AL2:202 BOS-ORD /23 | AL2:212 ORD-LAX /2
-0,50,2020-02-29 22:56:56 UTC,46781,1,Y1,1,300,436.905,BOS,ORD,business,2,AL1:102 BOS-ORD /9
-0,50,2020-02-29 23:09:36 UTC,46782,1,Y0,0,500,1355.06,ORD,LAX,business,8,AL2:212 ORD-LAX /1
-0,50,2020-02-29 23:14:52 UTC,46783,1,Y0,0,500,888.88,ORD,LAX,business,6,AL1:112 ORD-LAX /3
-0,50,2020-02-29 23:52:43 UTC,46784,1,XX,0,0,476.928,ORD,LAX,business,-1,
-0,50,2020-03-01 00:26:38 UTC,46785,1,XX,0,0,351.117,ORD,LAX,leisure,-1,
-0,50,2020-03-01 02:11:03 UTC,46786,1,XX,0,0,313.297,BOS,LAX,leisure,-1,
-0,50,2020-03-01 02:59:34 UTC,46787,1,XX,0,0,537.713,BOS,LAX,business,-1,
-0,50,2020-03-01 03:02:40 UTC,46788,1,XX,0,0,529.131,BOS,LAX,business,-1,
-0,50,2020-03-01 03:32:59 UTC,46789,1,Y0,1,500,515.704,ORD,LAX,business,6,AL1:112 ORD-LAX /2
-0,50,2020-03-01 03:33:33 UTC,46790,1,XX,0,0,-1,ORD,LAX,leisure,-1,
-0,50,2020-03-01 04:13:47 UTC,46791,1,Y1,1,625,1571.12,BOS,LAX,business,10,AL1:102 BOS-ORD /8 | AL1:112 ORD-LAX /1
-0,50,2020-03-01 05:20:23 UTC,46792,1,XX,0,0,-1,ORD,LAX,leisure,-1,
+0,50,2020-02-29 17:47:28 UTC,43411,1,XX,0,0,0,379.912,ORD,LAX,business,-1,
+0,50,2020-02-29 17:47:31 UTC,43412,1,XX,0,0,0,167.78,ORD,LAX,leisure,-1,
+0,50,2020-02-29 21:12:49 UTC,43413,1,Y1,1,1,300,595.483,BOS,ORD,business,4,AL2:202 BOS-ORD /24
+0,50,2020-02-29 21:24:18 UTC,43414,1,XX,0,0,0,533.805,BOS,LAX,business,-1,
+0,50,2020-02-29 22:34:29 UTC,43415,1,Y1,1,1,400,499.186,ORD,LAX,business,8,AL2:212 ORD-LAX /3
+0,50,2020-02-29 22:56:12 UTC,43416,1,Y0,0,0,750,1209.57,BOS,LAX,business,12,AL2:202 BOS-ORD /23 | AL2:212 ORD-LAX /2
+0,50,2020-02-29 22:56:56 UTC,43417,1,Y1,1,1,300,436.905,BOS,ORD,business,2,AL1:102 BOS-ORD /9
+0,50,2020-02-29 23:09:36 UTC,43418,1,Y0,0,0,500,1355.06,ORD,LAX,business,8,AL2:212 ORD-LAX /1
+0,50,2020-02-29 23:14:52 UTC,43419,1,Y0,0,0,500,888.88,ORD,LAX,business,6,AL1:112 ORD-LAX /3
+0,50,2020-02-29 23:52:43 UTC,43420,1,XX,0,0,0,476.928,ORD,LAX,business,-1,
+0,50,2020-03-01 00:26:38 UTC,43421,1,XX,0,0,0,351.117,ORD,LAX,leisure,-1,
+0,50,2020-03-01 02:11:03 UTC,43422,1,XX,0,0,0,313.297,BOS,LAX,leisure,-1,
+0,50,2020-03-01 02:59:34 UTC,43423,1,XX,0,0,0,537.713,BOS,LAX,business,-1,
+0,50,2020-03-01 03:02:40 UTC,43424,1,XX,0,0,0,529.131,BOS,LAX,business,-1,
+0,50,2020-03-01 03:32:59 UTC,43425,1,Y0,1,1,500,515.704,ORD,LAX,business,6,AL1:112 ORD-LAX /2
+0,50,2020-03-01 03:33:33 UTC,43426,1,XX,0,0,0,-1,ORD,LAX,leisure,-1,
+0,50,2020-03-01 04:13:47 UTC,43427,1,Y1,1,1,625,1571.12,BOS,LAX,business,10,AL1:102 BOS-ORD /8 | AL1:112 ORD-LAX /1
+0,50,2020-03-01 05:20:23 UTC,43428,1,XX,0,0,0,-1,ORD,LAX,leisure,-1,
 </code></pre></div>
 </div>
 </div>
@@ -2182,6 +2182,7 @@ although a few business customers with high willingness to pay are able to make 
       <th>event_num</th>
       <th>num_pax</th>
       <th>booking_class</th>
+      <th>offered_as_priceable</th>
       <th>chosen_as_priceable</th>
       <th>price</th>
       <th>wtp</th>
@@ -2198,9 +2199,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2019-12-29 07:53:28 UTC</td>
-      <td>45838</td>
+      <td>42536</td>
       <td>1</td>
       <td>Y4</td>
+      <td>1</td>
       <td>0</td>
       <td>175</td>
       <td>210.838</td>
@@ -2215,9 +2217,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2019-12-29 12:08:28 UTC</td>
-      <td>45839</td>
+      <td>42537</td>
       <td>1</td>
       <td>Y5</td>
+      <td>1</td>
       <td>1</td>
       <td>100</td>
       <td>111.864</td>
@@ -2232,9 +2235,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2019-12-29 12:11:06 UTC</td>
-      <td>45840</td>
+      <td>42538</td>
       <td>1</td>
       <td>Y5</td>
+      <td>1</td>
       <td>1</td>
       <td>200</td>
       <td>223.583</td>
@@ -2249,9 +2253,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2019-12-29 12:17:58 UTC</td>
-      <td>45841</td>
+      <td>42539</td>
       <td>1</td>
       <td>Y4</td>
+      <td>0</td>
       <td>0</td>
       <td>175</td>
       <td>190.735</td>
@@ -2266,9 +2271,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2019-12-29 12:33:31 UTC</td>
-      <td>45842</td>
+      <td>42540</td>
       <td>1</td>
       <td>Y2</td>
+      <td>0</td>
       <td>0</td>
       <td>300</td>
       <td>465.261</td>
@@ -2294,15 +2300,17 @@ although a few business customers with high willingness to pay are able to make 
       <td>...</td>
       <td>...</td>
       <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
       <th>702</th>
       <td>0</td>
       <td>50</td>
       <td>2020-03-01 03:02:40 UTC</td>
-      <td>46788</td>
+      <td>43424</td>
       <td>1</td>
       <td>XX</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>529.131</td>
@@ -2317,9 +2325,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2020-03-01 03:32:59 UTC</td>
-      <td>46789</td>
+      <td>43425</td>
       <td>1</td>
       <td>Y0</td>
+      <td>1</td>
       <td>1</td>
       <td>500</td>
       <td>515.704</td>
@@ -2334,9 +2343,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2020-03-01 03:33:33 UTC</td>
-      <td>46790</td>
+      <td>43426</td>
       <td>1</td>
       <td>XX</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>-1.000</td>
@@ -2351,9 +2361,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2020-03-01 04:13:47 UTC</td>
-      <td>46791</td>
+      <td>43427</td>
       <td>1</td>
       <td>Y1</td>
+      <td>1</td>
       <td>1</td>
       <td>625</td>
       <td>1571.120</td>
@@ -2368,9 +2379,10 @@ although a few business customers with high willingness to pay are able to make 
       <td>0</td>
       <td>50</td>
       <td>2020-03-01 05:20:23 UTC</td>
-      <td>46792</td>
+      <td>43428</td>
       <td>1</td>
       <td>XX</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>-1.000</td>
@@ -2382,7 +2394,7 @@ although a few business customers with high willingness to pay are able to make 
     </tr>
   </tbody>
 </table>
-<p>707 rows × 14 columns</p>
+<p>707 rows × 15 columns</p>
 </div></div></div>
 </div>
 

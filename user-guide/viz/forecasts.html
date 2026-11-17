@@ -2480,29 +2480,11 @@ it is discarded, and the results are cached separately for this page.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>Cache miss for config with hash 9b8defb6e298e5a907e4f575771cf85bab7dc527a1f33a6be684b52787a4da6d. Running simulation and saving summary to cache.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>Cache hit for config with hash 9b8defb6e298e5a907e4f575771cf85bab7dc527a1f33a6be684b52787a4da6d. Loaded summary from cache.
+Cache hit for config with hash e1ad3f9396fbfbe9e101d20088caa04a0cc7bb511cc768c5fde07052ab80951a. Loaded summary from cache.
 </code></pre></div>
 </div>
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">╭─────────────────── Summary revenue statistics · Europa ───────────────────╮</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="font-weight: bold">                           Brat            Stroop             Tapas      </span> <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="font-weight: bold">Run      Samples     Mean  ~95% CI     Mean  ~95% CI     Mean  ~95% CI   </span> <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> Europa       900   943.2K   ±7,066   920.6K   ±7,443   292.5K   ±2,336    <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">Post-burn-in only · Approx. 95% CI for mean</span>                               <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">╰───────────────────────────────────────────────────────────────────────────╯</span>
-</pre>
-</div><div class="output text_html"></div><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><code>Cache miss for config with hash e1ad3f9396fbfbe9e101d20088caa04a0cc7bb511cc768c5fde07052ab80951a. Running simulation and saving summary to cache.
-</code></pre></div>
 </div>
-<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
-</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="color: #008000; text-decoration-color: #008000">╭─────────────────── Summary revenue statistics · Europa ───────────────────╮</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="font-weight: bold">                           Brat            Stroop             Tapas      </span> <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="font-weight: bold">Run      Samples     Mean  ~95% CI     Mean  ~95% CI     Mean  ~95% CI   </span> <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> Europa       900   968.6K   ±8,193   935.5K   ±8,308   291.7K   ±2,130    <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">│</span> <span style="color: #7f7f7f; text-decoration-color: #7f7f7f">Post-burn-in only · Approx. 95% CI for mean</span>                               <span style="color: #008000; text-decoration-color: #008000">│</span>
-<span style="color: #008000; text-decoration-color: #008000">╰───────────────────────────────────────────────────────────────────────────╯</span>
-</pre>
-</div></div>
 </div>
 <h2 id="forecasts-for-individual-legs">Forecasts for Individual Legs<a class="headerlink" href="#forecasts-for-individual-legs" title="Link to this heading">¶</a></h2>
 <p>Choose a leg to see how its demand forecasts changed over the booking horizon—the period leading up
@@ -2516,7 +2498,7 @@ either individually or as a list.</p>
 class name selects just that class. When comparing runs, <code class="docutils literal notranslate"><span class="pre">agg_booking_classes=True</span></code> combines the
 classes.</p>
 <p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_leg_forecasts" title="passengersim.summaries.SimulationTables.fig_leg_forecasts (Python method)"><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_leg_forecasts</span></code></span></a>
-on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabLegCallbackDetail, SimTabSegmentationDetail, SimTabServices, SimTabLegBuckets, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
+on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabBidPriceHistory, SimTabContinuousPricingSegmentation, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabLegBuckets, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, SimTabServices, SimTabCabins, SimTabDemandToCome, SimTabCarriers, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">recorded_summary</span><span class="o">.</span><span class="n">fig_leg_forecasts</span><span class="p">(</span><span class="n">by_leg_id</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span> <span class="n">of</span><span class="o">=</span><span class="s2">&quot;mu&quot;</span><span class="p">)</span>
@@ -2526,23 +2508,23 @@ on a single <a class="reference internal" href="../../api/_generated/summaries/p
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-581b37a616b6437da32adb16823e2ffb.vega-embed {
+  #altair-viz-3c0a7d5ff05049c59f6a9ec61996975a.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-581b37a616b6437da32adb16823e2ffb.vega-embed details,
-  #altair-viz-581b37a616b6437da32adb16823e2ffb.vega-embed details summary {
+  #altair-viz-3c0a7d5ff05049c59f6a9ec61996975a.vega-embed details,
+  #altair-viz-3c0a7d5ff05049c59f6a9ec61996975a.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-581b37a616b6437da32adb16823e2ffb"></div>
+<div id="altair-viz-3c0a7d5ff05049c59f6a9ec61996975a"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-581b37a616b6437da32adb16823e2ffb") {
-      outputDiv = document.getElementById("altair-viz-581b37a616b6437da32adb16823e2ffb");
+    if (outputDiv.id !== "altair-viz-3c0a7d5ff05049c59f6a9ec61996975a") {
+      outputDiv = document.getElementById("altair-viz-3c0a7d5ff05049c59f6a9ec61996975a");
     }
 
     const paths = {
@@ -2604,23 +2586,23 @@ on a single <a class="reference internal" href="../../api/_generated/summaries/p
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-5c691ff2063b436283bf48ff273ef401.vega-embed {
+  #altair-viz-c3ee4c2f268c4ea19436492716baebb7.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-5c691ff2063b436283bf48ff273ef401.vega-embed details,
-  #altair-viz-5c691ff2063b436283bf48ff273ef401.vega-embed details summary {
+  #altair-viz-c3ee4c2f268c4ea19436492716baebb7.vega-embed details,
+  #altair-viz-c3ee4c2f268c4ea19436492716baebb7.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-5c691ff2063b436283bf48ff273ef401"></div>
+<div id="altair-viz-c3ee4c2f268c4ea19436492716baebb7"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-5c691ff2063b436283bf48ff273ef401") {
-      outputDiv = document.getElementById("altair-viz-5c691ff2063b436283bf48ff273ef401");
+    if (outputDiv.id !== "altair-viz-c3ee4c2f268c4ea19436492716baebb7") {
+      outputDiv = document.getElementById("altair-viz-c3ee4c2f268c4ea19436492716baebb7");
     }
 
     const paths = {
@@ -2681,7 +2663,7 @@ closures. Paths also support <code class="docutils literal notranslate"><span cl
 <p>For comparisons, you can request several measures with a list, give paths friendlier labels with
 <code class="docutils literal notranslate"><span class="pre">path_names</span></code>, or combine booking classes with <code class="docutils literal notranslate"><span class="pre">agg_booking_classes=True</span></code>.</p>
 <p>For one run, call <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables.fig_path_forecasts" title="passengersim.summaries.SimulationTables.fig_path_forecasts (Python method)"><span class="xref myst py py-meth"><code class="docutils literal notranslate"><span class="pre">fig_path_forecasts</span></code></span></a>
-on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabLegCallbackDetail, SimTabSegmentationDetail, SimTabServices, SimTabLegBuckets, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
+on a single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabBidPriceHistory, SimTabContinuousPricingSegmentation, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabLegBuckets, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, SimTabServices, SimTabCabins, SimTabDemandToCome, SimTabCarriers, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">recorded_summary</span><span class="o">.</span><span class="n">fig_path_forecasts</span><span class="p">(</span><span class="n">by_path_id</span><span class="o">=</span><span class="mi">111</span><span class="p">,</span> <span class="n">of</span><span class="o">=</span><span class="s2">&quot;mu&quot;</span><span class="p">)</span>
@@ -2691,23 +2673,23 @@ on a single <a class="reference internal" href="../../api/_generated/summaries/p
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-1b5fa733a8e54318ad6ce1a4339d775f.vega-embed {
+  #altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-1b5fa733a8e54318ad6ce1a4339d775f.vega-embed details,
-  #altair-viz-1b5fa733a8e54318ad6ce1a4339d775f.vega-embed details summary {
+  #altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd.vega-embed details,
+  #altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-1b5fa733a8e54318ad6ce1a4339d775f"></div>
+<div id="altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-1b5fa733a8e54318ad6ce1a4339d775f") {
-      outputDiv = document.getElementById("altair-viz-1b5fa733a8e54318ad6ce1a4339d775f");
+    if (outputDiv.id !== "altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd") {
+      outputDiv = document.getElementById("altair-viz-04c1cf7b01e54ec68c6dfc96c30051cd");
     }
 
     const paths = {
@@ -2769,23 +2751,23 @@ on a single <a class="reference internal" href="../../api/_generated/summaries/p
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-29f15403c4184c0e97a3bca6337260a2.vega-embed {
+  #altair-viz-1966db45b46947cb82c7e2aa8a376ee9.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-29f15403c4184c0e97a3bca6337260a2.vega-embed details,
-  #altair-viz-29f15403c4184c0e97a3bca6337260a2.vega-embed details summary {
+  #altair-viz-1966db45b46947cb82c7e2aa8a376ee9.vega-embed details,
+  #altair-viz-1966db45b46947cb82c7e2aa8a376ee9.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-29f15403c4184c0e97a3bca6337260a2"></div>
+<div id="altair-viz-1966db45b46947cb82c7e2aa8a376ee9"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-29f15403c4184c0e97a3bca6337260a2") {
-      outputDiv = document.getElementById("altair-viz-29f15403c4184c0e97a3bca6337260a2");
+    if (outputDiv.id !== "altair-viz-1966db45b46947cb82c7e2aa8a376ee9") {
+      outputDiv = document.getElementById("altair-viz-1966db45b46947cb82c7e2aa8a376ee9");
     }
 
     const paths = {
@@ -2848,7 +2830,7 @@ see which classes contribute to the forecast and how those expectations change a
 approaches. Choose the leg with <code class="docutils literal notranslate"><span class="pre">leg_id</span></code>.</p>
 <p>For one run, call
 <a class="reference internal" href="../../api/_generated/tracers/passengersim.tracers.forecasts.fig_leg_forecast_dashboard.html#passengersim.tracers.forecasts.fig_leg_forecast_dashboard" title="passengersim.tracers.forecasts.fig_leg_forecast_dashboard (Python function) — Create a dashboard of leg forecasts."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_leg_forecast_dashboard</span></code></span></a> with a
-single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabLegCallbackDetail, SimTabSegmentationDetail, SimTabServices, SimTabLegBuckets, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object. This is a standalone
+single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabBidPriceHistory, SimTabContinuousPricingSegmentation, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabLegBuckets, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, SimTabServices, SimTabCabins, SimTabDemandToCome, SimTabCarriers, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object. This is a standalone
 function, imported in the collection code above:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2859,23 +2841,23 @@ function, imported in the collection code above:</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-7adf061a057543f98554a8b6b486f4d2.vega-embed {
+  #altair-viz-4b240c0422c9443ea32b5e66cf385644.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-7adf061a057543f98554a8b6b486f4d2.vega-embed details,
-  #altair-viz-7adf061a057543f98554a8b6b486f4d2.vega-embed details summary {
+  #altair-viz-4b240c0422c9443ea32b5e66cf385644.vega-embed details,
+  #altair-viz-4b240c0422c9443ea32b5e66cf385644.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-7adf061a057543f98554a8b6b486f4d2"></div>
+<div id="altair-viz-4b240c0422c9443ea32b5e66cf385644"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-7adf061a057543f98554a8b6b486f4d2") {
-      outputDiv = document.getElementById("altair-viz-7adf061a057543f98554a8b6b486f4d2");
+    if (outputDiv.id !== "altair-viz-4b240c0422c9443ea32b5e66cf385644") {
+      outputDiv = document.getElementById("altair-viz-4b240c0422c9443ea32b5e66cf385644");
     }
 
     const paths = {
@@ -2939,23 +2921,23 @@ by side:</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-27ca531d19484a99879ca2576ba69678.vega-embed {
+  #altair-viz-300c64e4728d4d6dade60ce632a417ce.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-27ca531d19484a99879ca2576ba69678.vega-embed details,
-  #altair-viz-27ca531d19484a99879ca2576ba69678.vega-embed details summary {
+  #altair-viz-300c64e4728d4d6dade60ce632a417ce.vega-embed details,
+  #altair-viz-300c64e4728d4d6dade60ce632a417ce.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-27ca531d19484a99879ca2576ba69678"></div>
+<div id="altair-viz-300c64e4728d4d6dade60ce632a417ce"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-27ca531d19484a99879ca2576ba69678") {
-      outputDiv = document.getElementById("altair-viz-27ca531d19484a99879ca2576ba69678");
+    if (outputDiv.id !== "altair-viz-300c64e4728d4d6dade60ce632a417ce") {
+      outputDiv = document.getElementById("altair-viz-300c64e4728d4d6dade60ce632a417ce");
     }
 
     const paths = {
@@ -3012,7 +2994,7 @@ adjusted fares by timeframe, so you can review those alongside the demand foreca
 with <code class="docutils literal notranslate"><span class="pre">path_id</span></code>.</p>
 <p>For one run, call
 <a class="reference internal" href="../../api/_generated/tracers/passengersim.tracers.forecasts.fig_path_forecast_dashboard.html#passengersim.tracers.forecasts.fig_path_forecast_dashboard" title="passengersim.tracers.forecasts.fig_path_forecast_dashboard (Python function) — Create a dashboard of path forecasts."><span class="xref myst py py-func"><code class="docutils literal notranslate"><span class="pre">fig_path_forecast_dashboard</span></code></span></a> with a
-single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabDemandToCome, SimTabCarriers, SimTabCabins, SimTabFareClassMix, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabLegCallbackDetail, SimTabSegmentationDetail, SimTabServices, SimTabLegBuckets, SimTabContinuousPricingSegmentation, SimTabBidPriceHistory, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
+single <a class="reference internal" href="../../api/_generated/summaries/passengersim.summaries.SimulationTables.html#passengersim.summaries.SimulationTables" title="passengersim.summaries.SimulationTables (Python class) — Bases: SimTabBidPriceHistory, SimTabContinuousPricingSegmentation, SimTabDemands, SimTabDisplacementHistory, SimTabForecasts, SimTabLegBidPriceHistory, SimTabLegBuckets, SimTabPaths, SimTabPathLegs, SimTabSegByTimeframe, SimTabServices, SimTabCabins, SimTabDemandToCome, SimTabCarriers, SimTabFareClassMix, SimTabLegCallbackDetail, SimTabLegs, SimTabLocalAndFlowYields, SimTabPathBidPriceHistory, SimTabPathClasses, SimTabSegmentationDetail, GenericSimulationTables"><span class="xref myst py py-class"><code class="docutils literal notranslate"><span class="pre">SimulationTables</span></code></span></a> object:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><code><span class="n">fig_path_forecast_dashboard</span><span class="p">(</span><span class="n">recorded_summary</span><span class="p">,</span> <span class="n">path_id</span><span class="o">=</span><span class="mi">111</span><span class="p">)</span>
@@ -3022,23 +3004,23 @@ single <a class="reference internal" href="../../api/_generated/summaries/passen
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-257fd1e5152243a99f4810392593e1b9.vega-embed {
+  #altair-viz-e4564fef0e9f4440a61c06b65fe0e061.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-257fd1e5152243a99f4810392593e1b9.vega-embed details,
-  #altair-viz-257fd1e5152243a99f4810392593e1b9.vega-embed details summary {
+  #altair-viz-e4564fef0e9f4440a61c06b65fe0e061.vega-embed details,
+  #altair-viz-e4564fef0e9f4440a61c06b65fe0e061.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-257fd1e5152243a99f4810392593e1b9"></div>
+<div id="altair-viz-e4564fef0e9f4440a61c06b65fe0e061"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-257fd1e5152243a99f4810392593e1b9") {
-      outputDiv = document.getElementById("altair-viz-257fd1e5152243a99f4810392593e1b9");
+    if (outputDiv.id !== "altair-viz-e4564fef0e9f4440a61c06b65fe0e061") {
+      outputDiv = document.getElementById("altair-viz-e4564fef0e9f4440a61c06b65fe0e061");
     }
 
     const paths = {
@@ -3102,23 +3084,23 @@ which runs to show:</p>
 <div class="cell_output docutils container">
 <div class="output text_html">
 <style>
-  #altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f.vega-embed {
+  #altair-viz-0b67d03e9a9845b6896f0eaf452f225c.vega-embed {
     width: 100%;
     display: flex;
   }
 
-  #altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f.vega-embed details,
-  #altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f.vega-embed details summary {
+  #altair-viz-0b67d03e9a9845b6896f0eaf452f225c.vega-embed details,
+  #altair-viz-0b67d03e9a9845b6896f0eaf452f225c.vega-embed details summary {
     position: relative;
   }
 </style>
-<div id="altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f"></div>
+<div id="altair-viz-0b67d03e9a9845b6896f0eaf452f225c"></div>
 <script type="text/javascript">
   var VEGA_DEBUG = (typeof VEGA_DEBUG == "undefined") ? {} : VEGA_DEBUG;
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f") {
-      outputDiv = document.getElementById("altair-viz-c87fc0eaff6b4fbbb021ea970fc5c92f");
+    if (outputDiv.id !== "altair-viz-0b67d03e9a9845b6896f0eaf452f225c") {
+      outputDiv = document.getElementById("altair-viz-0b67d03e9a9845b6896f0eaf452f225c");
     }
 
     const paths = {

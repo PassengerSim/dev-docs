@@ -46,8 +46,10 @@ callbacks
 .. autosummary::
    :toctree: .
 
+   register_callback
    register_callback_factory
    register_combiner
+   register_tracer
    register_tracer_factory
    register_begin_sample_callback
    register_daily_callback

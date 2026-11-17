@@ -2213,7 +2213,7 @@
       <span aria-label="Python method" class="objinfo-icon objinfo-icon__procedure" title="Python method">M</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
+      <span title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
     </span>
   </a>
   
@@ -2589,7 +2589,7 @@
       <span aria-label="Python method" class="objinfo-icon objinfo-icon__procedure" title="Python method">M</span>
     
     <span class="md-ellipsis">
-      <span title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
+      <span title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><span>on_<wbr>finalize_<wbr>sample</span></span>
     </span>
   </a>
   
@@ -2641,12 +2641,18 @@
 <ul class="simple">
 <li><p><strong>Hook methods.</strong> Override one or more of <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_initialize_sample" title="passengersim.tracers.generic.GenericTracer.on_initialize_sample (Python method) — Observe the start of a sample, before its demand is generated."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_initialize_sample()</span></code></a>,
 <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_begin_sample" title="passengersim.tracers.generic.GenericTracer.on_begin_sample (Python method) — Observe a sample after its first DCP, before any customer arrives."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_begin_sample()</span></code></a>, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_daily" title="passengersim.tracers.generic.GenericTracer.on_daily (Python method) — Observe each day of a sample."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_daily()</span></code></a>, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_end_sample" title="passengersim.tracers.generic.GenericTracer.on_end_sample (Python method) — Observe the end of a sample, before counters are reset."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_end_sample()</span></code></a>, and
-<a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample" title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_finalize_sample()</span></code></a>. The tracer is attached to every hook whose
+<a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample" title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><code class="xref py py-meth docutils literal notranslate"><span class="pre">on_finalize_sample()</span></code></a>. The tracer is attached to every hook whose
 method it overrides, and one copy of the tracer receives all of them,
 so it can, for example, compare the start and end of each sample.</p></li>
 <li><p><strong>Legacy.</strong> Set the class attribute <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.hook" title="passengersim.tracers.generic.GenericTracer.hook (Python attribute) — Lifecycle hook at which a legacy-form tracer's __call__ runs."><code class="xref py py-attr docutils literal notranslate"><span class="pre">hook</span></code></a> and define
 <code class="docutils literal notranslate"><span class="pre">__call__</span></code>, which runs on that one hook.</p></li>
 </ul>
+<p>The time at which a queued hook (<code class="docutils literal notranslate"><span class="pre">begin_sample</span></code>, <code class="docutils literal notranslate"><span class="pre">daily</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">end_sample</span></code>) runs can be shifted with an offset in seconds, as for a
+plain callback, by setting a <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute. A hook-method
+tracer has just one <code class="docutils literal notranslate"><span class="pre">priority</span></code>, which applies to all of its queued
+hooks, so it observes every DCP from the same side of the RM systems
+and the simulation’s bookkeeping.</p>
 <p>Subclasses must implement <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.reset" title="passengersim.tracers.generic.GenericTracer.reset (Python method) — Reset the internal counters on this tracer to a null state."><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> and <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.finalize" title="passengersim.tracers.generic.GenericTracer.finalize (Python method) — Convert the internal counters on this tracer to a dataframe."><code class="xref py py-meth docutils literal notranslate"><span class="pre">finalize()</span></code></a>. The
 <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.fresh" title="passengersim.tracers.generic.GenericTracer.fresh (Python method) — Return a fresh copy of this tracer, tracing the same targets but not sharing state."><code class="xref py py-meth docutils literal notranslate"><span class="pre">fresh()</span></code></a>, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.attach" title="passengersim.tracers.generic.GenericTracer.attach (Python method) — Attach a fresh copy of this tracer to a simulation, on all its hooks."><code class="xref py py-meth docutils literal notranslate"><span class="pre">attach()</span></code></a>, and <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.setup" title="passengersim.tracers.generic.GenericTracer.setup (Python method) — Prepare to trace a run, once its scenario has been built."><code class="xref py py-meth docutils literal notranslate"><span class="pre">setup()</span></code></a> methods have working
 defaults.</p>
@@ -2656,9 +2662,9 @@ finalized after the last trial. See the user guide for the full lifecycle.</p>
 <p>Subclasses that can be enabled from a configuration declare, beside their
 constructor, everything a configured-callback registration needs:
 <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.name" title="passengersim.tracers.generic.GenericTracer.name (Python attribute) — Result key in callback_data."><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a>, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.options_model" title="passengersim.tracers.generic.GenericTracer.options_model (Python attribute) — Pydantic model of the constructor's keyword options, for configured callbacks."><code class="xref py py-attr docutils literal notranslate"><span class="pre">options_model</span></code></a>, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.options_version" title="passengersim.tracers.generic.GenericTracer.options_version (Python attribute) — Configured-callback implementation version; bump when results change meaning."><code class="xref py py-attr docutils literal notranslate"><span class="pre">options_version</span></code></a>, and, for
-the legacy form, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.hook" title="passengersim.tracers.generic.GenericTracer.hook (Python attribute) — Lifecycle hook at which a legacy-form tracer's __call__ runs."><code class="xref py py-attr docutils literal notranslate"><span class="pre">hook</span></code></a>. Then
-<a class="reference internal" href="../callbacks/passengersim.callbacks.register_tracer_factory.html#passengersim.callbacks.register_tracer_factory" title="passengersim.callbacks.register_tracer_factory (Python function) — Register a tracer using the configuration it declares on its class."><code class="xref py py-func docutils literal notranslate"><span class="pre">passengersim.callbacks.register_tracer_factory()</span></code></a> registers the class
-without restating any of them.</p>
+the legacy form, <a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.hook" title="passengersim.tracers.generic.GenericTracer.hook (Python attribute) — Lifecycle hook at which a legacy-form tracer's __call__ runs."><code class="xref py py-attr docutils literal notranslate"><span class="pre">hook</span></code></a>. Then <a class="reference internal" href="../callbacks/passengersim.callbacks.register_tracer.html#passengersim.callbacks.register_tracer" title="passengersim.callbacks.register_tracer (Python function) — Make a tracer class available to config.callbacks, without attaching it."><code class="xref py py-func docutils literal notranslate"><span class="pre">passengersim.callbacks.register_tracer()</span></code></a>
+(usable as a class decorator) registers the class without restating any
+of them.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable docutils data align-default">
 <tbody>
@@ -2683,8 +2689,8 @@ without restating any of them.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_end_sample" title="passengersim.tracers.generic.GenericTracer.on_end_sample (Python method) — Observe the end of a sample, before counters are reset."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_end_sample</span></code></a>(sim)</p></td>
 <td><p>Observe the end of a sample, before counters are reset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample" title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after all its events have finished."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_finalize_sample</span></code></a>(sim)</p></td>
-<td><p>Observe a sample after all its events have finished.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample" title="passengersim.tracers.generic.GenericTracer.on_finalize_sample (Python method) — Observe a sample after its events and bookkeeping have finished."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_finalize_sample</span></code></a>(sim)</p></td>
+<td><p>Observe a sample after its events and bookkeeping have finished.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#passengersim.tracers.generic.GenericTracer.on_initialize_sample" title="passengersim.tracers.generic.GenericTracer.on_initialize_sample (Python method) — Observe the start of a sample, before its demand is generated."><code class="xref py py-obj docutils literal notranslate"><span class="pre">on_initialize_sample</span></code></a>(sim)</p></td>
 <td><p>Observe the start of a sample, before its demand is generated.</p></td>
@@ -2837,7 +2843,9 @@ A returned dictionary is stored under
 <dt class="sig sig-object highlight py" id="passengersim.tracers.generic.GenericTracer.on_begin_sample">
 <span class="sig-name descname"><span class="pre">on_begin_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.generic.GenericTracer.on_begin_sample.sim" title="passengersim.tracers.generic.GenericTracer.on_begin_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="reference internal" href="../../../_modules/passengersim/callbacks/tracer.html#GenericTracer.on_begin_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#passengersim.tracers.generic.GenericTracer.on_begin_sample" title="Link to this definition">¶</a></dt>
 <dd><p>Observe a sample after its first DCP, before any customer arrives.</p>
-<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> hook.</p>
+<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">begin_sample</span></code> hook. Its
+time is set by the tracer’s <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute, if it has one,
+as for a plain begin-sample callback.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple api-field highlight">
@@ -2871,7 +2879,9 @@ for a plain daily callback.</p>
 <dt class="sig sig-object highlight py" id="passengersim.tracers.generic.GenericTracer.on_end_sample">
 <span class="sig-name descname"><span class="pre">on_end_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.generic.GenericTracer.on_end_sample.sim" title="passengersim.tracers.generic.GenericTracer.on_end_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="reference internal" href="../../../_modules/passengersim/callbacks/tracer.html#GenericTracer.on_end_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#passengersim.tracers.generic.GenericTracer.on_end_sample" title="Link to this definition">¶</a></dt>
 <dd><p>Observe the end of a sample, before counters are reset.</p>
-<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> hook.</p>
+<p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">end_sample</span></code> hook. Its
+time is set by the tracer’s <code class="docutils literal notranslate"><span class="pre">priority</span></code> attribute, if it has one,
+as for a plain end-sample callback.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple api-field highlight">
@@ -2885,7 +2895,7 @@ for a plain daily callback.</p>
 <dl class="py method objdesc">
 <dt class="sig sig-object highlight py" id="passengersim.tracers.generic.GenericTracer.on_finalize_sample">
 <span class="sig-name descname"><span class="pre">on_finalize_sample</span></span><span class="sig-paren">(</span><span class="sig-param-decl"><em class="sig-param"><a class="n reference internal" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample.sim" title="passengersim.tracers.generic.GenericTracer.on_finalize_sample.sim (Python parameter) — The running simulation."><span class="n"><span class="pre">sim</span></span></a><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="desctype"><a class="reference internal" href="../driver/passengersim.driver.Simulation.html#passengersim.driver.Simulation" title="passengersim.driver.Simulation (Python class) — Bases: BaseSimulation, CallbackMixin, Firehose"><span class="pre">Simulation</span></a></span></span></em></span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="desctype"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span></span><a class="reference internal" href="../../../_modules/passengersim/callbacks/tracer.html#GenericTracer.on_finalize_sample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#passengersim.tracers.generic.GenericTracer.on_finalize_sample" title="Link to this definition">¶</a></dt>
-<dd><p>Observe a sample after all its events have finished.</p>
+<dd><p>Observe a sample after its events and bookkeeping have finished.</p>
 <p>Override this to attach the tracer to the <code class="docutils literal notranslate"><span class="pre">finalize_sample</span></code> hook.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
