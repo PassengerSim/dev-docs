@@ -4,14 +4,3 @@
    :recursive:
 
    passengersim.callbacks
-
-.. autosummary::
-   :toctree: _generated/callbacks
-
-   passengersim.config.CallbackConfig
-   passengersim.callbacks.register_callback_factory
-   passengersim.callbacks.register_tracer_factory
-   passengersim.callbacks.register_begin_sample_callback
-   passengersim.callbacks.register_daily_callback
-   passengersim.callbacks.register_end_sample_callback
-   passengersim.callbacks.CallbackMixin.use_registered_callbacks

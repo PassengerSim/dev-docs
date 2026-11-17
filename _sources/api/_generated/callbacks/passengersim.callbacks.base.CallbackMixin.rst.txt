@@ -21,10 +21,21 @@ CallbackMixin
       ~CallbackMixin.end_sample_callback
       ~CallbackMixin.finalize_sample_callback
       ~CallbackMixin.initialize_sample_callback
+      ~CallbackMixin.remove_callback
       ~CallbackMixin.use_registered_callbacks
    
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CallbackMixin.begin_sample_callbacks
+      ~CallbackMixin.daily_callbacks
+      ~CallbackMixin.end_sample_callbacks
+      ~CallbackMixin.finalize_sample_callbacks
+      ~CallbackMixin.initialize_sample_callbacks
    
    

@@ -1,4 +1,4 @@
-﻿register\_callback\_factory
+register\_callback\_factory
 ===========================
 
 .. currentmodule:: passengersim.callbacks

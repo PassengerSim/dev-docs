@@ -16,7 +16,13 @@ SegmentationTracer
       ~SegmentationTracer.attach
       ~SegmentationTracer.finalize
       ~SegmentationTracer.fresh
+      ~SegmentationTracer.on_begin_sample
+      ~SegmentationTracer.on_daily
+      ~SegmentationTracer.on_end_sample
+      ~SegmentationTracer.on_finalize_sample
+      ~SegmentationTracer.on_initialize_sample
       ~SegmentationTracer.reset
+      ~SegmentationTracer.setup
    
    
 
@@ -29,6 +35,7 @@ SegmentationTracer
       ~SegmentationTracer.hook
       ~SegmentationTracer.name
       ~SegmentationTracer.options_version
+      ~SegmentationTracer.skip_burn
       ~SegmentationTracer.markets
       ~SegmentationTracer.carriers
       ~SegmentationTracer.segments

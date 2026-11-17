@@ -16,7 +16,13 @@ PathForecastTracer
       ~PathForecastTracer.attach
       ~PathForecastTracer.finalize
       ~PathForecastTracer.fresh
+      ~PathForecastTracer.on_begin_sample
+      ~PathForecastTracer.on_daily
+      ~PathForecastTracer.on_end_sample
+      ~PathForecastTracer.on_finalize_sample
+      ~PathForecastTracer.on_initialize_sample
       ~PathForecastTracer.reset
+      ~PathForecastTracer.setup
    
    
 
@@ -29,5 +35,6 @@ PathForecastTracer
       ~PathForecastTracer.hook
       ~PathForecastTracer.name
       ~PathForecastTracer.options_version
+      ~PathForecastTracer.skip_burn
    
    

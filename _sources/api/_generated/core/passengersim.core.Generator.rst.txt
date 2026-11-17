@@ -1,0 +1,32 @@
+Generator
+=========
+
+.. currentmodule:: passengersim.core
+
+.. autoclass:: Generator
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Generator.__init__
+      ~Generator.fork
+      ~Generator.get_normal
+      ~Generator.get_uniform
+      ~Generator.seed
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Generator.bitgenerator
+      ~Generator.bitgenerator_class
+   
+   

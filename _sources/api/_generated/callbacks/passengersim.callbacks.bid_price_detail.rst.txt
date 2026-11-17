@@ -21,6 +21,7 @@ bid\_price\_detail
    :template: autosummary/class.rst
 
    LegBidPriceDetailOptions
+   LegBidPriceDetailTracer
 
 
 

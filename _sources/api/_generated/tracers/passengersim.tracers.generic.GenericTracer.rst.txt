@@ -16,7 +16,13 @@ GenericTracer
       ~GenericTracer.attach
       ~GenericTracer.finalize
       ~GenericTracer.fresh
+      ~GenericTracer.on_begin_sample
+      ~GenericTracer.on_daily
+      ~GenericTracer.on_end_sample
+      ~GenericTracer.on_finalize_sample
+      ~GenericTracer.on_initialize_sample
       ~GenericTracer.reset
+      ~GenericTracer.setup
    
    
 
@@ -29,6 +35,7 @@ GenericTracer
       ~GenericTracer.name
       ~GenericTracer.options_model
       ~GenericTracer.options_version
+      ~GenericTracer.skip_burn
       ~GenericTracer.hook
    
    

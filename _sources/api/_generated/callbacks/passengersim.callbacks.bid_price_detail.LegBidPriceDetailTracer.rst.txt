@@ -1,0 +1,43 @@
+LegBidPriceDetailTracer
+=======================
+
+.. currentmodule:: passengersim.callbacks.bid_price_detail
+
+.. autoclass:: LegBidPriceDetailTracer
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegBidPriceDetailTracer.__init__
+      ~LegBidPriceDetailTracer.attach
+      ~LegBidPriceDetailTracer.finalize
+      ~LegBidPriceDetailTracer.fresh
+      ~LegBidPriceDetailTracer.on_begin_sample
+      ~LegBidPriceDetailTracer.on_daily
+      ~LegBidPriceDetailTracer.on_end_sample
+      ~LegBidPriceDetailTracer.on_finalize_sample
+      ~LegBidPriceDetailTracer.on_initialize_sample
+      ~LegBidPriceDetailTracer.reset
+      ~LegBidPriceDetailTracer.setup
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegBidPriceDetailTracer.hook
+      ~LegBidPriceDetailTracer.name
+      ~LegBidPriceDetailTracer.options_version
+      ~LegBidPriceDetailTracer.skip_burn
+      ~LegBidPriceDetailTracer.include_sold_out
+      ~LegBidPriceDetailTracer.leg_ids
+      ~LegBidPriceDetailTracer.priority
+   
+   

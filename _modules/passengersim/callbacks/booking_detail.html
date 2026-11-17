@@ -1374,6 +1374,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../networks/ahab/index.html" class="md-nav__link">
+        
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
+</svg>
+  
+  
+  <span class="md-ellipsis">
+    <span>Ahab Network</span>
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../networks/u25/index.html" class="md-nav__link">
         
   
@@ -1485,34 +1513,6 @@
 
               
             
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../networks/ahab/index.html" class="md-nav__link">
-        
-  
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-  <path d="M2 2h8v6a4 4 0 0 1-3 3.87V19H5v-7.13A4 4 0 0 1 2 8V2Zm3 18h2l1 2H4l1-2ZM13 2h7l1 8-4.5-1L12 10l1-8Zm1 10 2.5-1 2.5 1v5l2.1 1.05a1.6 1.6 0 0 1 .9 1.43V22h-4l-2-2v2h-2V12Z"/>
-</svg>
-  
-  
-  <span class="md-ellipsis">
-    <span>Ahab Network</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
@@ -1598,174 +1598,6 @@
   
   <span class="md-ellipsis">
     <span>callbacks</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.config.CallbackConfig.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Callback<wbr>Config</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.register_callback_factory.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>register_<wbr>callback_<wbr>factory</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.register_tracer_factory.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>register_<wbr>tracer_<wbr>factory</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.register_begin_sample_callback.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>register_<wbr>begin_<wbr>sample_<wbr>callback</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.register_daily_callback.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>register_<wbr>daily_<wbr>callback</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.register_end_sample_callback.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>register_<wbr>end_<wbr>sample_<wbr>callback</span>
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../api/_generated/callbacks/passengersim.callbacks.CallbackMixin.use_registered_callbacks.html" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    <span>Callback<wbr>Mixin.<wbr>use_<wbr>registered_<wbr>callbacks</span>
     
   </span>
   
@@ -2080,20 +1912,24 @@
 
 
 <h1>Source code for passengersim.callbacks.booking_detail</h1><div class="highlight"><pre>
-<span></span><code><span class="sd">&quot;&quot;&quot;Daily callback collecting cumulative sales for selected legs.</span>
+<span></span><code><span class="sd">&quot;&quot;&quot;Daily tracer collecting cumulative sales for selected legs.</span>
 
-<span class="sd">Attach :func:`collect_leg_booking_detail` manually, or enable it in a</span>
-<span class="sd">configuration as the ``leg_booking_detail`` configured callback. The results</span>
-<span class="sd">are available on summaries as ``leg_booking_detail`` and</span>
-<span class="sd">``fig_leg_booking_detail_rake`` (see</span>
+<span class="sd">Attach :func:`collect_leg_booking_detail` (a :class:`LegBookingDetailTracer`)</span>
+<span class="sd">manually, or enable it in a configuration as the ``leg_booking_detail``</span>
+<span class="sd">configured callback. The results are available on summaries as</span>
+<span class="sd">``leg_booking_detail`` and ``fig_leg_booking_detail_rake`` (see</span>
 <span class="sd">:class:`passengersim.summaries.leg_callback_detail.SimTabLegCallbackDetail`).</span>
+
+<span class="sd">Results saved before this collector became a tracer hold the same values as</span>
+<span class="sd">rows of ``callback_data.daily``, with keys such as ``leg-101-sold``; the</span>
+<span class="sd">readers in this module accept both.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">altair</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">alt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -2105,49 +1941,128 @@
 <span class="c1"># from the package namespace or from the summaries package at runtime.</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackData</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.configured</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackDefinition</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tracer</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericTracer</span>
 
 <span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
 
-    <span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackMixin</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.summaries</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulationTables</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">passengersim.summaries.generic</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenericSimulationTables</span>
 
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_collect_leg_booking_detail</span><span class="p">(</span><span class="n">sim</span><span class="p">:</span> <span class="n">CallbackMixin</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">leg_ids</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A daily callback function to collect sales for selected legs.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span> <span class="o">&lt;</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">burn_samples</span><span class="p">:</span>
-        <span class="c1"># don&#39;t collect data during burn period</span>
-        <span class="k">return</span> <span class="kc">None</span>
-    <span class="c1"># create a dictionary to store the sales for each leg</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="c1"># iterate over all legs in the simulation engine, and collect the current leg sales</span>
-    <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">legs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">leg</span><span class="o">.</span><span class="n">leg_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">leg_ids</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="n">out</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;leg-</span><span class="si">{</span><span class="n">leg</span><span class="o">.</span><span class="n">leg_id</span><span class="si">}</span><span class="s2">-sold&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">leg</span><span class="o">.</span><span class="n">sold</span>
-    <span class="c1"># return the value, which will be end up as &quot;callback_data&quot; in the results</span>
-    <span class="k">return</span> <span class="n">out</span>
+<span class="n">DETAIL_INDEX_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;trial&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;days_prior&quot;</span><span class="p">]</span>
+<span class="sd">&quot;&quot;&quot;Index levels of the per-sample detail tables.&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="collect_leg_booking_detail">
-<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.collect_leg_booking_detail.html#passengersim.callbacks.booking_detail.collect_leg_booking_detail">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">collect_leg_booking_detail</span><span class="p">(</span><span class="n">leg_ids</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a daily callback that records cumulative sales for selected legs.</span>
+<div class="viewcode-block" id="LegDetailTracer">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegDetailTracer.html#passengersim.callbacks.booking_detail.LegDetailTracer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LegDetailTracer</span><span class="p">(</span><span class="n">GenericTracer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base for daily tracers keeping one value per leg, sample, and day.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    leg_ids : collection of int</span>
-<span class="sd">        The legs to record.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    Callable</span>
-<span class="sd">        A daily callback returning ``{&quot;leg-&lt;id&gt;-sold&quot;: sold}`` for each selected</span>
-<span class="sd">        leg, or None during burn-in samples.</span>
+<span class="sd">    Each call records one row, keyed by ``(trial, sample, days_prior)``, with</span>
+<span class="sd">    one column per selected leg. Unlike the summary-statistic tracers, every</span>
+<span class="sd">    observation is kept, so quantiles can be computed afterwards. Subclasses</span>
+<span class="sd">    set :attr:`name` and implement :meth:`_value`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">leg_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">leg_ids</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">partial</span><span class="p">(</span><span class="n">_collect_leg_booking_detail</span><span class="p">,</span> <span class="n">leg_ids</span><span class="o">=</span><span class="n">leg_ids</span><span class="p">)</span></div>
+
+    <span class="n">hook</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;begin_sample&quot;</span><span class="p">,</span> <span class="s2">&quot;daily&quot;</span><span class="p">,</span> <span class="s2">&quot;end_sample&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="s2">&quot;daily&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lifecycle hook shared by manual and configured attachment.&quot;&quot;&quot;</span>
+
+    <span class="n">skip_burn</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Burn-in samples are not recorded.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LegDetailTracer.__init__">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegDetailTracer.html#passengersim.callbacks.booking_detail.LegDetailTracer.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="o">*</span><span class="p">,</span> <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the tracer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        leg_ids : Iterable[int]</span>
+<span class="sd">            The legs to record. IDs not found in the simulation are ignored.</span>
+<span class="sd">        priority : int, default 1</span>
+<span class="sd">            Daily offset in seconds from the overnight trigger; positive</span>
+<span class="sd">            values run after the RM systems and the simulation&#39;s daily</span>
+<span class="sd">            bookkeeping. Zero is not allowed.</span>
+<span class="sd">        name : str, optional</span>
+<span class="sd">            Key for the results in ``callback_data``; defaults to the class</span>
+<span class="sd">            name. The summary accessors read only the default name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leg_ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">leg_ids</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;IDs of the legs to record.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">priority</span> <span class="o">=</span> <span class="n">priority</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Daily callback priority, see :meth:`CallbackMixin.daily_callback`.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LegDetailTracer.reset">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegDetailTracer.html#passengersim.callbacks.booking_detail.LegDetailTracer.reset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Discard all recorded rows, and forget the selected legs.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_legs</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Drop references to live engine objects when pickling.&quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">state</span><span class="p">[</span><span class="s2">&quot;_legs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">state</span>
+
+<div class="viewcode-block" id="LegDetailTracer.setup">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegDetailTracer.html#passengersim.callbacks.booking_detail.LegDetailTracer.setup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Select the legs to record, in the simulation&#39;s leg order.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sim : Simulation</span>
+<span class="sd">            The simulation about to run.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_legs</span> <span class="o">=</span> <span class="p">[</span><span class="n">leg</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">legs</span> <span class="k">if</span> <span class="n">leg</span><span class="o">.</span><span class="n">leg_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">leg_ids</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">leg</span><span class="o">.</span><span class="n">leg_id</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legs</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The value recorded for one leg; implemented by subclasses.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sim</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Record one row of values for the selected legs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sim : Simulation</span>
+<span class="sd">            The running simulation.</span>
+<span class="sd">        days_prior : int</span>
+<span class="sd">            Days remaining before departure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Normally done by setup(); kept for a tracer called directly.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">sim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">trial</span><span class="p">,</span> <span class="n">sim</span><span class="o">.</span><span class="n">eng</span><span class="o">.</span><span class="n">sample</span><span class="p">,</span> <span class="n">days_prior</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">(</span><span class="n">leg</span><span class="p">)</span> <span class="k">for</span> <span class="n">leg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_legs</span><span class="p">])</span>
+
+<div class="viewcode-block" id="LegDetailTracer.finalize">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegDetailTracer.html#passengersim.callbacks.booking_detail.LegDetailTracer.finalize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the recorded rows into a table.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pd.DataFrame</span>
+<span class="sd">            Indexed by ``(trial, sample, days_prior)``, with one column per</span>
+<span class="sd">            leg (named ``leg_id``). The ``aggregation_process`` attribute is</span>
+<span class="sd">            ``&quot;concat_rows&quot;``, so results from several workers are stacked.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_keys</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span> <span class="k">else</span> <span class="p">[[],</span> <span class="p">[],</span> <span class="p">[]]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">MultiIndex</span><span class="o">.</span><span class="n">from_arrays</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">DETAIL_INDEX_NAMES</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;leg_id&quot;</span><span class="p">))</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;aggregation_process&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;concat_rows&quot;</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+</div>
 
 
 
@@ -2161,18 +2076,94 @@
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_make_leg_booking_detail</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">LegBookingDetailOptions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">CallbackMixin</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configured-callback factory: build a fresh collector from validated options.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">collect_leg_booking_detail</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">leg_ids</span><span class="p">)</span>
+<div class="viewcode-block" id="LegBookingDetailTracer">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.LegBookingDetailTracer.html#passengersim.callbacks.booking_detail.LegBookingDetailTracer">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LegBookingDetailTracer</span><span class="p">(</span><span class="n">LegDetailTracer</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Daily tracer recording the cumulative sales of selected legs in every sample.&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;leg_booking_detail&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Identifier used to store results in ``callback_data``.&quot;&quot;&quot;</span>
+
+    <span class="n">options_model</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">type</span><span class="p">[</span><span class="n">BaseModel</span><span class="p">]]</span> <span class="o">=</span> <span class="n">LegBookingDetailOptions</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configured-callback options; ``priority`` is not exposed.&quot;&quot;&quot;</span>
+
+    <span class="n">options_version</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Version 2 stores results under ``leg_booking_detail``, not in ``daily`` rows.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">leg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">leg</span><span class="o">.</span><span class="n">sold</span></div>
+
+
+
+<div class="viewcode-block" id="collect_leg_booking_detail">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.collect_leg_booking_detail.html#passengersim.callbacks.booking_detail.collect_leg_booking_detail">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">collect_leg_booking_detail</span><span class="p">(</span><span class="n">leg_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">LegBookingDetailTracer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Build a daily tracer that records cumulative sales for selected legs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    leg_ids : Iterable[int]</span>
+<span class="sd">        The legs to record.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    LegBookingDetailTracer</span>
+<span class="sd">        Attach it with ``sim.daily_callback(...)`` or its ``attach`` method.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LegBookingDetailTracer</span><span class="p">(</span><span class="n">leg_ids</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_leg_booking_detail</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">LegBookingDetailOptions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LegBookingDetailTracer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configured-callback factory: build a fresh tracer from validated options.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">LegBookingDetailTracer</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">leg_ids</span><span class="p">)</span>
 
 
 <span class="n">LEG_BOOKING_DETAIL_CALLBACK</span> <span class="o">=</span> <span class="n">CallbackDefinition</span><span class="p">(</span>
     <span class="n">factory</span><span class="o">=</span><span class="n">_make_leg_booking_detail</span><span class="p">,</span>
     <span class="n">when</span><span class="o">=</span><span class="s2">&quot;daily&quot;</span><span class="p">,</span>
     <span class="n">parameters_model</span><span class="o">=</span><span class="n">LegBookingDetailOptions</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+    <span class="n">version</span><span class="o">=</span><span class="n">LegBookingDetailTracer</span><span class="o">.</span><span class="n">options_version</span><span class="p">,</span>
+    <span class="n">output_name</span><span class="o">=</span><span class="n">LegBookingDetailTracer</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Configured-callback definition, registered as ``leg_booking_detail`` by the built-ins.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="detail_table">
+<a class="viewcode-back" href="../../../api/_generated/callbacks/passengersim.callbacks.booking_detail.detail_table.html#passengersim.callbacks.booking_detail.detail_table">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">detail_table</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">CallbackData</span> <span class="o">|</span> <span class="n">SimulationTables</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">legacy_suffix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a per-sample leg detail table, from a tracer or from legacy daily rows.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : CallbackData or SimulationTables</span>
+<span class="sd">        Callback data, or a summary holding it.</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The tracer&#39;s result name, such as ``&quot;leg_booking_detail&quot;``.</span>
+<span class="sd">    legacy_suffix : str</span>
+<span class="sd">        The suffix of legacy ``daily`` keys, such as ``&quot;sold&quot;`` for</span>
+<span class="sd">        ``leg-101-sold``, used for results saved before the tracer existed.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Indexed by ``(trial, sample, days_prior)``, one column per leg.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    KeyError</span>
+<span class="sd">        If neither the tracer&#39;s table nor legacy daily rows are present.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">CallbackData</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;callback_data&quot;</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">callback_data</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;leg-([0-9]+)-</span><span class="si">{</span><span class="n">legacy_suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="s2">&quot;daily&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">DETAIL_INDEX_NAMES</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leg_id&quot;</span>
+    <span class="k">return</span> <span class="n">df</span></div>
+
 
 
 <div class="viewcode-block" id="process_leg_booking_detail">
@@ -2180,12 +2171,20 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">process_leg_booking_detail</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">CallbackData</span> <span class="o">|</span> <span class="n">SimulationTables</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">CallbackData</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;callback_data&quot;</span><span class="p">):</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">callback_data</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">(</span><span class="s2">&quot;daily&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;trial&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;days_prior&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;leg-[0-9]+-sold&quot;</span><span class="p">)</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;leg-([0-9]+)-sold&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\1&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-    <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;leg_id&quot;</span>
-    <span class="k">return</span> <span class="n">df</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get cumulative leg sales for every recorded sample and day.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : CallbackData or SimulationTables</span>
+<span class="sd">        Callback data, or a summary holding it. Both the tracer&#39;s table and</span>
+<span class="sd">        the ``daily`` rows of results saved by earlier versions are read.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pd.DataFrame</span>
+<span class="sd">        Indexed by ``(trial, sample, days_prior)``, one column per leg.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">detail_table</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">LegBookingDetailTracer</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;sold&quot;</span><span class="p">)</span></div>
 
 
 

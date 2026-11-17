@@ -1,0 +1,6 @@
+uses\_hook\_methods
+===================
+
+.. currentmodule:: passengersim.tracers.generic
+
+.. autofunction:: uses_hook_methods

@@ -16,9 +16,7 @@ connection\_builder
    :toctree: .
    :recursive:
 
-   checking
    circuity
-   prebuild
 
 
 
@@ -27,6 +25,15 @@ connection\_builder
 
 
 
+
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   build_connections
+   check_connections
+   prebuild_connections
 
 
 

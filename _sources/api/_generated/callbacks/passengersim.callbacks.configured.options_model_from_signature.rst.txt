@@ -1,0 +1,6 @@
+options\_model\_from\_signature
+===============================
+
+.. currentmodule:: passengersim.callbacks.configured
+
+.. autofunction:: options_model_from_signature

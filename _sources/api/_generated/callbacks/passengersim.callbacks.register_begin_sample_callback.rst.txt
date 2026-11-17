@@ -1,4 +1,4 @@
-﻿register\_begin\_sample\_callback
+register\_begin\_sample\_callback
 =================================
 
 .. currentmodule:: passengersim.callbacks

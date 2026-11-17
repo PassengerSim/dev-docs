@@ -118,8 +118,8 @@ fresh history; saved summaries retain their previous results. This table require
 selection.
 
 You can use native collection alongside `LegBidPriceTracer`. Use the Python tracer below when
-selecting only some legs or developing custom collection behavior. Its existing aggregation behavior
-is unchanged. Cabin-level collection is not yet enabled by this option.
+selecting only some legs or developing custom collection behavior. It pools its statistics across
+trials and workers in the same way. Cabin-level collection is not yet enabled by this option.
 
 ### Selected legs and paths
 
@@ -246,12 +246,168 @@ across all relevant (i.e. non-burned) samples.
 summary.callback_data.selected_path_forecasts
 ```
 
-The bid prices data includes the mean and standard deviation of the leg or path bid price, by days
-prior.
+The bid prices data has three rows for each day prior: the mean bid price of the leg or path
+(`mean`), its sample standard deviation (`std_dev`), and the number of observations behind them
+(`n`). These are found in the `statistic` level of the index, so select one by name, for example
+with `df.xs("std_dev", level="statistic")`.
 
 ```{code-cell} ipython3
 summary.callback_data.leg_bid_prices
 ```
+
+The statistics pool every observation across samples, trials, and workers, so a multi-process run
+reports exactly the statistics a single-process run of the same trials would. The standard deviation
+includes the variation between trials. A day observed only once has a missing standard deviation.
+
+```{note}
+Results saved by earlier versions of PassengerSim have no `n` row, and their standard deviation is
+the average of each trial's standard deviation, which leaves out the variation between trials.
+Combining such a result with a new one gives trial-weighted averages without an `n` row. If the
+standard deviation matters to you, re-run the simulation. The tracers' `options_version` has
+changed, so a configuration that requires the old version reports an error instead of mixing the
+two.
+```
+
+## Attaching, Naming, and Re-running Tracers
+
+Calling `tracer.attach(sim)` attaches a fresh copy of the tracer to the simulation, on the lifecycle
+hook the tracer is designed for. The tracer object you created is never modified by a run, so you
+can attach the same object to several simulations without them sharing any data. The callback
+decorator methods also accept a tracer, so `sim.daily_callback(LegBidPriceTracer([101]))` works too,
+but only on the tracer's own hook: attaching a begin-sample tracer such as `LegBidPriceArrayTracer`
+with `sim.daily_callback` raises a `ValueError` immediately, rather than failing part-way through
+the run. If in doubt, use `attach`.
+
+Each tracer's results are stored in `callback_data` under its name, such as `leg_bid_prices`. To
+attach two tracers of the same kind to one simulation, for example to trace two groups of legs
+separately, give one of them its own name:
+
+```python
+LegBidPriceTracer(leg_ids=[101, 102]).attach(sim)
+LegBidPriceTracer(leg_ids=[111, 112], name="return_leg_bid_prices").attach(sim)
+summary = sim.run()
+summary.callback_data.leg_bid_prices  # legs 101 and 102
+summary.callback_data.return_leg_bid_prices  # legs 111 and 112
+```
+
+Attaching a tracer with a name that is already in use replaces the earlier tracer, with a warning
+suggesting the `name=` option. This keeps a notebook cell that attaches a tracer safe to run more
+than once: you get one tracer, not two. A name cannot be one of the hook names (`daily`,
+`begin_sample`, and so on), which are reserved for ordinary callback data. The plotting functions,
+such as `fig_leg_bid_prices`, read the tracer's default name.
+
+Every run starts its tracers empty, so calling `sim.run()` (or `sim.run_trial()`) a second time
+gives results for the second run alone, not an accumulation of both. A run that fails part-way
+through stores no tracer results, and running it again starts from scratch. Within one run, tracers
+accumulate across all of its trials. The built-in tracers ignore burn-in samples.
+
+## Writing a Tracer
+
+A tracer is a subclass of `GenericTracer`. It needs a `name` for its results, a `reset` method that
+empties its accumulators, and a `finalize` method that turns them into a DataFrame. It observes the
+simulation through one or more hook methods, named for the lifecycle hooks: `on_initialize_sample`,
+`on_begin_sample`, `on_daily`, `on_end_sample`, and `on_finalize_sample`. The tracer is attached to
+every hook whose method it defines, and a single copy of the tracer receives all of those calls, so
+it can compare what it saw at different points of each sample.
+
+This tracer records how many seats each leg sells between the start and the end of a sample:
+
+```python
+import pandas as pd
+
+from passengersim.tracers.generic import GenericTracer
+
+
+class LegSalesTracer(GenericTracer):
+    name = "leg_sales"
+    skip_burn = True  # The simulation skips burn-in samples for every hook.
+
+    def __init__(self, leg_ids, *, name=None):
+        self.leg_ids = list(leg_ids)
+        self._set_name(name)  # Optional instance-level result name.
+        self.reset()
+
+    def reset(self):
+        self.legs = None
+        self.at_start = {}
+        self.totals = dict.fromkeys(self.leg_ids, 0)
+        self.samples = 0
+
+    def setup(self, sim):
+        # Look up the legs once per run, so a bad leg ID fails before any sample.
+        self.legs = {leg_id: sim.eng.legs.select(leg_id=leg_id) for leg_id in self.leg_ids}
+
+    def on_begin_sample(self, sim):
+        self.at_start = {leg_id: leg.sold for leg_id, leg in self.legs.items()}
+
+    def on_end_sample(self, sim):
+        for leg_id, leg in self.legs.items():
+            self.totals[leg_id] += leg.sold - self.at_start[leg_id]
+        self.samples += 1
+
+    def finalize(self):
+        mean = {leg_id: total / max(self.samples, 1) for leg_id, total in self.totals.items()}
+        df = pd.DataFrame({"mean_sold": mean})
+        df.attrs["n_samples"] = self.samples
+        df.attrs["aggregation_process"] = "wgt_by_samples"
+        return df
+
+
+LegSalesTracer([101, 102]).attach(sim)
+summary = sim.run()
+summary.callback_data.leg_sales
+```
+
+Hook methods take the same arguments as the corresponding callback functions: the simulation, plus
+the days prior to departure for `on_daily`. Like a callback function, a hook method may return a
+dictionary to store as ordinary callback data, though most tracers keep what they observe and report
+it from `finalize`. A tracer with an `on_daily` method can set a `priority` attribute, which works
+as it does for a daily callback.
+
+For each run, the simulation takes the tracer through these steps:
+
+1. `reset()`, once, at the start of the run. A tracer is never reset between the trials of one run,
+   so its results cover all of them.
+2. The scenario is built: the network, fares, and demands now exist.
+3. `setup(sim)`, once. This is the place to look up the legs, paths, or fares the tracer will
+   observe, to allocate its arrays, and to report problems before the run gets going. The default
+   does nothing.
+4. The hook methods, for every trial and sample of the run (skipping burn-in samples, if `skip_burn`
+   is set).
+5. `finalize()`, once, after the last trial. Its result is stored in `callback_data` under the
+   tracer's name.
+
+If `setup` or a hook method raises an exception, the run stops, `finalize` is not called, and no
+result is stored. Running again starts over from `reset`. When a multi-process simulation runs, each
+worker gets its own fresh copy of the tracer, so no state is shared between workers, or between
+experiments.
+
+### Combining results
+
+When a simulation runs in several processes, or results are added together, the tables from each
+part are combined. A tracer chooses how by setting `df.attrs["aggregation_process"]` on the table
+its `finalize` method returns:
+
+| Process          | Combination                                                                  |
+| ---------------- | ---------------------------------------------------------------------------- |
+| (none)           | The tables are added together with `+`.                                      |
+| `wgt_by_samples` | A mean weighted by `df.attrs["n_samples"]`, as in the example above.         |
+| `wgt_by_trials`  | A mean weighted by `df.attrs["n_trials"]`.                                   |
+| `pooled_moments` | Exact pooling of the `mean`, `std_dev`, and `n` rows of a `statistic` level. |
+| `concat_rows`    | The rows of both tables are stacked, for tables that keep every observation. |
+
+Two tables declaring different processes cannot be combined, and raise an error. A tracer can define
+its own process with `passengersim.callbacks.register_combiner`, giving it a function that combines
+two such tables into a new one. Register it in the module that defines the tracer, since saved
+results only record the process's name: combining saved results in a new session raises an error
+naming the process until that module has been imported. Once results using a process exist, never
+change what the process name means; choose a new name instead.
+
+### Legacy tracers
+
+Tracers written before hook methods existed set a `hook` class attribute and define `__call__`
+instead. They work as before, on that one hook. A tracer uses one form or the other: defining `hook`
+together with any hook method is an error.
 
 ## Relationship to Callbacks
 

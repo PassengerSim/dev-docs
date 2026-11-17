@@ -1,4 +1,4 @@
-﻿register\_daily\_callback
+register\_daily\_callback
 =========================
 
 .. currentmodule:: passengersim.callbacks

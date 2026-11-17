@@ -1,12 +1,18 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.
 
 config
 ======
+
+.. py:module:: passengersim.config
 
 .. autosummary::
     :toctree: _generated/configs
     :template: autosummary/config-class.rst
 
     ~passengersim.config.Config
+    ~passengersim.config.CallbackConfig
     ~passengersim.config.SimulationSettings
     ~passengersim.config.Carrier
     ~passengersim.config.Leg

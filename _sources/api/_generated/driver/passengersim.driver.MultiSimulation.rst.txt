@@ -26,6 +26,7 @@ MultiSimulation
       ~MultiSimulation.log_config
       ~MultiSimulation.path_names
       ~MultiSimulation.pathclasses_for_carrier
+      ~MultiSimulation.remove_callback
       ~MultiSimulation.run
       ~MultiSimulation.sequential_run
       ~MultiSimulation.use_registered_callbacks
@@ -38,13 +39,18 @@ MultiSimulation
 
    .. autosummary::
    
+      ~MultiSimulation.begin_sample_callbacks
       ~MultiSimulation.cnx
+      ~MultiSimulation.daily_callbacks
       ~MultiSimulation.database_available
       ~MultiSimulation.database_path
       ~MultiSimulation.database_status
       ~MultiSimulation.db
       ~MultiSimulation.demands
+      ~MultiSimulation.end_sample_callbacks
       ~MultiSimulation.fares
+      ~MultiSimulation.finalize_sample_callbacks
+      ~MultiSimulation.initialize_sample_callbacks
       ~MultiSimulation.markets
       ~MultiSimulation.pathclasses
       ~MultiSimulation.paths

@@ -16,7 +16,13 @@ LegForecastTracer
       ~LegForecastTracer.attach
       ~LegForecastTracer.finalize
       ~LegForecastTracer.fresh
+      ~LegForecastTracer.on_begin_sample
+      ~LegForecastTracer.on_daily
+      ~LegForecastTracer.on_end_sample
+      ~LegForecastTracer.on_finalize_sample
+      ~LegForecastTracer.on_initialize_sample
       ~LegForecastTracer.reset
+      ~LegForecastTracer.setup
    
    
 
@@ -29,5 +35,6 @@ LegForecastTracer
       ~LegForecastTracer.hook
       ~LegForecastTracer.name
       ~LegForecastTracer.options_version
+      ~LegForecastTracer.skip_burn
    
    

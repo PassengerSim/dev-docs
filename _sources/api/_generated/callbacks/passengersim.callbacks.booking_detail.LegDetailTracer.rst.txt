@@ -1,0 +1,43 @@
+LegDetailTracer
+===============
+
+.. currentmodule:: passengersim.callbacks.booking_detail
+
+.. autoclass:: LegDetailTracer
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LegDetailTracer.__init__
+      ~LegDetailTracer.attach
+      ~LegDetailTracer.finalize
+      ~LegDetailTracer.fresh
+      ~LegDetailTracer.on_begin_sample
+      ~LegDetailTracer.on_daily
+      ~LegDetailTracer.on_end_sample
+      ~LegDetailTracer.on_finalize_sample
+      ~LegDetailTracer.on_initialize_sample
+      ~LegDetailTracer.reset
+      ~LegDetailTracer.setup
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LegDetailTracer.hook
+      ~LegDetailTracer.name
+      ~LegDetailTracer.options_model
+      ~LegDetailTracer.options_version
+      ~LegDetailTracer.skip_burn
+      ~LegDetailTracer.leg_ids
+      ~LegDetailTracer.priority
+   
+   

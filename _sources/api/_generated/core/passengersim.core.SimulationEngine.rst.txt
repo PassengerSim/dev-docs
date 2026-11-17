@@ -1,0 +1,135 @@
+SimulationEngine
+================
+
+.. currentmodule:: passengersim.core
+
+.. autoclass:: SimulationEngine
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SimulationEngine.__init__
+      ~SimulationEngine.add_airport
+      ~SimulationEngine.add_booking_event
+      ~SimulationEngine.add_carrier
+      ~SimulationEngine.add_circuity_rule
+      ~SimulationEngine.add_curve
+      ~SimulationEngine.add_dcp
+      ~SimulationEngine.add_demand
+      ~SimulationEngine.add_event
+      ~SimulationEngine.add_fare
+      ~SimulationEngine.add_frat5
+      ~SimulationEngine.add_leg
+      ~SimulationEngine.add_path
+      ~SimulationEngine.additional_settings
+      ~SimulationEngine.allocate_demand_to_tf
+      ~SimulationEngine.allocate_demand_to_tf_pods
+      ~SimulationEngine.attach_firehose_logger
+      ~SimulationEngine.avg_local_by_carrier
+      ~SimulationEngine.build_connections
+      ~SimulationEngine.build_expiration
+      ~SimulationEngine.capture_forecast_accuracy
+      ~SimulationEngine.choice_set_columns
+      ~SimulationEngine.clear_choice_set
+      ~SimulationEngine.compute_hhi
+      ~SimulationEngine.connect_markets
+      ~SimulationEngine.create_events
+      ~SimulationEngine.distribution_local_leg_passengers
+      ~SimulationEngine.fare_segment_counters
+      ~SimulationEngine.flush_firehoses
+      ~SimulationEngine.fraction_local_by_carrier_and_place
+      ~SimulationEngine.get_airport_carrier_share
+      ~SimulationEngine.get_choice_set
+      ~SimulationEngine.get_days_prior
+      ~SimulationEngine.get_preferred_carrier
+      ~SimulationEngine.get_random_generator
+      ~SimulationEngine.go
+      ~SimulationEngine.initialize_bucket_ap_rules
+      ~SimulationEngine.initialize_histories
+      ~SimulationEngine.initialize_nonstop_path_linkage
+      ~SimulationEngine.initialize_pathclasses
+      ~SimulationEngine.leg_id_exists
+      ~SimulationEngine.license_info
+      ~SimulationEngine.next_departure
+      ~SimulationEngine.nonbookings_by_segment_dcp
+      ~SimulationEngine.num_events
+      ~SimulationEngine.path_2_leg
+      ~SimulationEngine.print_demand_by_tf
+      ~SimulationEngine.record_daily_statistics
+      ~SimulationEngine.record_dcp_statistics
+      ~SimulationEngine.record_departure_statistics
+      ~SimulationEngine.reseed
+      ~SimulationEngine.reset_counters
+      ~SimulationEngine.reset_trial_counters
+      ~SimulationEngine.set_parm
+      ~SimulationEngine.shop
+      ~SimulationEngine.summary_demand_to_come
+      ~SimulationEngine.validate_license
+      ~SimulationEngine.write_to_firehose
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SimulationEngine.airports
+      ~SimulationEngine.base_time
+      ~SimulationEngine.bucketnames
+      ~SimulationEngine.buckets
+      ~SimulationEngine.burn_samples
+      ~SimulationEngine.carriers
+      ~SimulationEngine.choice_set_mkts
+      ~SimulationEngine.choice_set_sampling_probability
+      ~SimulationEngine.config
+      ~SimulationEngine.controller_time_zone
+      ~SimulationEngine.dedupe_offers
+      ~SimulationEngine.demands
+      ~SimulationEngine.disable_ap
+      ~SimulationEngine.fares
+      ~SimulationEngine.iteration
+      ~SimulationEngine.last_dcp
+      ~SimulationEngine.last_dcp_index
+      ~SimulationEngine.last_event_time
+      ~SimulationEngine.legs
+      ~SimulationEngine.manual_paths
+      ~SimulationEngine.markets
+      ~SimulationEngine.max_connect_time
+      ~SimulationEngine.max_connect_time_dd
+      ~SimulationEngine.max_connect_time_di
+      ~SimulationEngine.max_connect_time_id
+      ~SimulationEngine.max_connect_time_ii
+      ~SimulationEngine.min_connect_time_dd
+      ~SimulationEngine.min_connect_time_di
+      ~SimulationEngine.min_connect_time_id
+      ~SimulationEngine.min_connect_time_ii
+      ~SimulationEngine.mkt_k_factor
+      ~SimulationEngine.name
+      ~SimulationEngine.num_dcps
+      ~SimulationEngine.num_samples
+      ~SimulationEngine.num_trials
+      ~SimulationEngine.num_trials_completed
+      ~SimulationEngine.paths
+      ~SimulationEngine.pax_type_k_factor
+      ~SimulationEngine.preferred_airline_pct_share
+      ~SimulationEngine.prorate_revenue
+      ~SimulationEngine.random_generator
+      ~SimulationEngine.revenue
+      ~SimulationEngine.rm_start_sample
+      ~SimulationEngine.sample
+      ~SimulationEngine.save_all_offers
+      ~SimulationEngine.save_orders
+      ~SimulationEngine.save_timeframe_details
+      ~SimulationEngine.snapshot_filters
+      ~SimulationEngine.sys_k_factor
+      ~SimulationEngine.tf_k_factor
+      ~SimulationEngine.tf_z_factor
+      ~SimulationEngine.trial
+   
+   

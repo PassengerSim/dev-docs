@@ -1,0 +1,6 @@
+register\_combiner
+==================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_combiner

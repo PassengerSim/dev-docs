@@ -1,0 +1,6 @@
+combine\_concat\_rows
+=====================
+
+.. currentmodule:: passengersim.callbacks.combine
+
+.. autofunction:: combine_concat_rows

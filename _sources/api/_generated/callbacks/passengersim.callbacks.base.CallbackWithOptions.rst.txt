@@ -1,0 +1,29 @@
+CallbackWithOptions
+===================
+
+.. currentmodule:: passengersim.callbacks.base
+
+.. autoclass:: CallbackWithOptions
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CallbackWithOptions.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CallbackWithOptions.result_name
+      ~CallbackWithOptions.priority
+      ~CallbackWithOptions.skip_burn
+   
+   

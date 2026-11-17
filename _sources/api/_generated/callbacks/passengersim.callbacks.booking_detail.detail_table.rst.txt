@@ -1,0 +1,6 @@
+detail\_table
+=============
+
+.. currentmodule:: passengersim.callbacks.booking_detail
+
+.. autofunction:: detail_table

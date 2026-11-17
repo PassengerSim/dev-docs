@@ -20,7 +20,6 @@
    "outputs": [],
    "source": [
     "import passengersim as pax\n",
-    "from passengersim.config.checks import check_config\n",
     "\n",
     "pax.versions()"
    ]
@@ -58,39 +57,109 @@
    "source": [
     "## Route Map\n",
     "\n",
-    "Pequod operates one flight from Nantucket (ACK) to Nadi (NAN). The map is centered on the Pacific to\n",
-    "show both ends of this long-haul route."
+    "Pequod operates one voyage from Nantucket (ACK) to Fiji (NAN)."
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
    "id": "89f05954",
-   "metadata": {},
+   "metadata": {
+    "tags": [
+     "remove-output"
+    ]
+   },
    "outputs": [],
    "source": [
-    "cfg.plotly_route_map(center_lon=-140, center_lat=15, zoom=0.7)"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "3ebdb929",
-   "metadata": {},
-   "source": [
-    "As in the Europa example, we pre-build the paths before inspecting the configuration. There are no\n",
-    "connecting itineraries in this network."
+    "cfg.plotly_route_map()"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "4e18fac4",
-   "metadata": {},
+   "id": "292903cb",
+   "metadata": {
+    "tags": [
+     "remove-input"
+    ]
+   },
    "outputs": [],
    "source": [
-    "from passengersim.connection_builder import prebuild_connections\n",
+    "import numpy as np\n",
+    "import plotly.graph_objects as go\n",
     "\n",
-    "cfg = prebuild_connections(cfg, inplace=False)"
+    "# Use configured airport coordinates when available.\n",
+    "places = cfg.dataframes.places.set_index(\"name\")\n",
+    "ack = tuple(places.loc[\"ACK\", [\"lon\", \"lat\"]])\n",
+    "nan = tuple(places.loc[\"NAN\", [\"lon\", \"lat\"]])\n",
+    "\n",
+    "# Approximate voyage coordinates, ordered as (longitude, latitude).\n",
+    "# Intermediate points control the path between the illustrated stops.\n",
+    "route = np.array(\n",
+    "    [\n",
+    "        ack,\n",
+    "        (-57, 35),  # North Atlantic\n",
+    "        (-42, 38),\n",
+    "        (-27, 38),  # Azores\n",
+    "        (-25, 16),  # Cape Verde\n",
+    "        (-29, -7),\n",
+    "        (-38, -28),\n",
+    "        (-52, -40),  # Off South America\n",
+    "        (-32, -39),\n",
+    "        (-5, -32),  # South Atlantic\n",
+    "        (10, -37),\n",
+    "        (20, -39),  # South of the Cape of Good Hope\n",
+    "        (38, -47),\n",
+    "        (55, -52),  # Southern Indian Ocean\n",
+    "        (75, -43),\n",
+    "        (90, -29),\n",
+    "        (103, -13),\n",
+    "        (105, -6),  # Sunda Strait\n",
+    "        (111, 7),\n",
+    "        (122, 23),  # Western Pacific\n",
+    "        (150, 36),  # East of Japan\n",
+    "        (163, 13),\n",
+    "        nan,\n",
+    "    ],\n",
+    "    dtype=float,\n",
+    ")\n",
+    "\n",
+    "# Preserve PassengerSim's projection, title styling, and margins.\n",
+    "fig = cfg.plotly_route_map(\n",
+    "    center_lon=45,\n",
+    "    center_lat=11,\n",
+    "    # height=550,\n",
+    "    title=\"Voyage of the Pequod\",\n",
+    ")\n",
+    "fig.data = ()\n",
+    "\n",
+    "fig.add_trace(\n",
+    "    go.Scattergeo(\n",
+    "        lon=route[:, 0],\n",
+    "        lat=route[:, 1],\n",
+    "        mode=\"lines\",\n",
+    "        line={\"color\": \"red\", \"width\": 2},\n",
+    "        hoverinfo=\"skip\",\n",
+    "    )\n",
+    ")\n",
+    "\n",
+    "fig.add_trace(\n",
+    "    go.Scattergeo(\n",
+    "        lon=[ack[0], nan[0]],\n",
+    "        lat=[ack[1], nan[1]],\n",
+    "        mode=\"markers+text\",\n",
+    "        text=[\"ACK\", \"NAN\"],\n",
+    "        textposition=[\"top left\", \"bottom right\"],\n",
+    "        marker={\n",
+    "            \"size\": 9,\n",
+    "            \"color\": \"white\",\n",
+    "            \"line\": {\"color\": \"red\", \"width\": 2},\n",
+    "        },\n",
+    "        hovertemplate=\"%{text}<extra></extra>\",\n",
+    "    )\n",
+    ")\n",
+    "\n",
+    "fig.show()"
    ]
   },
   {
@@ -99,16 +168,6 @@
    "metadata": {},
    "source": [
     "## Check Configuration"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "6d2fae92",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "check_config(cfg)"
    ]
   },
   {
@@ -138,7 +197,7 @@
    "source": [
     "### Fares\n",
     "\n",
-    "The six fare classes range from $1,000 to $4,000. Lower fares carry advance-purchase requirements\n",
+    "The six fare classes range from \\$1,000 to \\$4,000. Lower fares carry advance-purchase requirements\n",
     "and restrictions; these are configuration inputs, not simulation results."
    ]
   },
@@ -213,8 +272,7 @@
    "outputs": [],
    "source": [
     "sim = pax.MultiSimulation(cfg)\n",
-    "out = sim.run()\n",
-    "out.n_total_samples"
+    "out = sim.run()"
    ]
   },
   {
@@ -330,7 +388,7 @@
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 3",
+   "display_name": "pax (3.12.13)",
    "language": "python",
    "name": "python3"
   },

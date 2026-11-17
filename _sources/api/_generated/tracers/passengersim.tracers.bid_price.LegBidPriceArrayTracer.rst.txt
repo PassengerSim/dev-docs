@@ -16,7 +16,13 @@ LegBidPriceArrayTracer
       ~LegBidPriceArrayTracer.attach
       ~LegBidPriceArrayTracer.finalize
       ~LegBidPriceArrayTracer.fresh
+      ~LegBidPriceArrayTracer.on_begin_sample
+      ~LegBidPriceArrayTracer.on_daily
+      ~LegBidPriceArrayTracer.on_end_sample
+      ~LegBidPriceArrayTracer.on_finalize_sample
+      ~LegBidPriceArrayTracer.on_initialize_sample
       ~LegBidPriceArrayTracer.reset
+      ~LegBidPriceArrayTracer.setup
    
    
 
@@ -29,6 +35,7 @@ LegBidPriceArrayTracer
       ~LegBidPriceArrayTracer.hook
       ~LegBidPriceArrayTracer.name
       ~LegBidPriceArrayTracer.options_version
+      ~LegBidPriceArrayTracer.skip_burn
       ~LegBidPriceArrayTracer.bid_price_arrays
    
    

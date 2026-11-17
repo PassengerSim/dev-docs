@@ -43,6 +43,7 @@ Simulation
       ~Simulation.parse_restriction_flags
       ~Simulation.path_names
       ~Simulation.pathclasses_for_carrier
+      ~Simulation.remove_callback
       ~Simulation.reseed
       ~Simulation.rm_data
       ~Simulation.run
@@ -65,14 +66,19 @@ Simulation
    .. autosummary::
    
       ~Simulation.base_time
+      ~Simulation.begin_sample_callbacks
       ~Simulation.cnx
       ~Simulation.config
+      ~Simulation.daily_callbacks
       ~Simulation.database_available
       ~Simulation.database_path
       ~Simulation.db
       ~Simulation.db_writer
       ~Simulation.demands
+      ~Simulation.end_sample_callbacks
       ~Simulation.fares
+      ~Simulation.finalize_sample_callbacks
+      ~Simulation.initialize_sample_callbacks
       ~Simulation.markets
       ~Simulation.pathclasses
       ~Simulation.paths

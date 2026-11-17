@@ -1,0 +1,37 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.callbacks.
+
+combine
+=======
+
+.. automodule:: passengersim.callbacks.combine
+   :no-members:
+
+
+
+
+
+
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   combine_concat_rows
+   combine_pooled_moments
+   combine_values
+   combine_wgt_by_samples
+   combine_wgt_by_trials
+   register_combiner
+   registered_processes
+
+
+
+
+

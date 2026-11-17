@@ -1,0 +1,6 @@
+combine\_wgt\_by\_trials
+========================
+
+.. currentmodule:: passengersim.callbacks.combine
+
+.. autofunction:: combine_wgt_by_trials

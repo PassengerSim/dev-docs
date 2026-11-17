@@ -1,0 +1,6 @@
+registered\_processes
+=====================
+
+.. currentmodule:: passengersim.callbacks.combine
+
+.. autofunction:: registered_processes

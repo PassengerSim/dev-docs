@@ -20,6 +20,7 @@ callbacks
    bid_price_detail
    booking_detail
    builtins
+   combine
    configured
    registration
 
@@ -27,9 +28,32 @@ callbacks
 
 
 
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree: .
+   :template: autosummary/class.rst
+
+   CallbackData
+   CallbackMixin
 
 
 
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   register_callback_factory
+   register_combiner
+   register_tracer_factory
+   register_begin_sample_callback
+   register_daily_callback
+   register_end_sample_callback
+   register_finalize_sample_callback
+   register_initialize_sample_callback
 
 
 

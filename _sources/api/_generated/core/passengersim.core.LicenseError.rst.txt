@@ -1,0 +1,6 @@
+LicenseError
+============
+
+.. currentmodule:: passengersim.core
+
+.. autoexception:: LicenseError

@@ -1,4 +1,8 @@
-﻿driver
+﻿.. rst-class:: page_title_prefix
+
+    passengersim.
+
+driver
 ======
 
 .. automodule:: passengersim.driver

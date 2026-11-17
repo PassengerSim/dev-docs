@@ -33,8 +33,10 @@ core
    Fare
    Forecast
    ForecastAccessor
+   ForecastData
    ForecastGroup
    Frat5
+   Generator
    History
    Leg
    Market
@@ -42,13 +44,28 @@ core
    PathClass
    ProBP
    Profiler
+   SimulationEngine
    UserAction
 
 
 
 
 
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   build_connections
 
 
 
+
+
+.. rubric:: Exceptions
+
+.. autosummary::
+   :toctree: .
+
+   LicenseError
 

@@ -22,6 +22,7 @@ Experiments
       ~Experiments.existing
       ~Experiments.finalize_sample_callback
       ~Experiments.initialize_sample_callback
+      ~Experiments.remove_callback
       ~Experiments.run
       ~Experiments.use_registered_callbacks
       ~Experiments.validate
@@ -34,6 +35,11 @@ Experiments
 
    .. autosummary::
    
+      ~Experiments.begin_sample_callbacks
+      ~Experiments.daily_callbacks
+      ~Experiments.end_sample_callbacks
+      ~Experiments.finalize_sample_callbacks
+      ~Experiments.initialize_sample_callbacks
       ~Experiments.report_filename
       ~Experiments.sims
    

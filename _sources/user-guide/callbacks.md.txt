@@ -58,7 +58,7 @@ we are looking for. There are five lifecycle hooks:
 | ------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
 | `initialize_sample` | Synchronous | After the sample number, random seed, and counters are initialized, before demand generation                |
 | `begin_sample`      | Event queue | One second after the first DCP, after its RM processing                                                     |
-| `daily`             | Event queue | Each day, at the existing callback priority offset from the overnight trigger                               |
+| `daily`             | Event queue | Each day, one second after the overnight trigger unless the callback sets a `priority`                      |
 | `end_sample`        | Event queue | One second after the final DCP                                                                              |
 | `finalize_sample`   | Synchronous | After all queued events, before sample diagnostics, departure statistics, history rollover, and bookkeeping |
 
@@ -120,6 +120,38 @@ def collect_carrier_revenue_detail(
         return {c.name: c.revenue for c in sim.eng.carriers}
 ```
 
+Each day, a daily callback runs one second after the overnight trigger time. Carrier RM systems run
+one second *before* the trigger, and the simulation's own DCP and daily data capture happens *at*
+the trigger, so your callback sees each day after both have finished. To run at a different moment,
+give it a `priority`: an offset in seconds from the trigger. The sign says which side of the
+simulation's own bookkeeping the callback runs on: a positive value runs after it, and a negative
+value runs before it. A value below -1 also runs before the RM systems. For example, this callback
+runs before the RM systems do their daily work:
+
+```python
+@sim.daily_callback(priority=-5)
+def before_rm(sim: pax.Simulation, days_prior: int) -> dict | None: ...
+```
+
+The same option can be given when attaching a function directly, as in
+`sim.daily_callback(before_rm, priority=-5)`. Setting a `priority` attribute on the function itself
+(`before_rm.priority = -5`) also still works; an option given when attaching takes precedence.
+
+A `priority` of zero is not allowed. It would share the exact moment of the simulation's own
+bookkeeping, and the two would run in an arbitrary order, so there would be no telling whether your
+callback sees the day before or after it. Attaching a daily callback with a zero `priority` raises a
+`ValueError`, which says to use 1 to run after the bookkeeping or a negative value to run before it.
+Because `priority` is read from the callback each sample, a zero set after attaching is caught too,
+when the run starts. The same rule applies to tracers' `priority` options and to RM systems.
+
+Callbacks are scheduled at the start of each sample. A callback attached while a sample is running
+(for example, by another callback) therefore takes effect from the next sample.
+
+When several callbacks are due at the same moment, they run in a fixed order: RM systems first, then
+configured callbacks (described below) in the order they are declared, then callbacks you attached
+yourself in the order you attached them. This includes callbacks on different hooks that share a
+moment, such as a daily callback and an `end_sample` callback on the day of departure.
+
 Use the queued `begin_sample` hook to inspect RM state once per sample, after the first DCP:
 
 ```python
@@ -147,9 +179,33 @@ decorators are `register_initialize_sample_callback` and `register_finalize_samp
 Configured callback factories can select either hook with `when="initialize_sample"` or
 `when="finalize_sample"`, including in multiprocessing runs.
 
-Multiple callbacks of the same kind can be attached (i.e. there can be two end_sample callbacks).
-The only limitation is that the named values in the return values of each callback function must be
-unique, or else they will overwrite one another.
+Multiple callbacks of the same kind can be attached (i.e. there can be two end_sample callbacks). By
+default, the dictionaries they return are merged into one shared table per hook, so the named values
+in the return values of each callback function must be unique, or else they will overwrite one
+another.
+
+To keep a callback's data apart, give it a `name` when attaching it. Its returned dictionaries are
+then stored under `callback_data.<name>`, instead of the shared hook table, and cannot collide with
+other callbacks' keys. The `skip_burn` option skips the callback during burn-in samples, so it does
+not need to check for them itself. Every registration method accepts `name` and `skip_burn`, and
+`daily_callback` also accepts `priority`; they can be given with the function, or with the method
+used as a decorator:
+
+```python
+@sim.end_sample_callback(name="carrier_sales", skip_burn=True)
+def carrier_sales(sim: pax.Simulation) -> dict:
+    return {c.name: c.sold for c in sim.eng.carriers}
+
+
+# ... after running:
+summary.callback_data.carrier_sales
+```
+
+The options belong to that one attachment: the function itself is not changed, so it can be attached
+elsewhere with different options. A name cannot be one of the hook names, nor the result name of a
+tracer attached to the same simulation.
+
+The rest of this example uses the shared tables.
 
 For example, suppose we also want to count for each carrier the number of passengers departing each
 airport on each sample day. The previous end sample callback stored revenue values in a dictionary
@@ -231,6 +287,22 @@ All the usual summary data remains available for review and analysis.
 summary.fig_carrier_revenues()
 ```
 
+### Removing Callbacks
+
+To detach a callback, pass it to `remove_callback`. It is removed from every hook it was attached
+to, whether or not it was attached with options. A tracer can be removed by its name, or by passing
+the tracer object you attached:
+
+```python
+sim.remove_callback(collect_carrier_revenue)
+sim.remove_callback("leg_bid_prices")  # a tracer, or callbacks attached with name=
+```
+
+The method returns the number of registrations removed, and raises a `ValueError` if nothing matches
+(pass `missing_ok=True` to get 0 instead). Callbacks enabled in a configuration are removed by
+disabling them there, and carrier RM systems cannot be removed. A callback removed while a sample is
+running takes effect from the next sample.
+
 ## Callback Data
 
 In addition to the usual suspects, the summary object includes the collected callback data from our
@@ -241,7 +313,8 @@ summary.callback_data
 ```
 
 Because we connected a "daily" callback, the data we collected is available under the
-`callback_data.daily` accessor.
+`callback_data.daily` accessor. Each run collects into its own `callback_data`, so running a
+simulation again starts from empty tables and leaves the earlier summary unchanged.
 
 ```{code-cell} ipython3
 summary.callback_data.daily[:5]
@@ -369,9 +442,9 @@ callbacks:
 Existing keys retain their positions; new keys append in overlay order. Saving and reloading a
 config preserves declaration order. At the same event time, configured callbacks execute in
 declaration order. Daily `priority` remains an offset in seconds relative to the overnight event, so
-different priorities can change execution order. Ordering relative to manual or RM events at exactly
-the same timestamp retains the existing scheduler behavior; use the established priority options
-when timing relative to RM updates matters.
+different priorities can change execution order. At exactly the same timestamp, RM systems run
+before configured callbacks, and configured callbacks run before manually attached ones. A declared
+`priority` of zero is rejected when the run starts, before any worker process is launched.
 
 ### Built-in Catalog
 
@@ -390,21 +463,27 @@ for use, and do not require the user to register them:
 | `leg_bid_price_vectors`   | daily        | Required `leg_ids`; optional `priority` (default 2)                | `leg_bid_price_vectors`   |
 | `selected_leg_forecasts`  | begin sample | Required `leg_ids`                                                 | `selected_leg_forecasts`  |
 | `selected_path_forecasts` | begin sample | Required `path_ids`                                                | `selected_path_forecasts` |
-| `leg_booking_detail`      | daily        | Required `leg_ids`                                                 | `daily` callback data     |
-| `leg_bid_price_detail`    | daily        | Required `leg_ids`; optional `include_sold_out` (default true)     | `daily` callback data     |
+| `leg_booking_detail`      | daily        | Required `leg_ids`                                                 | `leg_booking_detail`      |
+| `leg_bid_price_detail`    | daily        | Required `leg_ids`; optional `include_sold_out` (default true)     | `leg_bid_price_detail`    |
 
-The last two are plain daily callbacks rather than tracers. They add `leg-<id>-sold` and
-`leg-<id>-bidprice` entries to the shared `daily` callback data, which summaries expose as
-`leg_booking_detail` and `leg_bid_price_detail`, with the figures `fig_leg_booking_detail_rake`,
-`fig_leg_bid_price_detail_rake`, and `fig_leg_bid_price_history`. These summary members are always
-available; no extra import is needed.
+The last two keep every observation rather than summary statistics: one row per trial, sample, and
+day, with one column per selected leg. Summaries expose them as `leg_booking_detail` and
+`leg_bid_price_detail` (the distribution of the observations by day), with the figures
+`fig_leg_booking_detail_rake`, `fig_leg_bid_price_detail_rake`, and `fig_leg_bid_price_history`.
+These summary members are always available; no extra import is needed. Results saved by earlier
+versions, which kept the same observations as `leg-<id>-sold` and `leg-<id>-bidprice` entries of the
+shared `daily` callback data, are read by the same summary members.
 
 These adapters retain the tracers' existing burn-period filtering, aggregation, and prerequisites.
+For the daily tracers, `priority` is the offset in seconds from the overnight trigger, as for any
+daily callback: the defaults of 1 and 2 record each day after the RM systems and the simulation's
+own bookkeeping, a negative value records it before the bookkeeping, and zero is an error.
 Begin-sample adapters do not expose `priority`, which has no effect for that hook. Two configured
 tracers cannot write the same result key, even under different declaration IDs or registry aliases.
-A configured tracer also cannot share an output name with a manually or globally attached tracer.
-Output renaming is not supported. The names `initialize_sample`, `begin_sample`, `daily`,
-`end_sample`, and `finalize_sample` are reserved for ordinary callback data.
+A configured tracer also cannot share an output name with a manually or globally attached tracer;
+give the manual tracer a different `name=` to use both (see [Tracing](tracers.md)). Configured
+tracers always use their canonical result key. The names `initialize_sample`, `begin_sample`,
+`daily`, `end_sample`, and `finalize_sample` are reserved for ordinary callback data.
 
 ### Custom Callback Factories
 
@@ -484,26 +563,39 @@ class MyTracerOptions(BaseModel, extra="forbid"):
 class MyTracer(GenericTracer):
     name = "my_tracer"  # Canonical result key in callback_data.
     hook: ClassVar[Literal["begin_sample", "daily", "end_sample"]] = "daily"
+    skip_burn: ClassVar[bool] = True  # The simulation skips burn-in samples for you.
     options_model: ClassVar[type[BaseModel]] = MyTracerOptions
     options_version: ClassVar[str] = "1"
 
-    def __init__(self, leg_ids: list[int], *, priority: int = 1) -> None: ...
+    def __init__(self, leg_ids: list[int], *, priority: int = 1, name: str | None = None) -> None:
+        self.leg_ids = leg_ids
+        self.priority = priority
+        self._set_name(name)  # Optional instance-level result key.
+        self.reset()
 
-    # reset(), fresh(), attach(), __call__(), and finalize() as for any tracer.
+    # reset(), __call__(), and finalize() as for any tracer.
 
 
 register_tracer_factory(MyTracer)
 ```
 
-The helper calls `MyTracer(**validated_options)` and uses the declared hook, result name, options
-model, and version. Keep the options model's fields and defaults identical to the constructor's, and
-bump `options_version` when the tracer's results change meaning. `parameters_model=` and `version=`
-arguments override the class attributes, and `name=` registers an alias without renaming the output.
-The tracer's `fresh()` must preserve its output name and parameters, and its manual `attach()`
-should use the same hook.
+A tracer written with hook methods (see [Writing a Tracer](tracers.md#writing-a-tracer)) leaves out
+`hook`, and is attached to every hook whose method it defines. The helper calls
+`MyTracer(**validated_options)` and uses the declared hooks, result name, options model, and
+version. If the class declares no `options_model`, one is built from the constructor's signature:
+each keyword parameter becomes an option, with its annotation as the type and its default, except
+`name` (a configured tracer always uses its class's result name). Declare the model yourself to
+document the options, or when the constructor takes `*args` or `**kwargs`. Keep the options model's
+fields and defaults identical to the constructor's, and bump `options_version` when the tracer's
+results change meaning. `parameters_model=` and `version=` arguments override the class attributes,
+and `name=` registers an alias without renaming the output. `GenericTracer` provides `attach()`,
+which uses the declared hook, and `fresh()`, which returns a reset deep copy. A tracer that
+overrides `fresh()` must preserve its parameters; its instance name is re-applied by the simulation
+when it is attached.
 
 For a general factory returning a tracer, supply `output_name` equal to the tracer's canonical name;
-this allows collision checks before workers start.
+this allows collision checks before workers start. Such a factory may pass `when=None`, so that the
+tracer it returns is attached to the hooks it declares itself.
 
 The built-in catalog follows the same pattern: each tracer declares its options on its class, and
 `passengersim.callbacks.builtins` only lists what is registered and under which names.

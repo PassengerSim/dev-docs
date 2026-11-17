@@ -1,0 +1,30 @@
+ForecastData
+============
+
+.. currentmodule:: passengersim.core
+
+.. autoclass:: ForecastData
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ForecastData.__init__
+      ~ForecastData.dashboard
+      ~ForecastData.from_dataframe
+      ~ForecastData.to_dataframe
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ForecastData.adjusted_price
+   
+   

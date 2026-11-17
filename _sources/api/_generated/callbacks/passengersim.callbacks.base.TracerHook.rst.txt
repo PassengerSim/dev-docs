@@ -1,0 +1,30 @@
+TracerHook
+==========
+
+.. currentmodule:: passengersim.callbacks.base
+
+.. autoclass:: TracerHook
+   :inherited-members:
+
+   
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TracerHook.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TracerHook.hook
+      ~TracerHook.tracer
+      ~TracerHook.priority
+      ~TracerHook.skip_burn
+   
+   

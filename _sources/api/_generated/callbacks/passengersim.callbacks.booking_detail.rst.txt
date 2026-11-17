@@ -21,6 +21,8 @@ booking\_detail
    :template: autosummary/class.rst
 
    LegBookingDetailOptions
+   LegBookingDetailTracer
+   LegDetailTracer
 
 
 
@@ -32,6 +34,7 @@ booking\_detail
    :toctree: .
 
    collect_leg_booking_detail
+   detail_table
    fig_leg_booking_detail_rake
    process_leg_booking_detail
    summarize_leg_booking_detail

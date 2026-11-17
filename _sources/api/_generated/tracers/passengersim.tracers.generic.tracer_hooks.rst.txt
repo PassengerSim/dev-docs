@@ -1,0 +1,6 @@
+tracer\_hooks
+=============
+
+.. currentmodule:: passengersim.tracers.generic
+
+.. autofunction:: tracer_hooks

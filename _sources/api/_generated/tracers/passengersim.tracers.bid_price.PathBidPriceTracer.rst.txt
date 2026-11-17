@@ -16,7 +16,13 @@ PathBidPriceTracer
       ~PathBidPriceTracer.attach
       ~PathBidPriceTracer.finalize
       ~PathBidPriceTracer.fresh
+      ~PathBidPriceTracer.on_begin_sample
+      ~PathBidPriceTracer.on_daily
+      ~PathBidPriceTracer.on_end_sample
+      ~PathBidPriceTracer.on_finalize_sample
+      ~PathBidPriceTracer.on_initialize_sample
       ~PathBidPriceTracer.reset
+      ~PathBidPriceTracer.setup
    
    
 
@@ -29,6 +35,7 @@ PathBidPriceTracer
       ~PathBidPriceTracer.hook
       ~PathBidPriceTracer.name
       ~PathBidPriceTracer.options_version
+      ~PathBidPriceTracer.skip_burn
       ~PathBidPriceTracer.bid_prices
    
    

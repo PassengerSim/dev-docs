@@ -26,6 +26,14 @@ generic
 
 
 
+.. rubric:: Functions
+
+.. autosummary::
+   :toctree: .
+
+   tracer_hooks
+   uses_hook_methods
+
 
 
 

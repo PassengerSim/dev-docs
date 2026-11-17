@@ -1,0 +1,6 @@
+register\_finalize\_sample\_callback
+====================================
+
+.. currentmodule:: passengersim.callbacks
+
+.. autofunction:: register_finalize_sample_callback

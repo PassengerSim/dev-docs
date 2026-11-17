@@ -1,0 +1,6 @@
+combine\_pooled\_moments
+========================
+
+.. currentmodule:: passengersim.callbacks.combine
+
+.. autofunction:: combine_pooled_moments

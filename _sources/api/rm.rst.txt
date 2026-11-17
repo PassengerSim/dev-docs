@@ -1,6 +1,12 @@
+.. rst-class:: page_title_prefix
+
+    passengersim.
+
 ==
 rm
 ==
+
+.. py:module:: passengersim.rm
 
 .. autosummary::
     :toctree: _generated/rm
